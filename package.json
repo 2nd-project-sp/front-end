@@ -9,9 +9,11 @@
 		"preview": "vite preview",
 		"lint": "eslint ./src/**/*.{ts,tsx,js,jsx}",
 		"lint:fix": "eslint --fix ./src/**/*.{ts,tsx,js,jsx}",
+		"start": "react-scripts start",
 		"format": "prettier --write --cache ."
 	},
 	"dependencies": {
+		"@fortawesome/react-fontawesome": "^0.2.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	},

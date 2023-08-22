@@ -2,8 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import kakao from '../assets/kakao_login_medium_narrow.png';
 import naver from '../assets/btnG_완성형.png';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
+	const navigate = useNavigate();
+	const signupHandler = () => {
+		navigate('/signup');
+	};
 	return (
 		<SLogin>
 			<div className='wrapper'>
@@ -47,7 +52,9 @@ const LoginPage: React.FC = () => {
 							</div>
 						</div>
 					</div>
-					<div className='container-signup'>간편 회원가입하기</div>
+					<div className='container-signup' onClick={signupHandler}>
+						간편 회원가입하기
+					</div>
 				</div>
 			</div>
 		</SLogin>
@@ -184,6 +191,7 @@ const SLogin = styled.div`
 				color: #1d1d1d;
 				text-align: center;
 				line-height: 56px;
+				cursor: pointer;
 			}
 		}
 	}

@@ -1,30 +1,33 @@
-import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faStar } from '@fortawesome/free-solid-svg-icons';
 import ProductDesc from '../ProductDesc/ProductDesc';
+import ProductReview from '../ProductReview/ProductReview';
 
-const ProductDetail: React.FC = () => {
+interface ProductProps {
+	productData: any;
+}
+
+const ProductDetail: React.FC<ProductProps> = ({ productData }) => {
+	const discountPer = 23;
+	const currentPrice =
+		productData && productData[0].price - (productData[0].price * discountPer) / 100;
+
+	const review = productData && productData[0].rating.count;
+
 	return (
 		<div className='product-detail'>
 			<div className='product-brand'>
-				{/* <img src='https://img.29cm.co.kr/next-brand/2022/03/18/bd3af322f4a94fa98ee5929df5e28384_20220318145010.jpg?width=100' /> */}
-				<div className='brand_infoCon'>
-					<div>브랜드이름이용 샘숭</div>
-					{/* <div>Do what you can't</div> */}
-					{/* <button>BRAND HOME</button> */}
-				</div>
+				<div className='brand_infoCon'>{/* <div>category: {productData[0].category}</div> */}</div>
 			</div>
+
 			<div className='product-detail_infoCon'>
-				<img
-					className='detail_infoCon_img'
-					src='https://img.29cm.co.kr/next-product/2023/04/25/ec3d805879fc46c1afd49ec5d3428911_20230425133633.jpg?width=700'
-				/>
+				<img className='detail_infoCon_img' src={productData[0].image} />
 				<div className='detail_infoCon'>
 					<div className='infoCon_textBox'>
 						<div className='textBox_text'>
 							<div className='infoTextBox'>
-								<h2 className='infoTextBox_title'>상품이름이용 미니 건조기 어쩌구 저쩌구</h2>
-								<div>
+								<h2 className='infoTextBox_title'>{productData[0].title}</h2>
+								<div className='infoTextBox_heart'>
 									<FontAwesomeIcon icon={faHeart} />
 								</div>
 							</div>
@@ -36,16 +39,14 @@ const ProductDetail: React.FC = () => {
 									<FontAwesomeIcon icon={faStar} />
 									<FontAwesomeIcon icon={faStar} />
 								</div>
-								<div className='reviewCon_text'>75개 리뷰보기</div>
+								<div className='reviewCon_text'>{productData[0].rating.count}</div>
 							</div>
 							<div className='infoText_priceCon'>
-								<div className='prevPrice'>599,000</div>
+								<div className='prevPrice'>{productData[0].price}$</div>
 								<div className='currentPrice_Con'>
-									<div className='discountPer'>23%</div>
-									<div className='currentPrice'>459,690</div>
+									<div className='discountPer'>{discountPer}%</div>
+									<div className='currentPrice'>{currentPrice}$</div>
 								</div>
-
-								<div className='priceCon_point'>4,890p (1%) 적립</div>
 							</div>
 						</div>
 						<div className='textBox_shipping'>
@@ -62,7 +63,9 @@ const ProductDetail: React.FC = () => {
 					</div>
 				</div>
 			</div>
-			<ProductDesc />
+
+			<ProductDesc productData={productData} />
+			<ProductReview review={review} />
 		</div>
 	);
 };

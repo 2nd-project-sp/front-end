@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+import React from 'react';
+
+const MainPage = () => {
+	return <div>메인 페이지</div>;
+=======
 import { useEffect, useState } from 'react';
 import ProductList from '../components/ProductList';
 interface Product {
@@ -29,6 +35,7 @@ const MainPage = () => {
 			<ProductList products={products} />
 		</>
 	);
+>>>>>>> devMain
 };
 
 export default MainPage;

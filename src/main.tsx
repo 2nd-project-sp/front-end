@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 import './global.css';
-import { LoginPage, MainPage, MyBagPage, MyPage } from './pages/index.ts';
+import { LoginPage, MainPage, MyBagPage, MyPage } from './pages/index';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const router = createBrowserRouter([

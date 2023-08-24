@@ -1,0 +1,24 @@
+.product-desc {
+	display: flex;
+	flex-direction: column;
+}
+
+.product-desc_title {
+	display: flex;
+	justify-content: flex-start;
+}
+
+.desc_info {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.info_text {
+	width: 80%;
+	display: flex;
+	justify-content: flex-start;
+	text-align: left;
+	margin-bottom: 5px;
+	font-size: 14px;
+}

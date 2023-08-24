@@ -13,11 +13,11 @@ interface ProductListsProps {
 	products: Product[];
 }
 
-const ProductList: React.FC<ProductListsProps> = ({ products }) => {
+const ProductList: React.FC<ProductListsProps> = ({ products }: ProductListsProps) => {
 	return (
 		<Grid>
-			{products.map(product => (
-				<Product product={product} />
+			{products.map((product, index) => (
+				<Product product={product} key={`product-${index}`} />
 			))}
 		</Grid>
 	);

@@ -22,7 +22,7 @@ const ProductDetail: React.FC = () => {
 	const currentPrice = productData
 		? productData.price - (productData.price * discountPer) / 100
 		: 0;
-	const review = productData ? productData.rating.count : 0;
+	const reviewNum = productData ? productData.rating.count : 0;
 
 	// API불러옴
 	useEffect(() => {
@@ -58,7 +58,7 @@ const ProductDetail: React.FC = () => {
 								</div>
 								<div className='infoText_reviewCon'>
 									<div className='reviewCon_stars'></div>
-									<div className='reviewCon_text'>{review}</div>
+									<div className='reviewCon_text'>{reviewNum}</div>
 								</div>
 								<div className='infoText_priceCon'>
 									<div className='prevPrice'>{productData.price}$</div>
@@ -84,7 +84,7 @@ const ProductDetail: React.FC = () => {
 				</div>
 			)}
 			<ProductDesc productData={productData} />
-			<ProductReview review={review} />
+			<ProductReview />
 		</div>
 	);
 };

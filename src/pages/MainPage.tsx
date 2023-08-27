@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 import React from 'react';
-
-const MainPage: React.FC = () => {
-	return <div>메인 페이지</div>;
-=======
 import { useEffect, useState } from 'react';
 import ProductList from '../components/ProductList';
+
 interface Product {
 	id: number;
 	title: string;
@@ -14,7 +10,7 @@ interface Product {
 	description: string;
 	category: string;
 }
-const MainPage = () => {
+const MainPage: React.FC = () => {
 	const [products, setProducts] = useState<Product[]>([]);
 
 	useEffect(() => {
@@ -35,7 +31,6 @@ const MainPage = () => {
 			<ProductList products={products} />
 		</>
 	);
->>>>>>> devMain
 };
 
 export default MainPage;

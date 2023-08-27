@@ -1,20 +1,60 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import kakao from '../assets/kakao_login_medium_narrow.png';
 import naver from '../assets/btnG_완성형.png';
-import { useNavigate } from 'react-router-dom';
+
+// interface form 설정 필요
 
 const LoginPage: React.FC = () => {
+	const [form, setForm] = useState({
+		email: '',
+		password: '',
+	});
+	const [valid, isValid] = useState({
+		isEmail: false,
+		isPassword: false,
+	});
+	const [touched, isTouched] = useState({
+		email: false,
+		password: false,
+	});
+	const count = useRef(0);
+
+	const emailInputInValid = !valid.isEmail && touched.email;
+	const passwordInputInValid = !valid.isPassword && touched.password;
 	const navigate = useNavigate();
 	const signupHandler = () => {
 		navigate('/signup');
 	};
+	const formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const emailRegex =
+			/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+		const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+		console.log('success');
+		isTouched({ email: true, password: true });
+		isValid({ isEmail: true, isPassword: true });
+		if (form.email.trim() === '' || !emailRegex.test(form.email)) {
+			console.log('email fail');
+			isValid({ ...valid, isEmail: false });
+			count.current = count.current + 1;
+		}
+		if (!passwordRegex.test(form.password)) {
+			console.log('password fail');
+			isValid({ ...valid, isPassword: false });
+			count.current = count.current + 1;
+		}
+
+		setForm({ email: '', password: '' });
+	};
+	console.log(emailInputInValid, passwordInputInValid);
 	return (
 		<SLogin>
 			<div className='wrapper'>
 				<h2 className='title'>로그인</h2>
 				<div className='underline'>
-					<form>
+					<form onSubmit={formSubmitHandler}>
 						<div className='form-box'>
 							<input
 								type='text'
@@ -22,7 +62,10 @@ const LoginPage: React.FC = () => {
 								placeholder='아이디 (이메일)'
 								autoCapitalize='none'
 								name='username'
+								value={form.email}
+								onChange={e => setForm({ ...form, email: e.target.value })}
 							/>
+							{emailInputInValid && <p className='err-message'>* 아이디 형식이 맞지 않습니다.</p>}
 						</div>
 						<div className='form-box'>
 							<input
@@ -31,8 +74,18 @@ const LoginPage: React.FC = () => {
 								placeholder='비밀번호'
 								autoCapitalize='none'
 								name='password'
+								value={form.password}
+								onChange={e => setForm({ ...form, password: e.target.value })}
 							/>
+							{passwordInputInValid && (
+								<p className='err-message'>* 비밀번호 형식이 맞지 않습니다.</p>
+							)}
 						</div>
+						{count.current <= 4 && count.current !== 0 && (
+							<p className='login-fail'>
+								5회 로그인 실패 시, 로그인이 10분 동안 제한됩니다.({count.current}/5)
+							</p>
+						)}
 						<button className='btn-login' type='submit'>
 							로그인하기
 						</button>
@@ -89,6 +142,15 @@ const SLogin = styled.div`
 			padding-top: 18px;
 			border-top: 4px solid #000;
 
+			.login-fail {
+				display: block;
+				margin-bottom: 5px;
+				color: rgb(255, 72, 0);
+				font-size: 13px;
+				line-height: 20px;
+				word-break: keep-all;
+			}
+
 			form {
 				padding: 0;
 				margin: 0;
@@ -96,6 +158,12 @@ const SLogin = styled.div`
 				.form-box {
 					margin-top: 8px;
 					margin-bottom: 8px;
+
+					.err-message {
+						font-size: 13px;
+						color: red;
+						margin-left: 5px;
+					}
 
 					.input-id {
 						border: 1px solid #d4d4d4;

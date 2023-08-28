@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import kakao from '../assets/kakao_login_medium_narrow.png';
 import naver from '../assets/btnG_완성형.png';
+import { login } from '../store/loginSlice';
 
 // interface form 설정 필요
 
@@ -20,10 +22,10 @@ const LoginPage: React.FC = () => {
 		password: false,
 	});
 	const count = useRef(0);
-
 	const emailInputInValid = !valid.isEmail && touched.email;
 	const passwordInputInValid = !valid.isPassword && touched.password;
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const signupHandler = () => {
 		navigate('/signup');
 	};
@@ -44,11 +46,13 @@ const LoginPage: React.FC = () => {
 			console.log('password fail');
 			isValid({ ...valid, isPassword: false });
 			count.current = count.current + 1;
+		} else {
+			navigate('/');
+			localStorage.setItem('login', form.email);
+			dispatch(login(true));
 		}
-
 		setForm({ email: '', password: '' });
 	};
-	console.log(emailInputInValid, passwordInputInValid);
 	return (
 		<SLogin>
 			<div className='wrapper'>
@@ -143,7 +147,6 @@ const SLogin = styled.div`
 			border-top: 4px solid #000;
 
 			.login-fail {
-				display: block;
 				margin-bottom: 5px;
 				color: rgb(255, 72, 0);
 				font-size: 13px;
@@ -163,6 +166,7 @@ const SLogin = styled.div`
 						font-size: 13px;
 						color: red;
 						margin-left: 5px;
+						display: flex;
 					}
 
 					.input-id {

@@ -1,3 +1,4 @@
+import React from 'react';
 import Product from '../components/Product';
 import styled from 'styled-components';
 interface Product {
@@ -27,7 +28,7 @@ const Grid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	gap: 20px; /* 각 카드 사이의 간격 */
-	margin-top: 20px;
+	margin-top: 70px;
 `;
 
 export default ProductList;

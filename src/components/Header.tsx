@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { PiHandbagBold } from 'react-icons/pi';
 import { RiLoginBoxLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../store/loginSlice';
+import { RootState } from '../store/store';
 
 const Header: React.FC = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const isLogin = useSelector((state: RootState) => state.login.isLogin);
+
 	const myHandler = () => {
 		navigate('/my');
 	};
@@ -14,7 +20,11 @@ const Header: React.FC = () => {
 		navigate('/mybag');
 	};
 	const loginHandler = () => {
-		navigate('/login');
+		if (isLogin) {
+			dispatch(logout(false));
+		} else {
+			navigate('/login');
+		}
 	};
 	const homeHandler = () => {
 		navigate('/');
@@ -52,7 +62,7 @@ const Header: React.FC = () => {
 							<div className='menu-icon'>
 								<RiLoginBoxLine />
 							</div>
-							<span>로그인</span>
+							<span>{isLogin ? '로그아웃' : '로그인'}</span>
 						</div>
 					</div>
 				</div>

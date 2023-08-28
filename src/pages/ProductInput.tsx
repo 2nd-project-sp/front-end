@@ -37,7 +37,7 @@ const ProductInput: React.FC<ProductInputProps> = ({ onAddProduct }) => {
 
         onAddProduct(newProduct);
 
-        // Clear form inputs
+        // 정보 삭제
         setName('');
         setPrice('');
         setImage(null);

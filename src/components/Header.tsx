@@ -14,10 +14,18 @@ const Header: React.FC = () => {
 	const isLogin = useSelector((state: RootState) => state.login.isLogin);
 
 	const myHandler = () => {
-		navigate('/my');
+		if (isLogin) {
+			navigate('/my');
+		} else {
+			navigate('/login');
+		}
 	};
 	const mybagHandler = () => {
-		navigate('/mybag');
+		if (isLogin) {
+			navigate('/mybag');
+		} else {
+			navigate('/login');
+		}
 	};
 	const loginHandler = () => {
 		if (isLogin) {

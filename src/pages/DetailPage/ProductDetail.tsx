@@ -1,7 +1,8 @@
-import ProductDesc from '../ProductDesc/ProductDesc';
-import ProductReview from '../ProductReview/ProductReview';
+import ProductDesc from '../../components/ProductDesc/ProductDesc';
+import ProductReview from '../../components/ProductReview/ProductReview';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import ProductCount from '../../components/ProductCount/ProductCount';
 
 interface Product {
 	id: number;
@@ -17,12 +18,26 @@ interface Product {
 
 const ProductDetail: React.FC = () => {
 	const { id } = useParams<{ id?: string }>();
+	const navigate = useNavigate();
 	const [productData, setProductData] = useState<Product | null>(null);
 	const discountPer = 50;
 	const currentPrice = productData
 		? productData.price - (productData.price * discountPer) / 100
 		: 0;
-	const reviewNum = productData ? productData.rating.count : 0;
+	// const reviewNum = productData ? productData.rating.count : 0;
+
+	const [showPopup, setShowPopup] = useState(false);
+
+	const gotoMyBag = () => {
+		navigate('/mybag');
+	};
+	const putCart = () => {
+		setShowPopup(true);
+	};
+
+	const xbutton = () => {
+		setShowPopup(false);
+	};
 
 	// API불러옴
 	useEffect(() => {
@@ -58,7 +73,7 @@ const ProductDetail: React.FC = () => {
 								</div>
 								<div className='infoText_reviewCon'>
 									<div className='reviewCon_stars'></div>
-									<div className='reviewCon_text'>{reviewNum}</div>
+									{/* <div className='reviewCon_text'>{reviewNum}</div> */}
 								</div>
 								<div className='infoText_priceCon'>
 									<div className='prevPrice'>{productData.price}$</div>
@@ -76,11 +91,28 @@ const ProductDetail: React.FC = () => {
 								</div>
 							</div>
 						</div>
+						<ProductCount />
 						<div className='detail_buttonCon'>
-							<button className='buttonCon_cart'>장바구니 담기</button>
-							<button className='buttonCon_purchase'>바로 구매하기</button>
+							<button className='buttonCon_cart' onClick={putCart}>
+								장바구니 담기
+							</button>
+							<button className='buttonCon_purchase' onClick={gotoMyBag}>
+								바로 구매하기
+							</button>
 						</div>
 					</div>
+					{showPopup && (
+						<div className='popup'>
+							<div className='popup-xbutton'>
+								<button onClick={xbutton}>X</button>
+							</div>
+
+							<p>장바구니에 상품이 담겼습니다</p>
+							<div className='popup-button'>
+								<button onClick={gotoMyBag}>장바구니 바로가기</button>
+							</div>
+						</div>
+					)}
 				</div>
 			)}
 			<ProductDesc productData={productData} />

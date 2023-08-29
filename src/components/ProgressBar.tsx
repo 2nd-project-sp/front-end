@@ -11,7 +11,7 @@ const ProgressBar = ({ step }) => {
 	const getProgressWidth = (step: number) => {
 		return Math.floor((step / 4) * 100);
 	};
-
+	console.log(progressBar);
 	useEffect(() => {
 		switch (step) {
 			case 0:
@@ -34,19 +34,21 @@ const ProgressBar = ({ step }) => {
 		}
 	}, [step]);
 	return (
-		<SProgressBar>
+		<>
 			<SProgress width={`${progressBar}%`}></SProgress>
-		</SProgressBar>
+		</>
 	);
 };
 
 export default ProgressBar;
-
-const SProgressBar = styled.div``;
 
 const SProgress = styled.i<Istep>`
 	position: absolute;
 	top: 0px;
 	left: 0px;
 	width: ${({ width }) => width};
+	height: 4px;
+	background: rgb(0, 0, 0);
+	transition: width 0.2s ease 0s;
+	z-index: 1;
 `;

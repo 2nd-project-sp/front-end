@@ -41,8 +41,7 @@ const LoginPage: React.FC = () => {
 			console.log('email fail');
 			isValid({ ...valid, isEmail: false });
 			count.current = count.current + 1;
-		}
-		if (!passwordRegex.test(form.password)) {
+		} else if (!passwordRegex.test(form.password)) {
 			console.log('password fail');
 			isValid({ ...valid, isPassword: false });
 			count.current = count.current + 1;

@@ -24,6 +24,7 @@ const SignUpPage: React.FC = () => {
 				<h2 className='title'>간편가입</h2>
 				<div className='container'>
 					<ProgressBar step={step} />
+					<div>{stepComponent[step]}</div>
 				</div>
 			</div>
 		</SSignUp>
@@ -55,9 +56,9 @@ const SSignUp = styled.div`
 		}
 
 		.container {
-			display: flex;
 			position: relative;
 			overflow: hidden;
+			width: 100%;
 			height: calc(100vh - 100px);
 		}
 	}

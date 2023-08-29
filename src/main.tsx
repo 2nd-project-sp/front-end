@@ -1,9 +1,11 @@
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './global.css';
-import { LoginPage, MainPage, MyBagPage, MyPage } from './pages/index';
-import ProductDetail from './pages/DetailPage/ProductDetail';
+import { LoginPage, MainPage, MyBagPage, MyPage, SignUpPage } from './pages/index';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+import ProductDetail from './pages/DetailPage/ProductDetail';
 
 const router = createBrowserRouter([
 	{
@@ -30,8 +32,13 @@ const router = createBrowserRouter([
 				path: 'product/:id', // 디테일 페이지 라우팅
 				element: <ProductDetail />,
 			},
+			{ path: 'signup', element: <SignUpPage /> },
 		],
 	},
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<RouterProvider router={router} />);
+ReactDOM.createRoot(document.getElementById('root')!).render(
+	<Provider store={store}>
+		<RouterProvider router={router} />
+	</Provider>
+);

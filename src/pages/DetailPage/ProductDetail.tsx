@@ -57,7 +57,7 @@ const ProductDetail: React.FC = () => {
 			{productData && (
 				<div className='product-brand'>
 					<div className='brand_infoCon'>
-						<div>category: {productData.category}</div>
+						<div>{productData.category}</div>
 					</div>
 				</div>
 			)}

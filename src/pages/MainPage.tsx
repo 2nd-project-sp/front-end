@@ -1,5 +1,7 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import ProductList from '../components/ProductList';
+
 interface Product {
 	id: number;
 	title: string;
@@ -8,7 +10,7 @@ interface Product {
 	description: string;
 	category: string;
 }
-const MainPage = () => {
+const MainPage: React.FC = () => {
 	const [products, setProducts] = useState<Product[]>([]);
 
 	useEffect(() => {

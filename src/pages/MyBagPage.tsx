@@ -85,6 +85,7 @@ const MyBagPage: React.FC = () => {
 	);
 }
 
+
 export default MyBagPage;
 
 

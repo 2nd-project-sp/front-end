@@ -1,9 +1,8 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './global.css';
 import { LoginPage, MainPage, MyBagPage, MyPage } from './pages/index';
-import ProductDetail from './components/ProductDetail/ProductDetail';
+import ProductDetail from './pages/DetailPage/ProductDetail';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const router = createBrowserRouter([

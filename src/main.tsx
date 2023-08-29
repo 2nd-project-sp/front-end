@@ -2,10 +2,10 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './global.css';
 import { LoginPage, MainPage, MyBagPage, MyPage, SignUpPage } from './pages/index';
+import ProductDetail from './pages/DetailPage/ProductDetail';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
-import ProductDetail from './pages/DetailPage/ProductDetail';
 
 const router = createBrowserRouter([
 	{

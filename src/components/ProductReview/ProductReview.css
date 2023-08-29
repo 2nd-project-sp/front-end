@@ -29,8 +29,13 @@
 	justify-content: flex-start;
 	font-size: 12px;
 	color: rgb(160, 160, 160);
-	margin-top: 15px;
 	margin-bottom: 6px;
+}
+.reviewCon_email {
+	display: flex;
+	justify-content: flex-start;
+	font-size: 12px;
+	margin-top: 15px;
 }
 .reviewCon_reviewBox {
 	width: 100%;
@@ -47,4 +52,5 @@
 	font-size: 14px;
 	word-break: break-all;
 	text-overflow: clip;
+	text-align: left;
 }

@@ -1,11 +1,13 @@
 .product-desc {
 	display: flex;
 	flex-direction: column;
+	margin-bottom: 30px;
 }
 
 .product-desc_title {
 	display: flex;
 	justify-content: flex-start;
+	margin-bottom: 10px;
 }
 
 .desc_info {

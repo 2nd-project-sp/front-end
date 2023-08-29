@@ -1,17 +1,32 @@
 import React from 'react';
 
+interface Product {
+	id: number;
+	title: string;
+	price: number;
+	image: string;
+	rating: {
+		count: number;
+	};
+	category: string;
+	description: string;
+}
+
 interface ProductdataProps {
-	productData: any;
+	productData: Product | null;
 }
 
 const ProductDesc: React.FC<ProductdataProps> = ({ productData }) => {
-	console.log(productData[0]);
+	if (!productData) {
+		return null;
+	}
+
 	return (
 		<div className='product-desc'>
 			<h2 className='product-desc_title'>상품정보</h2>
 			<div className='desc_info'>
-				<div className='info_text'>{productData[0].title}</div>
-				<div className='info_text'>{productData[0].description}</div>
+				<div className='info_text'>{productData.title}</div>
+				<div className='info_text'>{productData.description}</div>
 			</div>
 		</div>
 	);

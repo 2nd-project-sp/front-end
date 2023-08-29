@@ -1,19 +1,36 @@
 import React from 'react';
 
-const ReviewCon: React.FC = () => {
+interface Review {
+	id: number;
+	postId: number;
+	name: string;
+	email: string;
+	body: string;
+}
+
+interface ReviewConProps {
+	reviews: Review[];
+}
+
+const ReviewCon: React.FC<ReviewConProps> = ({ reviews }) => {
 	return (
 		<div className='reviewCon'>
-			<div className='reviewCon_name'></div>
-			<div className='reviewCon_option'>옵션 : [색상]산토리니 베이지</div>
-			<div className='reviewCon_reviewBox'>
-				<div className='reviewCon_review'>
-					엘땡이랑 고민했는데 심플 깔끔한 디자인 때문에 선택했어요. 물통이 크니까 좋네요. 저소음
-					아니여도 조용해요.
-				</div>
-				<div className='reviewCon_img'>
-					<img src='https://img.29cm.co.kr/next-product/2023/08/21/fd5037e86ec24907a2b14e8b2176657e_20230821233017.jpg?width=120' />
-				</div>
-			</div>
+			{reviews.length > 0 &&
+				reviews.map(review => (
+					<div key={review.id} className='reviewCon_item'>
+						<div className='reviewCon_email'>{review.email}</div>
+						<div className='reviewCon_option'>옵션 : [색상]산토리니 베이지</div>
+						<div className='reviewCon_reviewBox'>
+							<div className='reviewCon_review'>{review.body}</div>
+							<div className='reviewCon_img'>
+								<img
+									src='https://img.29cm.co.kr/next-product/2023/08/21/fd5037e86ec24907a2b14e8b2176657e_20230821233017.jpg?width=120'
+									alt='Review'
+								/>
+							</div>
+						</div>
+					</div>
+				))}
 		</div>
 	);
 };

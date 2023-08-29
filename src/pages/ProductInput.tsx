@@ -54,7 +54,7 @@ const ProductInput: React.FC<ProductInputProps> = ({ onAddProduct }) => {
                         type="text"
                         id="name"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setName(e.target.value)}
                         required
                     />
                 </FormField>
@@ -64,7 +64,7 @@ const ProductInput: React.FC<ProductInputProps> = ({ onAddProduct }) => {
                         type="number"
                         id="price"
                         value={price}
-                        onChange={(e) => setPrice(e.target.value)}
+                        onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setPrice(e.target.value)}
                         required
                     />
                 </FormField>
@@ -83,7 +83,7 @@ const ProductInput: React.FC<ProductInputProps> = ({ onAddProduct }) => {
                     <StyledTextArea
                         id="description"
                         value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setDescription(e.target.value)}
                         required
                     />
                 </FormField>

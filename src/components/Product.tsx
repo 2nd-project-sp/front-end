@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 interface ProductProps {
 	id: number;
@@ -11,13 +12,15 @@ interface ProductProps {
 
 const Product: React.FC<ProductProps> = ({ product }) => {
 	return (
-		<ProductCard>
-			<ProductImage src={product.image} alt={product.title}></ProductImage>
-			<h3>{product.title}</h3>
-			<p>${product.price}</p>
-			<p>${product.description}</p>
-			<p>${product.category}</p>
-		</ProductCard>
+		<Link to={`/product/${product.id}`}>
+			<ProductCard>
+				<ProductImage src={product.image} alt={product.title}></ProductImage>
+				<h3>{product.title}</h3>
+				<p>${product.price}</p>
+				<p>${product.description}</p>
+				<p>${product.category}</p>
+			</ProductCard>
+		</Link>
 	);
 };
 const ProductCard = styled.div`

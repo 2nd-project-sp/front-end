@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import ProductList from '../components/ProductList';
+import ProductList from '../components/ProductList/ProductList';
 
 interface Product {
 	id: number;

@@ -1,5 +1,5 @@
 import React from 'react';
-import Product from '../components/Product';
+import Product from './Product';
 import styled from 'styled-components';
 interface Product {
 	id: number;
@@ -17,7 +17,7 @@ interface ProductListsProps {
 const ProductList: React.FC<ProductListsProps> = ({ products }: ProductListsProps) => {
 	return (
 		<Grid>
-			{products.map((product, index) => (
+			{products.map((product: Product, index: number) => (
 				<Product product={product} key={`product-${index}`} />
 			))}
 		</Grid>

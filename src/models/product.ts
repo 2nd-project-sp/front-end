@@ -1,4 +1,3 @@
-
 export interface ProductInterface {
 	id: number;
 	title: string;
@@ -6,6 +5,7 @@ export interface ProductInterface {
 	image: string;
 	description: string;
 	category: string;
+	thumbnail: string;
 }
 
 export interface ProductLists {

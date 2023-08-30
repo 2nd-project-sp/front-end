@@ -1,14 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ProductInterface } from '../../model/products';
+import { ProductInterface } from '../../model/Products';
 
 const Product: React.FC<ProductInterface> = ({ product }) => {
 	return (
 		<Link to={`/product/${product.id}`}>
 			<ProductCard>
 				<ProductImage>
-					<img src={product.image} alt={product.title} />
+					{/* <img src={product.image} alt={product.title} /> */}
+					<img src={product.thumbnail} alt={product.title} />
 				</ProductImage>
 				<ProductTitle>
 					<h5>{product.title}</h5>
@@ -16,8 +17,8 @@ const Product: React.FC<ProductInterface> = ({ product }) => {
 					<strong>{product.price}</strong>
 				</ProductTitle>
 				<ProductInfo>
-				<Discount>10%</Discount>
-  <DiscountedPrice>{Math.round(product.price * 0.9)}</DiscountedPrice>
+					<Discount>10%</Discount>
+					<DiscountedPrice>{Math.round(product.price * 0.9)}</DiscountedPrice>
 				</ProductInfo>
 				<ProductInfo2>
 					<ul>
@@ -61,7 +62,7 @@ const ProductInfo = styled.div`
 	}
 `;
 const Discount = styled.span`
-  margin-right: 1rem; /* 여백을 조정할 수 있는 값으로 변경하세요 */
+	margin-right: 1rem; /* 여백을 조정할 수 있는 값으로 변경하세요 */
 `;
 
 const DiscountedPrice = styled.strong`

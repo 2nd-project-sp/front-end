@@ -1,7 +1,7 @@
 import React from 'react';
 import Product from './Product';
 import styled from 'styled-components';
-import { ProductInterface, ProductLists } from '../models/Product';
+import { ProductInterface, ProductLists } from '../../models/product';
 
 const ProductList: React.FC<ProductLists> = ({ products }: ProductLists) => {
 	return (

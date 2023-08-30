@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ISteps } from '../../models/steps';
 
-const PhoneNum = ({ step, setStep }) => {
+const PhoneNum: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 	const handlingNext = () => {
 		// 유효성 검사 후
 		setStep(step + 1);

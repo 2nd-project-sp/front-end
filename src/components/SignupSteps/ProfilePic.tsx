@@ -1,27 +1,28 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import styled from 'styled-components';
+import { ISteps } from '../../models/steps';
 
-const ProfilePic = ({ step, setStep }) => {
-	const imgRef = useRef(null);
+const ProfilePic: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
+	const imgRef = useRef<HTMLInputElement | null>(null);
 	const [imgFile, setImgFile] = useState('');
 
 	const handlingNext = () => {
 		// 유효성 검사 후
 		setStep(step + 1);
 	};
+
 	const readImg = () => {
-		if (imgRef.current !== undefined && imgRef.current !== null) {
+		if (!imgRef.current) {
+			return;
+		} else {
 			const file = imgRef.current.files[0];
 			const reader = new FileReader();
 			reader.readAsDataURL(file);
-			if (reader.result !== null) {
-				reader.onloadend = () => {
-					setImgFile(reader?.result);
-				};
-			}
-		} else return;
+			reader.onloadend = () => {
+				setImgFile(reader.result);
+			};
+		}
 	};
-
 	return (
 		<SProfilePic>
 			<h3 className='profile-title'>프로필 사진을 선택해주세요.</h3>
@@ -37,6 +38,13 @@ const ProfilePic = ({ step, setStep }) => {
 					ref={imgRef}
 					className='file-input'
 					id='filePicture'
+				/>
+			</div>
+			<h4>사진 미리보기</h4>
+			<div className='img-preview'>
+				<img
+					src={imgFile ? imgFile : 'https://care.ntbprov.go.id/img/noimage.png'}
+					alt='프로필 사진'
 				/>
 			</div>
 			<button type='button' className='btn-next' onClick={handlingNext}>
@@ -69,27 +77,41 @@ const SProfilePic = styled.div`
 		.file-label {
 			cursor: pointer;
 			border: none;
-			outline: gray solid 1px;
-			border-radius: 1rem;
-			width: 50%;
-			height: 60px;
+			border: 1px solid #d4d4d4;
+			width: 70%;
+			height: 48px;
 			box-sizing: border-box;
-			padding-left: 1.1rem;
-			font-size: 15px;
-			font-weight: 350;
+			font-size: 14px;
+			font-weight: 700;
 			margin-top: 10px;
 			margin: 0 auto;
-			text-align: center;
 			display: flex;
-			justify-content: start;
+			justify-content: center;
 			align-items: center;
 			&:hover {
-				border-color: #0047ff;
+				background-color: #1a1a1a;
+				color: #fff;
+				transition: 0.2s ease-in-out;
 			}
 		}
 
 		.file-input {
 			display: none;
+		}
+	}
+
+	.img-preview {
+		width: 100%;
+		height: 240px;
+		border: 1px solid #d4d4d4;
+		border-radius: 5px;
+		margin-bottom: 20px;
+		overflow: hidden;
+
+		img {
+			width: 100%;
+			height: 100%;
+			border-radius: 5px;
 		}
 	}
 

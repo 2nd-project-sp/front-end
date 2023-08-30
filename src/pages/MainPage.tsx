@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import ProductList from '../components/ProductList/ProductList';
-import { ProductLists } from '../models/Product';
+import { ProductLists } from '../models/product';
 
 const MainPage: React.FC = () => {
 	const [products, setProducts] = useState<ProductLists>([]);

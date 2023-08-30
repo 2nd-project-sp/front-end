@@ -4,14 +4,21 @@ import styled from 'styled-components';
 const ProfilePic = ({ step, setStep }) => {
 	const imgRef = useRef(null);
 	const [imgFile, setImgFile] = useState('');
+
+	const handlingNext = () => {
+		// 유효성 검사 후
+		setStep(step + 1);
+	};
 	const readImg = () => {
 		if (imgRef.current !== undefined && imgRef.current !== null) {
 			const file = imgRef.current.files[0];
 			const reader = new FileReader();
 			reader.readAsDataURL(file);
-			reader.onloadend = () => {
-				setImgFile(reader?.result);
-			};
+			if (reader.result !== null) {
+				reader.onloadend = () => {
+					setImgFile(reader?.result);
+				};
+			}
 		} else return;
 	};
 
@@ -19,14 +26,22 @@ const ProfilePic = ({ step, setStep }) => {
 		<SProfilePic>
 			<h3 className='profile-title'>프로필 사진을 선택해주세요.</h3>
 			<div className='container-pic-input'>
+				<label className='file-label' htmlFor='filePicture'>
+					사진 선택하기(.jpeg, .png)
+				</label>
 				<input
 					type='file'
 					accept='image/*'
 					placeholder='사진을 선택해주세요'
 					onChange={readImg}
 					ref={imgRef}
+					className='file-input'
+					id='filePicture'
 				/>
 			</div>
+			<button type='button' className='btn-next' onClick={handlingNext}>
+				다음
+			</button>
 		</SProfilePic>
 	);
 };
@@ -45,5 +60,51 @@ const SProfilePic = styled.div`
 		font-weight: 500;
 		line-height: 28px;
 		white-space: pre-wrap;
+	}
+
+	.container-pic-input {
+		margin-bottom: 40px;
+		padding: 0;
+
+		.file-label {
+			cursor: pointer;
+			border: none;
+			outline: gray solid 1px;
+			border-radius: 1rem;
+			width: 50%;
+			height: 60px;
+			box-sizing: border-box;
+			padding-left: 1.1rem;
+			font-size: 15px;
+			font-weight: 350;
+			margin-top: 10px;
+			margin: 0 auto;
+			text-align: center;
+			display: flex;
+			justify-content: start;
+			align-items: center;
+			&:hover {
+				border-color: #0047ff;
+			}
+		}
+
+		.file-input {
+			display: none;
+		}
+	}
+
+	.btn-next {
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 40px;
+		min-height: 25px;
+		width: 100%;
+		height: 52px;
+		background: rgb(0, 0, 0);
+		color: rgb(255, 255, 255);
+		font-size: 14px;
+		font-weight: 700;
 	}
 `;

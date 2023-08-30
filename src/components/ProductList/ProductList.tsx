@@ -16,8 +16,9 @@ const ProductList: React.FC<ProductLists> = ({ products }: ProductLists) => {
 
 const Grid = styled.div`
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 20px; /* 각 카드 사이의 간격 */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 칸 크기 설정 */
+	grid-template-rows: auto; /* 칸 높이 설정 */
+  grid-gap: 20px; /* 칸 사이의 간격 설정 */
 	margin-top: 70px;
 `;
 

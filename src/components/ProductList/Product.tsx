@@ -16,8 +16,8 @@ const Product: React.FC<ProductInterface> = ({ product }) => {
 					<strong>{product.price}</strong>
 				</ProductTitle>
 				<ProductInfo>
-					<span>10%</span>
-					<strong>{product.price * 0.9}</strong>
+				<Discount>10%</Discount>
+  <DiscountedPrice>{Math.round(product.price * 0.9)}</DiscountedPrice>
 				</ProductInfo>
 				<ProductInfo2>
 					<ul>
@@ -58,17 +58,15 @@ const ProductInfo = styled.div`
 		display: flex;
 		justify-content: space-between;
 		margin-bottom: 0.5rem;
-
-		strong {
-			font-size: 1rem;
-			font-weight: bold;
-		}
-
-		span {
-			font-size: 0.8rem;
-			color: #999;
-		}
 	}
+`;
+const Discount = styled.span`
+  margin-right: 1rem; /* 여백을 조정할 수 있는 값으로 변경하세요 */
+`;
+
+const DiscountedPrice = styled.strong`
+	font-size: 1rem;
+	font-weight: bold;
 `;
 const ProductInfo2 = styled.div`
 	ul {
@@ -79,6 +77,7 @@ const ProductInfo2 = styled.div`
 		li {
 			margin-bottom: 0.2rem;
 			color: #1d1d1d;
+			// border: 1px solid #ccc;
 		}
 	}
 `;

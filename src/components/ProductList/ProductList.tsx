@@ -1,23 +1,13 @@
 import React from 'react';
 import Product from './Product';
 import styled from 'styled-components';
-interface Product {
-	id: number;
-	title: string;
-	price: number;
-	image: string;
-	description: string;
-	category: string;
-}
+import { ProductInterface, ProductLists } from '../models/product'
 
-interface ProductListsProps {
-	products: Product[];
-}
 
-const ProductList: React.FC<ProductListsProps> = ({ products }: ProductListsProps) => {
+const ProductList: React.FC<ProductLists> = ({ products }: ProductLists) => {
 	return (
 		<Grid>
-			{products.map((product: Product, index: number) => (
+			{products.map((product: ProductInterface, index: number) => (
 				<Product product={product} key={`product-${index}`} />
 			))}
 		</Grid>

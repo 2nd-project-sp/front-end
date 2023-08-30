@@ -1,17 +1,10 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import ProductList from '../components/ProductList/ProductList';
+import { ProductLists } from '../models/product'
 
-interface Product {
-	id: number;
-	title: string;
-	price: number;
-	image: string;
-	description: string;
-	category: string;
-}
 const MainPage: React.FC = () => {
-	const [products, setProducts] = useState<Product[]>([]);
+	const [products, setProducts] = useState<ProductLists>([]);
 
 	useEffect(() => {
 		const fetchProducts = async () => {

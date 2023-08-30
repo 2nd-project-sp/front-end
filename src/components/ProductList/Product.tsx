@@ -1,16 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-interface ProductProps {
-	id: number;
-	title: string;
-	price: number;
-	image: string;
-	description: string;
-	category: string;
-}
+import { ProductInterface } from '../../model/products';
 
-const Product: React.FC<ProductProps> = ({ product }) => {
+const Product: React.FC<ProductInterface> = ({ product }) => {
 	return (
 		<Link to={`/product/${product.id}`}>
 			<ProductCard>

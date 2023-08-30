@@ -41,6 +41,11 @@ const CategoryWrapper = styled.div`
 			font-size: 15px;
 			color: #5d5d5d;
 			font-weight: 200;
+			cursor: pointer;
+
+			&:hover {
+				color: #000;
+			}
 		}
 	}
 `;

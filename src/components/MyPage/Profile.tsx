@@ -12,7 +12,7 @@ const Profile = () => {
 						<li>
 							<div>
 								<span>아이디(이메일)</span>
-								<p>ign3333@naver.com</p>
+								<p>dev@gmail.com</p>
 							</div>
 						</li>
 						<li>
@@ -36,13 +36,13 @@ const Profile = () => {
 						<li>
 							<div>
 								<span>연락처</span>
-								<p>010-4647-6443</p>
+								<p>010-0001-0001</p>
 							</div>
 						</li>
 						<li>
 							<div>
 								<span>생일</span>
-								<p>1997년 05월 03일</p>
+								<p>2013년 8월 30일</p>
 							</div>
 						</li>
 						<li>
@@ -54,7 +54,7 @@ const Profile = () => {
 						<li>
 							<div>
 								<span>주소정보</span>
-								<p>서울특별시 서초구</p>
+								<p>서울특별시 가나다구</p>
 							</div>
 						</li>
 					</ul>

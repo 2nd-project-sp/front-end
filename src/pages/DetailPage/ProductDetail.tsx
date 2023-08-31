@@ -1,6 +1,7 @@
 import ProductDesc from '../../components/ProductDesc/ProductDesc';
 import ProductReview from '../../components/ProductReview/ProductReview';
 import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import ProductCount from '../../components/ProductCount/ProductCount';
 
@@ -24,7 +25,7 @@ const ProductDetail: React.FC = () => {
 	const currentPrice = productData
 		? productData.price - (productData.price * discountPer) / 100
 		: 0;
-	// const reviewNum = productData ? productData.rating.count : 0;
+	const reviewNum = productData ? productData.rating.count : 0;
 
 	const [showPopup, setShowPopup] = useState(false);
 
@@ -53,72 +54,278 @@ const ProductDetail: React.FC = () => {
 	}, [id]);
 
 	return (
-		<div className='product-detail'>
-			{productData && (
-				<div className='product-brand'>
-					<div className='brand_infoCon'>
-						<div>{productData.category}</div>
-					</div>
-				</div>
-			)}
-			{productData && (
-				<div className='product-detail_infoCon'>
-					<img className='detail_infoCon_img' src={productData.image} alt={productData.title} />
-					<div className='detail_infoCon'>
-						<div className='infoCon_textBox'>
-							<div className='textBox_text'>
-								<div className='infoTextBox'>
-									<h2 className='infoTextBox_title'>{productData.title}</h2>
-									<div className='infoTextBox_heart'></div>
-								</div>
-								<div className='infoText_reviewCon'>
-									<div className='reviewCon_stars'></div>
-									{/* <div className='reviewCon_text'>{reviewNum}</div> */}
-								</div>
-								<div className='infoText_priceCon'>
-									<div className='prevPrice'>{productData.price}$</div>
-									<div className='currentPrice_Con'>
-										<div className='discountPer'>{discountPer}%</div>
-										<div className='currentPrice'>{currentPrice}$</div>
-									</div>
-								</div>
-							</div>
-							<div className='textBox_shipping'>
-								<div className='shipping-title'>배송정보</div>
-								<div className='shipping-info'>
-									<div>배송비</div>
-									<div>배송기간</div>
-								</div>
-							</div>
-						</div>
-						<ProductCount />
-						<div className='detail_buttonCon'>
-							<button className='buttonCon_cart' onClick={putCart}>
-								장바구니 담기
-							</button>
-							<button className='buttonCon_purchase' onClick={gotoMyBag}>
-								바로 구매하기
-							</button>
-						</div>
-					</div>
-					{showPopup && (
-						<div className='popup'>
-							<div className='popup-xbutton'>
-								<button onClick={xbutton}>X</button>
-							</div>
+		<ProductDetailWrapper>
+			<div className='product-detail'>
+				{productData && (
+					<ProductBrand>
+						<BrandInfoCon>{productData.category}</BrandInfoCon>
+					</ProductBrand>
+				)}
+				{productData && (
+					<ProductDetailInfoCon>
+						<DetailInfoConImg src={productData.image} alt={productData.title}></DetailInfoConImg>
+						<DetailInfoCon>
+							<InfoConTextBox>
+								<TextBoxText>
+									<InfoTextBox>
+										<InfoTextBoxTitle>{productData.title}</InfoTextBoxTitle>
+										<InfoTextBoxHeart></InfoTextBoxHeart>
+										<InfoTextReviewCon>
+											<ReviewConStars></ReviewConStars>
+											<ReviewConText>{reviewNum}</ReviewConText>
+										</InfoTextReviewCon>
+									</InfoTextBox>
 
-							<p>장바구니에 상품이 담겼습니다</p>
-							<div className='popup-button'>
-								<button onClick={gotoMyBag}>장바구니 바로가기</button>
-							</div>
-						</div>
-					)}
-				</div>
-			)}
-			<ProductDesc productData={productData} />
-			<ProductReview />
-		</div>
+									<InfoTextPriceCon>
+										<PrevPrice>{productData.price}$</PrevPrice>
+										<CurrentPriceCon>
+											<DiscountPer>{discountPer}%</DiscountPer>
+											<CurrentPrice>{currentPrice}$</CurrentPrice>
+										</CurrentPriceCon>
+									</InfoTextPriceCon>
+								</TextBoxText>
+								<TextBoxShipping>
+									<ShippingTitle>배송정보</ShippingTitle>
+									<ShippingInfo>
+										<div>배송비</div>
+										<div>배송기간</div>
+									</ShippingInfo>
+								</TextBoxShipping>
+							</InfoConTextBox>
+
+							<ProductCount />
+							<DetailButtonCon>
+								<ButtonConCart onClick={putCart}>장바구니 담기</ButtonConCart>
+								<ButtonConPurchase onClick={gotoMyBag}>바로 구매하기</ButtonConPurchase>
+							</DetailButtonCon>
+						</DetailInfoCon>
+						{showPopup && (
+							<Popup>
+								<PopupXButton>
+									<button onClick={xbutton}>X</button>
+								</PopupXButton>
+								<p>장바구니에 상품이 담겼습니다</p>
+								<PopupButton>
+									<button onClick={gotoMyBag}>장바구니 바로가기</button>
+								</PopupButton>
+							</Popup>
+						)}
+					</ProductDetailInfoCon>
+				)}
+				<ProductDesc productData={productData} />
+				<ProductReview />
+			</div>
+		</ProductDetailWrapper>
 	);
 };
+//Styled Component
+const ProductDetailWrapper = styled.div`
+	margin-top: 70px;
+`;
+
+const ProductBrand = styled.div`
+	display: flex;
+	margin-bottom: 16px;
+`;
+
+const BrandInfoCon = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin-left: 14px;
+`;
+
+const ProductDetailInfoCon = styled.div`
+	width: 100%;
+	height: 100%;
+	display: flex;
+	margin-bottom: 20px;
+`;
+
+const DetailInfoConImg = styled.img`
+	width: 300px;
+	height: 300px;
+`;
+
+const DetailInfoCon = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: space-between;
+	margin-left: 45px;
+`;
+
+const InfoConTextBox = styled.div`
+	width: 100%;
+`;
+const TextBoxText = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding-bottom: 16px;
+	border-top: 2px solid #000000;
+	border-bottom: 1px solid #f4f4f4;
+`;
+
+const InfoTextBox = styled.div`
+	display: flex;
+	width: 100%;
+	height: 100%;
+	align-items: center;
+	justify-content: space-between;
+`;
+
+const InfoTextBoxTitle = styled.h2`
+	font-size: 18px;
+	width: 80%;
+	font-weight: 600;
+	margin-top: 10px;
+	text-align: left;
+`;
+
+const InfoTextBoxHeart = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 10%;
+	height: 100%;
+`;
+
+const InfoTextReviewCon = styled.div`
+	display: flex;
+	align-items: center;
+`;
+
+const ReviewConStars = styled.div`
+	margin-right: 12px;
+`;
+
+const ReviewConText = styled.div`
+	color: #5d5d5d;
+	font-size: 11px;
+	font-weight: 500;
+	border-bottom: 0.5px solid #5d5d5d;
+`;
+
+const InfoTextPriceCon = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+`;
+
+const PrevPrice = styled.div`
+	font-size: 16px;
+	font-weight: 500;
+	color: #c4c4c4;
+`;
+
+const CurrentPriceCon = styled.div`
+	display: flex;
+`;
+
+const DiscountPer = styled.div`
+	font-size: 22px;
+	color: #ff4800;
+	font-weight: 600;
+	margin-right: 6px;
+`;
+
+const CurrentPrice = styled.div`
+	margin-left: 4px;
+	color: rgb(0, 0, 0);
+	font-size: 22px;
+	font-weight: 600;
+`;
+
+const TextBoxShipping = styled.div`
+	width: 100%;
+	height: 50%;
+	font-size: 13px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: flex-start;
+	padding: 16px 0;
+	border-bottom: 1px solid #f4f4f4;
+`;
+
+const ShippingTitle = styled.div`
+	font-weight: 700;
+`;
+
+const ShippingInfo = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+`;
+
+const DetailButtonCon = styled.div`
+	display: flex;
+	width: 100%;
+	margin-top: 20px;
+`;
+
+const ButtonCon = styled.button`
+	width: 100%;
+	font-size: 14px;
+`;
+
+const ButtonConCart = styled(ButtonCon)`
+	background-color: #fff;
+	color: #000000;
+	border: 1px solid #c4c4c4;
+	margin-right: 5px;
+	height: 50px;
+`;
+
+const ButtonConPurchase = styled(ButtonCon)`
+	background-color: #000000;
+	border: 1px solid #000000;
+	color: #fff;
+
+	&:hover {
+		background-color: #ff4800;
+		border: 1px solid #ff4800;
+	}
+`;
+
+const Popup = styled.div`
+	position: fixed;
+	width: 30%;
+	height: 20%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: white;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+	z-index: 999;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`;
+
+const PopupXButton = styled.div`
+	position: absolute;
+	right: 20px;
+	top: 10px;
+`;
+
+const PopupButton = styled.div`
+	width: 150px;
+	height: 30px;
+	border: 1px solid #c4c4c4;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 3px;
+	margin-top: 20px;
+`;
 
 export default ProductDetail;

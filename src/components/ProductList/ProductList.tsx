@@ -19,6 +19,11 @@ const Grid = styled.div`
 	grid-template-rows: auto;
 	grid-gap: 20px; /* 칸 사이의 간격 설정 */
 	margin-top: 70px;
+	@media screen and (max-width: 500px) {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+		grid-gap: 0px; /* 칸 사이의 간격 설정 */
+	}
 `;
 
 export default ProductList;

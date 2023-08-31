@@ -52,6 +52,19 @@ const ProductTitle = styled.div`
 		font-weight: normal;
 		text-decoration: line-through;
 	}
+	@media screen and (max-width: 500px) {
+		h5 {
+			font-size: 0.5rem;
+			margin-bottom: 0.2rem;
+		}
+		strong {
+			color: rgb(196, 196, 196);
+			line-height: 1;
+			font-size: 7px;
+			font-weight: normal;
+			text-decoration: line-through;
+		}
+	}
 `;
 
 const ProductInfo = styled.div`

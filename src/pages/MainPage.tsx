@@ -36,10 +36,14 @@ const MainPage: React.FC = () => {
 		</>
 	);
 };
+
 const PageContainer = styled.div`
 	display: flex;
 	flex: 5;
 	box-sizing: content-box; /* 박스 모델을 content-box로 설정 */
+	@media screen and (max-width: 500px) {
+		flex-direction: column;
+	}
 `;
 const SidebarContainer = styled.div`
 	flex: 1;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 
 const ProductCount: React.FC = () => {
 	const [quantity, setQuantity] = useState(1);
@@ -14,16 +15,29 @@ const ProductCount: React.FC = () => {
 	};
 
 	return (
-		<div className='product-count'>
-			<button className='quantity-button' onClick={decreaseQuantity}>
-				-
-			</button>
-			<span className='quantity'>{quantity}</span>
-			<button className='quantity-button' onClick={increaseQuantity}>
-				+
-			</button>
-		</div>
+		<ProductCountContainer>
+			<QuantityButton onClick={decreaseQuantity}>-</QuantityButton>
+			<Quantity>{quantity}</Quantity>
+			<QuantityButton onClick={increaseQuantity}>+</QuantityButton>
+		</ProductCountContainer>
 	);
 };
+const ProductCountContainer = styled.div`
+	display: flex;
+	align-items: center;
+	margin-top: 20px;
+`;
+const QuantityButton = styled.button`
+	background-color: #f0f0f0;
+	border: none;
+	padding: 5px 10px;
+	font-size: 16px;
+	cursor: pointer;
+`;
+const Quantity = styled.span`
+	width: 30px;
+	text-align: center;
+	font-size: 18px;
+`;
 
 export default ProductCount;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReviewCon from './ReviewCon';
+import styled from 'styled-components';
 
 interface Review {
 	id: number;
@@ -18,18 +19,38 @@ const ProductReview: React.FC = () => {
 			.then(data => setReviews(data.slice(0, 20)));
 	}, []);
 
-	console.log(reviews);
 	return (
-		<div className='product-review'>
-			<div className='product-review-info'>
+		<ProductReviewContainer className='product-review'>
+			<ProductReviewInfo className='product-review-info'>
 				<h2 className='review_title'>리뷰</h2>
-				<p className='review_count'>({reviews.length})</p>
-			</div>
-			<div className='reviewCard'>
+				<ReviewCount>({reviews.length})</ReviewCount>
+			</ProductReviewInfo>
+			<ReviewCard className='reviewCard'>
 				<ReviewCon reviews={reviews} />
-			</div>
-		</div>
+			</ReviewCard>
+		</ProductReviewContainer>
 	);
 };
+
+const ProductReviewContainer = styled.div`
+	width: 100%;
+`;
+
+const ProductReviewInfo = styled.div`
+	border-bottom: 4px solid rgb(0, 0, 0);
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+`;
+
+const ReviewCard = styled.div`
+	border-bottom: 2px solid #f4f4f4;
+`;
+
+const ReviewCount = styled.p`
+	font-size: 24px;
+	font-weight: 700;
+`;
 
 export default ProductReview;

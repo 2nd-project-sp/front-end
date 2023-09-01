@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import ProductList from '../components/ProductList/ProductList';
 import Sidebar from '../components/Sidebar';
+import Banner from '../components/Banner/Banner';
 import { ProductLists } from '../models/Product';
 import styled from 'styled-components';
 import { devices } from '../assets/styles/constants';
@@ -28,6 +29,9 @@ const MainPage: React.FC = () => {
 		<>
 			<PageContainer>
 				{loading && 'Loading...'}
+				<BannerContainer>
+					<Banner />
+				</BannerContainer>
 				<SidebarContainer>
 					<Sidebar />
 				</SidebarContainer>
@@ -52,6 +56,16 @@ const SidebarContainer = styled.div`
 	background-color: #f2f2f2;
 	margin-top: 70px;
 	margin-right: 80px;
+`;
+const BannerContainer = styled.div`
+	display: none; /* 기본적으로 숨김 */
+
+	@media screen and (${devices.md}) {
+		display: block; /* 모바일 화면일 때 보이도록 변경 */
+		margin-top: 60px;
+		width: auto;
+		height: auto;
+	}
 `;
 const ProductListContainer = styled.div`
 	flex: 4;

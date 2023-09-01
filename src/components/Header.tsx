@@ -44,7 +44,7 @@ const Header: React.FC = () => {
 				<div className='header-navigation'>
 					<div>
 						<div className='temp-logo' onClick={homeHandler}>
-							29cm
+							29CM
 						</div>
 					</div>
 					<div className='navigation'>
@@ -87,17 +87,17 @@ const SHeader = styled.div`
 	top: 0;
 	left: 0;
 	right: 0;
-	min-width: 1000px;
+
 	z-index: 100;
 	height: 80px;
 	background: #000;
 	color: #fff;
-	
+
 	.header-wrapper {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-
+		height: 100%;
 		.header-navigation {
 			display: flex;
 			justify-content: center;
@@ -139,26 +139,8 @@ const SHeader = styled.div`
 			margin-right: 50px;
 			margin-top: 10px;
 
-			.mypage {
-				display: flex;
-				flex-direction: column;
-				margin-right: 10px;
-				align-items: center;
-				cursor: pointer;
-				span {
-					font-size: 10px;
-				}
-			}
-			.mybag {
-				display: flex;
-				flex-direction: column;
-				margin-right: 10px;
-				align-items: center;
-				cursor: pointer;
-				span {
-					font-size: 10px;
-				}
-			}
+			.mypage,
+			.mybag,
 			.login {
 				display: flex;
 				flex-direction: column;
@@ -167,15 +149,74 @@ const SHeader = styled.div`
 				cursor: pointer;
 				span {
 					font-size: 10px;
-					color: white;
 				}
 			}
+
 			.menu-icon {
 				font-size: 30px;
 			}
 		}
 	}
 	@media ${devices.md} {
-		background: rgba(0,0,0,0.5);
+		min-width: 0px;
+		height: 60px;
+		.header-wrapper {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.header-navigation {
+				display: flex;
+				justify-content: center;
+				align-items: flex-start;
+				height: 100%;
+
+				.temp-logo {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					text-align: center;
+					font-size: 1.5rem;
+					letter-spacing: 5px;
+					margin-top: 10px;
+					margin-left: 30px;
+					margin-right: 70px;
+					cursor: pointer;
+				}
+				.navigation {
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					.home {
+						display: none;
+					}
+				}
+			}
+
+			.menu-container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				gap: 0.5rem;
+				margin-right: 10px;
+				margin-top: 0px;
+
+				.mypage,
+				.mybag,
+				.login {
+					display: flex;
+					flex-direction: column;
+					margin-right: 10px;
+					align-items: center;
+					cursor: pointer;
+					span {
+						display: none;
+					}
+				}
+				.menu-icon {
+					font-size: 1.5rem;
+				}
+			}
+		}
 	}
 `;

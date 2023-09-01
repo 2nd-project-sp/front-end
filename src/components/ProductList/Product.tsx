@@ -10,7 +10,12 @@ const Product: React.FC<ProductInterface> = ({ product }) => {
 			<ProductCard>
 				<ProductImage>
 					{/* <img src={product.image} alt={product.title} /> */}
-					<img src={product.thumbnail} alt={product.title} />
+					<img
+						src={
+							'	https://img.29cm.co.kr/item/202308/11ee35923504abf7aa4f312e96f92cf3.jpg?width=400'
+						}
+						alt={product.title}
+					/>
 				</ProductImage>
 				<ProductTitle>
 					<p>{product.category}</p>
@@ -23,6 +28,7 @@ const Product: React.FC<ProductInterface> = ({ product }) => {
 				</ProductInfo>
 				<ProductInfo2>
 					<ul>
+						<li color='#1d1d1d'>쿠폰</li>
 						<li color='#1d1d1d'>신상품</li>
 					</ul>
 				</ProductInfo2>
@@ -36,13 +42,13 @@ const ProductCard = styled.div`
 	flex-direction: column;
 	margin-bottom: 1rem;
 	text-align: left;
-	font-size: 20px;
+	font-size: 16px;
 	font-family: campton, 'Apple SD Gothic Neo', NanumBarunGothic, 나눔바른고딕, 'Malgun Gothic',
 		'맑은 고딕', dotum, sans-serif;
 `;
 const ProductTitle = styled.div`
 	h5 {
-		margin-bottom: 2rem;
+		margin-bottom: 1rem;
 		margin-top: 0.5rem;
 	}
 	strong {
@@ -69,21 +75,18 @@ const ProductInfo = styled.div`
 	div {
 		display: flex;
 		justify-content: space-between;
-		margin-bottom: 0.5rem;
 	}
 `;
 const Discount = styled.span`
 	margin-right: 1rem; /* 여백을 조정할 수 있는 값으로 변경하세요 */
 	color: var(--ruler-scale-color-red-500);
-`;
-
-const DiscountedPrice = styled.strong`
 	font-weight: bold;
 `;
+
+const DiscountedPrice = styled.strong``;
 const ProductInfo2 = styled.div`
 	ul {
 		list-style: none;
-		margin-top: 1rem;
 		padding: 0;
 		display: flex; /* 리스트 아이템을 가로로 정렬하기 위해 flex로 설정 */
 		flex-wrap: wrap; /* 리스트 아이템이 가로로 넘칠 경우 줄 바꿈 처리 */
@@ -102,7 +105,7 @@ const ProductImage = styled.div`
 	overflow: hidden;
 	position: relative;
 	padding-top: 100%;
-	background-color: rgb(244, 244, 244);
+	background-color: rgba(244, 244, 244, 0.5);
 	img {
 		width: 100%;
 		position: absolute;

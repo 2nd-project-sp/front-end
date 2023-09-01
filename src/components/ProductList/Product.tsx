@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ProductInterface } from '../../model/Products';
+import { ProductInterface } from '../../models/product';
 
 const Product: React.FC<ProductInterface> = ({ product }) => {
 	return (

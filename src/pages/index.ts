@@ -6,7 +6,6 @@ import SignUpPage from './SignUpPage';
 import ProductInput from './ProductInput';
 import PaymentPage from './PaymentPage';
 import ProductDetail from './DetailPage/ProductDetail';
-
 export {
 	LoginPage,
 	MyBagPage,

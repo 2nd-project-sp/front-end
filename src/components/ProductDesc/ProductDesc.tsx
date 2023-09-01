@@ -1,24 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ProductInterface } from '../../models/product';
 
-interface Product {
-	id: number;
-	title: string;
-	price: number;
-	image: string;
-	rating: {
-		count: number;
-	};
-	category: string;
-	description: string;
-}
-
-interface ProductdataProps {
-	productData: Product | null;
-}
-
-const ProductDesc: React.FC<ProductdataProps> = ({ productData }) => {
-	if (!productData) {
+const ProductDesc: React.FC<ProductInterface> = ({ selectedProduct }) => {
+	if (!selectedProduct) {
 		return null;
 	}
 
@@ -26,8 +11,8 @@ const ProductDesc: React.FC<ProductdataProps> = ({ productData }) => {
 		<ProductDescContainer>
 			<ProductDescTitle className='product-desc_title'>상품정보</ProductDescTitle>
 			<DescInfo className='desc_info'>
-				<InfoText className='info_text'>{productData.title}</InfoText>
-				<InfoText className='info_text'>{productData.description}</InfoText>
+				<InfoText className='info_text'>{selectedProduct.title}</InfoText>
+				<InfoText className='info_text'>{selectedProduct.description}</InfoText>
 			</DescInfo>
 		</ProductDescContainer>
 	);

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ProductInterface } from '../../models/Products';
 import { devices } from '../../assets/styles/constants';
+import { ProductInterface } from '../../models/product';
+
 const Product: React.FC<ProductInterface> = ({ product }) => {
 	return (
 		<Link to={`/product/${product.id}`}>

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/loginSlice';
 import { RootState } from '../store/store';
+import { devices } from '../assets/styles/constants';
 
 const Header: React.FC = () => {
 	const navigate = useNavigate();
@@ -91,7 +92,7 @@ const SHeader = styled.div`
 	height: 80px;
 	background: #000;
 	color: #fff;
-
+	
 	.header-wrapper {
 		display: flex;
 		justify-content: space-between;
@@ -173,5 +174,8 @@ const SHeader = styled.div`
 				font-size: 30px;
 			}
 		}
+	}
+	@media ${devices.md} {
+		background: rgba(0,0,0,0.5);
 	}
 `;

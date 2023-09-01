@@ -4,6 +4,7 @@ import ProductList from '../components/ProductList/ProductList';
 import Sidebar from '../components/Sidebar';
 import { ProductLists } from '../models/Product';
 import styled from 'styled-components';
+import { devices } from '../assets/styles/constants';
 const MainPage: React.FC = () => {
 	const [products, setProducts] = useState<ProductLists>([]);
 	const [loading, setLoading] = useState(false);
@@ -41,7 +42,7 @@ const PageContainer = styled.div`
 	display: flex;
 	flex: 5;
 	box-sizing: content-box; /* 박스 모델을 content-box로 설정 */
-	@media screen and (max-width: 500px) {
+	@media screen and ${devices.md} {
 		flex-direction: column;
 	}
 `;

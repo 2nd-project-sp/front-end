@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ProductInterface } from '../../model/Products';
-
+import { ProductInterface } from '../../models/Products';
+import { devices } from '../../assets/styles/constants';
 const Product: React.FC<ProductInterface> = ({ product }) => {
 	return (
 		<Link to={`/product/${product.id}`}>
@@ -52,7 +52,7 @@ const ProductTitle = styled.div`
 		font-weight: normal;
 		text-decoration: line-through;
 	}
-	@media screen and (max-width: 500px) {
+	@media screen and ${devices.md} {
 		h5 {
 			font-size: 0.5rem;
 			margin-bottom: 0.2rem;

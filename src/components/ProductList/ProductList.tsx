@@ -2,7 +2,7 @@ import React from 'react';
 import Product from './Product';
 import styled from 'styled-components';
 import { ProductInterface, ProductLists } from '../models/Product';
-
+import { devices } from '../../assets/styles/constants';
 const ProductList: React.FC<ProductLists> = ({ products }: ProductLists) => {
 	return (
 		<Grid>
@@ -19,9 +19,9 @@ const Grid = styled.div`
 	grid-template-rows: auto;
 	grid-gap: 20px; /* 칸 사이의 간격 설정 */
 	margin-top: 70px;
-	@media screen and (max-width: 500px) {
+	@media screen and ${devices.md} {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+		grid-template-columns: 1fr 1fr;
 		grid-gap: 0px; /* 칸 사이의 간격 설정 */
 	}
 `;

@@ -13,8 +13,8 @@ const Product: React.FC<ProductInterface> = ({ product }) => {
 					<img src={product.thumbnail} alt={product.title} />
 				</ProductImage>
 				<ProductTitle>
-					<h5>{product.title}</h5>
 					<p>{product.category}</p>
+					<h5>{product.title}</h5>
 					<strong>{product.price}</strong>
 				</ProductTitle>
 				<ProductInfo>
@@ -34,34 +34,31 @@ const Product: React.FC<ProductInterface> = ({ product }) => {
 const ProductCard = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 1rem;
-	border: 1px solid #eaefef;
 	margin-bottom: 1rem;
 	text-align: left;
+	font-size: 20px;
 	font-family: campton, 'Apple SD Gothic Neo', NanumBarunGothic, 나눔바른고딕, 'Malgun Gothic',
 		'맑은 고딕', dotum, sans-serif;
 `;
 const ProductTitle = styled.div`
 	h5 {
-		font-size: 1rem;
-		margin-bottom: 0.5rem;
+		margin-bottom: 2rem;
+		margin-top: 0.5rem;
 	}
 	strong {
 		color: rgb(196, 196, 196);
 		line-height: 1;
-		font-size: 11px;
 		font-weight: normal;
 		text-decoration: line-through;
+		line-height: 1.4;
 	}
 	@media screen and ${devices.md} {
 		h5 {
-			font-size: 0.5rem;
-			margin-bottom: 0.2rem;
+			margin-bottom: 1rem;
 		}
 		strong {
 			color: rgb(196, 196, 196);
 			line-height: 1;
-			font-size: 7px;
 			font-weight: normal;
 			text-decoration: line-through;
 		}
@@ -77,23 +74,28 @@ const ProductInfo = styled.div`
 `;
 const Discount = styled.span`
 	margin-right: 1rem; /* 여백을 조정할 수 있는 값으로 변경하세요 */
+	color: var(--ruler-scale-color-red-500);
 `;
 
 const DiscountedPrice = styled.strong`
-	font-size: 1rem;
 	font-weight: bold;
 `;
 const ProductInfo2 = styled.div`
 	ul {
 		list-style: none;
-		margin: 0;
+		margin-top: 1rem;
 		padding: 0;
+		display: flex; /* 리스트 아이템을 가로로 정렬하기 위해 flex로 설정 */
+		flex-wrap: wrap; /* 리스트 아이템이 가로로 넘칠 경우 줄 바꿈 처리 */
+	}
 
-		li {
-			margin-bottom: 0.2rem;
-			color: #1d1d1d;
-			// border: 1px solid #ccc;
-		}
+	li {
+		color: #1d1d1d;
+		font-size: 70%;
+		border: 1px solid #ccc;
+		padding: 0.2rem; /* 리스트 아이템 내부 패딩 추가 */
+		margin-right: 0.5rem; /* 리스트 아이템 간격 설정 */
+		margin-bottom: 0.5rem; /* 아래 여백 설정 */
 	}
 `;
 const ProductImage = styled.div`

@@ -7,6 +7,7 @@ import styled from 'styled-components';
 const MainPage: React.FC = () => {
 	const [products, setProducts] = useState<ProductLists>([]);
 	const [loading, setLoading] = useState(false);
+
 	useEffect(() => {
 		setLoading(true);
 		const fetchProducts = async () => {

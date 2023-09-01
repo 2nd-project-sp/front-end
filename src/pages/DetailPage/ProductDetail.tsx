@@ -1,33 +1,31 @@
-import ProductDesc from '../../components/ProductDesc/ProductDesc';
-import ProductReview from '../../components/ProductReview/ProductReview';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import ProductCount from '../../components/ProductCount/ProductCount';
-
-interface Product {
-	id: number;
-	title: string;
-	price: number;
-	image: string;
-	rating: {
-		count: number;
-	};
-	category: string;
-	description: string;
-}
+import { fetchProducts, selectProductData } from '../../store/productsSlice'; // Import the renamed async thunk
+import ProductDesc from '../../components/ProductDesc/ProductDesc';
+import ProductReview from '../../components/ProductReview/ProductReview';
 
 const ProductDetail: React.FC = () => {
-	const { id } = useParams<{ id?: string }>();
 	const navigate = useNavigate();
-	const [productData, setProductData] = useState<Product | null>(null);
-	const discountPer = 50;
-	const currentPrice = productData
-		? productData.price - (productData.price * discountPer) / 100
-		: 0;
-	const reviewNum = productData ? productData.rating.count : 0;
+	const dispatch = useDispatch();
+
+	const { id } = useParams<{ id?: string }>();
+	const idAsNumber = parseInt(id, 10);
+
+	const productData = useSelector(selectProductData);
 
 	const [showPopup, setShowPopup] = useState(false);
+
+	const productsArray = productData.products;
+	const selectedProduct = productsArray && productsArray.find(it => it.id === idAsNumber);
+
+	const discountPer = 50;
+	const currentPrice = selectedProduct
+		? selectedProduct.price - (selectedProduct.price * discountPer) / 100
+		: 0;
+	const reviewNum = selectedProduct ? selectedProduct.rating : 0;
 
 	const gotoMyBag = () => {
 		navigate('/mybag');
@@ -40,35 +38,31 @@ const ProductDetail: React.FC = () => {
 		setShowPopup(false);
 	};
 
-	// API불러옴
 	useEffect(() => {
 		if (id) {
-			// Check if id is not undefined
-			fetch('https://fakestoreapi.com/products')
-				.then(res => res.json())
-				.then(json => {
-					const matchingProduct = json.find((product: Product) => product.id === parseInt(id, 10));
-					setProductData(matchingProduct || null);
-				});
+			dispatch(fetchProducts());
 		}
-	}, [id]);
+	}, [dispatch, id]);
 
 	return (
 		<ProductDetailWrapper>
 			<div className='product-detail'>
-				{productData && (
+				{selectedProduct && (
 					<ProductBrand>
-						<BrandInfoCon>{productData.category}</BrandInfoCon>
+						<BrandInfoCon>{selectedProduct.brand}</BrandInfoCon>
 					</ProductBrand>
 				)}
-				{productData && (
+				{selectedProduct && (
 					<ProductDetailInfoCon>
-						<DetailInfoConImg src={productData.image} alt={productData.title}></DetailInfoConImg>
+						<DetailInfoConImg
+							src={selectedProduct.thumbnail}
+							alt={selectedProduct.title}
+						></DetailInfoConImg>
 						<DetailInfoCon>
 							<InfoConTextBox>
 								<TextBoxText>
 									<InfoTextBox>
-										<InfoTextBoxTitle>{productData.title}</InfoTextBoxTitle>
+										<InfoTextBoxTitle>{selectedProduct.title}</InfoTextBoxTitle>
 										<InfoTextBoxHeart></InfoTextBoxHeart>
 										<InfoTextReviewCon>
 											<ReviewConStars></ReviewConStars>
@@ -77,7 +71,7 @@ const ProductDetail: React.FC = () => {
 									</InfoTextBox>
 
 									<InfoTextPriceCon>
-										<PrevPrice>{productData.price}$</PrevPrice>
+										<PrevPrice>{selectedProduct.price}$</PrevPrice>
 										<CurrentPriceCon>
 											<DiscountPer>{discountPer}%</DiscountPer>
 											<CurrentPrice>{currentPrice}$</CurrentPrice>
@@ -112,7 +106,7 @@ const ProductDetail: React.FC = () => {
 						)}
 					</ProductDetailInfoCon>
 				)}
-				<ProductDesc productData={productData} />
+				<ProductDesc selectedProduct={selectedProduct} />
 				<ProductReview />
 			</div>
 		</ProductDetailWrapper>

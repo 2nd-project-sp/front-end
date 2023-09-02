@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ProductInterface } from '../../model/Products';
+import { ProductInterface } from '../../models/product';
 
 const Product: React.FC<ProductInterface> = ({ product }) => {
 	return (
@@ -51,6 +51,19 @@ const ProductTitle = styled.div`
 		font-size: 11px;
 		font-weight: normal;
 		text-decoration: line-through;
+	}
+	@media screen and (max-width: 500px) {
+		h5 {
+			font-size: 0.5rem;
+			margin-bottom: 0.2rem;
+		}
+		strong {
+			color: rgb(196, 196, 196);
+			line-height: 1;
+			font-size: 7px;
+			font-weight: normal;
+			text-decoration: line-through;
+		}
 	}
 `;
 

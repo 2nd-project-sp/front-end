@@ -1,35 +1,47 @@
 import React from 'react';
+import styled from 'styled-components';
+import { ProductInterface } from '../../models/product';
 
-interface Product {
-	id: number;
-	title: string;
-	price: number;
-	image: string;
-	rating: {
-		count: number;
-	};
-	category: string;
-	description: string;
-}
-
-interface ProductdataProps {
-	productData: Product | null;
-}
-
-const ProductDesc: React.FC<ProductdataProps> = ({ productData }) => {
-	if (!productData) {
+const ProductDesc: React.FC<ProductInterface> = ({ selectedProduct }) => {
+	if (!selectedProduct) {
 		return null;
 	}
 
 	return (
-		<div className='product-desc'>
-			<h2 className='product-desc_title'>상품정보</h2>
-			<div className='desc_info'>
-				<div className='info_text'>{productData.title}</div>
-				<div className='info_text'>{productData.description}</div>
-			</div>
-		</div>
+		<ProductDescContainer>
+			<ProductDescTitle className='product-desc_title'>상품정보</ProductDescTitle>
+			<DescInfo className='desc_info'>
+				<InfoText className='info_text'>{selectedProduct.title}</InfoText>
+				<InfoText className='info_text'>{selectedProduct.description}</InfoText>
+			</DescInfo>
+		</ProductDescContainer>
 	);
 };
+const ProductDescContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 30px;
+`;
+
+const ProductDescTitle = styled.h2`
+	display: flex;
+	justify-content: flex-start;
+	margin-bottom: 10px;
+`;
+
+const DescInfo = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+`;
+
+const InfoText = styled.div`
+	width: 80%;
+	display: flex;
+	justify-content: flex-start;
+	text-align: left;
+	margin-bottom: 5px;
+	font-size: 14px;
+`;
 
 export default ProductDesc;

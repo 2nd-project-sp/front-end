@@ -1,17 +1,33 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { ISteps } from '../../models/steps';
 
 const PhoneNum: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
+	const [phoneNumber, setPhoneNumber] = useState<string>('');
+	const [gender, setGender] = useState('');
+	const validationCheck = phoneNumber.length === 13 && gender !== '';
 	const handlingNext = () => {
 		// 유효성 검사 후
 		setStep(step + 1);
 	};
-	const autoHyphen2 = (target: any) => {
-		return (target.value = target.value
-			.replace(/[^0-9]/g, '')
-			.replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
-			.replace(/(\-{1,2})$/g, ''));
+	const formatPhoneNumber = (value: string): string => {
+		const numericValue = value.replace(/\D/g, ''); // Remove non-digit characters
+		const match = numericValue.match(/^(\d{3})(\d{0,4})(\d{0,4})$/);
+		if (match) {
+			return match[1] + (match[2] ? '-' + match[2] : '') + (match[3] ? '-' + match[3] : '');
+		}
+		return numericValue;
+	};
+	const onChangePhoneNum = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+		const formattedValue = formatPhoneNumber(e.target.value);
+		console.log(formattedValue);
+		setPhoneNumber(formattedValue);
+	}, []);
+	const onClickMale = () => {
+		setGender('male');
+	};
+	const onClickFemale = () => {
+		setGender('female');
 	};
 	return (
 		<SPhoneNum>
@@ -26,15 +42,27 @@ const PhoneNum: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 					placeholder='전화번호 입력'
 					autoCapitalize='none'
 					className='email-input'
+					onChange={onChangePhoneNum}
+					maxLength={13}
+					value={phoneNumber}
 				/>
 				<div className='select-gender'>
 					<input type='radio' id='select1' name='gender' />
-					<label htmlFor='select1'>남성</label>
+					<label htmlFor='select1' onClick={onClickMale}>
+						남성
+					</label>
 					<input type='radio' id='select2' name='gender' />
-					<label htmlFor='select2'>여성</label>
+					<label htmlFor='select2' onClick={onClickFemale}>
+						여성
+					</label>
 				</div>
 			</div>
-			<button type='button' className='btn-next' onClick={handlingNext}>
+			<button
+				type='button'
+				className={validationCheck ? 'btn-next' : 'btn-next_invalid'}
+				onClick={handlingNext}
+				disabled={validationCheck ? false : true}
+			>
 				다음
 			</button>
 		</SPhoneNum>
@@ -117,6 +145,21 @@ const SPhoneNum = styled.div`
 		width: 100%;
 		height: 52px;
 		background: rgb(0, 0, 0);
+		color: rgb(255, 255, 255);
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	.btn-next_invalid {
+		cursor: not-allowed;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 40px;
+		min-height: 25px;
+		width: 100%;
+		height: 52px;
+		background: rgb(196, 196, 196);
 		color: rgb(255, 255, 255);
 		font-size: 14px;
 		font-weight: 700;

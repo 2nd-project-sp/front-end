@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { ISteps } from '../../models/steps';
 
@@ -21,8 +21,10 @@ const ProfilePic: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 			reader.onloadend = () => {
 				setImgFile(reader.result);
 			};
+			console.log();
 		}
 	};
+	console.log(imgFile.length);
 	return (
 		<SProfilePic>
 			<h3 className='profile-title'>프로필 사진을 선택해주세요.</h3>

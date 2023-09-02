@@ -7,6 +7,7 @@ import {
 	PhoneNum,
 	ProfilePic,
 	Done,
+	AddressSetting,
 } from '../components';
 
 const SignUpPage: React.FC = () => {
@@ -16,7 +17,8 @@ const SignUpPage: React.FC = () => {
 		1: <PasswordSetting step={step} setStep={setStep} />,
 		2: <PhoneNum step={step} setStep={setStep} />,
 		3: <ProfilePic step={step} setStep={setStep} />,
-		4: <Done step={step} setStep={setStep} />,
+		4: <AddressSetting step={step} setStep={setStep} />,
+		5: <Done />,
 	};
 	return (
 		<SSignUp>

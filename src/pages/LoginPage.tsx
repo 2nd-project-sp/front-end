@@ -47,7 +47,7 @@ const LoginPage: React.FC = () => {
 			count.current = count.current + 1;
 		} else {
 			navigate('/');
-			localStorage.setItem('login', form.email);
+			//localStorage.setItem('login', form.email);
 			dispatch(login(true));
 		}
 		setForm({ email: '', password: '' });

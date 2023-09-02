@@ -2,77 +2,65 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { ISteps } from '../../models/steps';
 
-const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
-	const [email, setEmail] = useState<string>('');
-	const [name, setName] = useState<string>('');
-	const [isEmail, setIsEmail] = useState<boolean>(false);
-	const [isTouched, setIsTouched] = useState<boolean>(false);
-	const emailInputInValid = !isEmail && isTouched;
+const AddressSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
+	const [address, setAddress] = useState<string>('');
+	const [subaddress, setSubaddress] = useState<string>('');
 	const handlingNext = () => {
 		// 유효성 검사 후
 		setStep(step + 1);
 	};
-	const onChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-		setName(e.target.value);
+	const onChangeMain = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+		setAddress(e.target.value);
 	}, []);
-	const onChangeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-		const emailRegex =
-			/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-		const emailCurrent = e.target.value;
-		setEmail(emailCurrent);
-		setIsTouched(true);
-		if (emailCurrent.trim() === '' || !emailRegex.test(emailCurrent)) {
-			setIsEmail(false);
-		} else {
-			setIsEmail(true);
-		}
+	const onChangeSub = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+		setSubaddress(e.target.value);
 	}, []);
+
 	return (
-		<SEmailSetting>
-			<h3 className='email-title'>
+		<SAddressSetting>
+			<h3 className='address-title'>
 				사용자 이름과 로그인에 사용할
 				<br />
 				이메일을 입력해주세요.
 			</h3>
-			<div className='container-email-input'>
+			<div className='container-address-input'>
 				<input
 					type='text'
-					placeholder='이름 입력'
+					placeholder='기본 주소 입력 (필수)'
 					autoCapitalize='none'
-					className='email-input'
-					onChange={onChangeName}
+					className='address-input'
+					onChange={onChangeMain}
 				/>
 				<div></div>
 				<input
 					type='text'
-					placeholder='아이디 (이메일) 입력'
+					placeholder='주소 입력 (선택)'
 					autoCapitalize='none'
-					className='email-input'
-					onChange={onChangeEmail}
+					className='address-input'
+					onChange={onChangeSub}
 				/>
-				{emailInputInValid && <p className='err-message'>* 이메일 형식이 맞지 않습니다.</p>}
 			</div>
 			<button
 				type='button'
-				className={isEmail && name ? 'btn-next' : 'btn-next_invalid'}
+				className={address ? 'btn-next' : 'btn-next_invalid'}
 				onClick={handlingNext}
-				disabled={isEmail && name ? false : true}
+				disabled={address ? false : true}
 			>
 				다음
 			</button>
-		</SEmailSetting>
+		</SAddressSetting>
 	);
 };
 
-export default EmailSetting;
+export default AddressSetting;
 
-const SEmailSetting = styled.div`
+const SAddressSetting = styled.div`
 	position: relative;
 	flex: 1 0 100%;
 	padding-top: 18px;
 	border-top: 4px solid rgb(244, 244, 244);
 
-	.email-title {
+	.address-title {
 		margin-bottom: 20px;
 		font-size: 20px;
 		font-weight: 500;
@@ -80,11 +68,11 @@ const SEmailSetting = styled.div`
 		white-space: pre-wrap;
 	}
 
-	.container-email-input {
+	.container-address-input {
 		margin-bottom: 40px;
 		padding: 0;
 
-		.email-input {
+		.address-input {
 			border: 1px solid #d4d4d4;
 			border-radius: 2px;
 			display: block;

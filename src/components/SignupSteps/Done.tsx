@@ -1,15 +1,22 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setting } from '../../store/signupSlice';
+import { RootState } from '../../store/store';
 
 const Done: React.FC = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const check = useSelector((state: RootState) => state.signup);
 	const [contents, setContents] = useState<string>('');
 	const handlingNext = () => {
 		navigate('/');
 	};
 	const onChangeIntroduce = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setContents(e.target.value);
+		const intro = e.target.value;
+		setContents(intro);
+		dispatch(setting({ introduce: intro }));
 	}, []);
 	return (
 		<SDone>

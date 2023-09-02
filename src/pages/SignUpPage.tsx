@@ -16,9 +16,8 @@ const SignUpPage: React.FC = () => {
 		0: <EmailSetting step={step} setStep={setStep} />,
 		1: <PasswordSetting step={step} setStep={setStep} />,
 		2: <PhoneNum step={step} setStep={setStep} />,
-		3: <ProfilePic step={step} setStep={setStep} />,
-		4: <AddressSetting step={step} setStep={setStep} />,
-		5: <Done />,
+		3: <AddressSetting step={step} setStep={setStep} />,
+		4: <Done />,
 	};
 	return (
 		<SSignUp>

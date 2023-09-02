@@ -9,7 +9,7 @@ const ProgressBar = ({ step }) => {
 	const [progressBar, setProgressBar] = useState(0);
 
 	const getProgressWidth = (step: number) => {
-		return Math.floor((step / 5) * 100);
+		return Math.floor((step / 4) * 100);
 	};
 	console.log(progressBar);
 	useEffect(() => {
@@ -28,9 +28,6 @@ const ProgressBar = ({ step }) => {
 				break;
 			case 4:
 				setProgressBar(getProgressWidth(4));
-				break;
-			case 5:
-				setProgressBar(getProgressWidth(5));
 				break;
 			default:
 				break;

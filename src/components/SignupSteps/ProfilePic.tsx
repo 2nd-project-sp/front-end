@@ -10,38 +10,11 @@ const ProfilePic: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 		// 유효성 검사 후
 		setStep(step + 1);
 	};
-
-	const readImg = () => {
-		if (!imgRef.current) {
-			return;
-		} else {
-			const file = imgRef.current.files[0];
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onloadend = () => {
-				setImgFile(reader.result);
-			};
-			console.log();
-		}
-	};
-	console.log(imgFile.length);
+	// 기본 이미지
+	// https://i.stack.imgur.com/frlIf.png
 	return (
 		<SProfilePic>
 			<h3 className='profile-title'>프로필 사진을 선택해주세요.</h3>
-			<div className='container-pic-input'>
-				<label className='file-label' htmlFor='filePicture'>
-					사진 선택하기(.jpeg, .png)
-				</label>
-				<input
-					type='file'
-					accept='image/*'
-					placeholder='사진을 선택해주세요'
-					onChange={readImg}
-					ref={imgRef}
-					className='file-input'
-					id='filePicture'
-				/>
-			</div>
 			<h4>사진 미리보기</h4>
 			<div className='img-preview'>
 				<img

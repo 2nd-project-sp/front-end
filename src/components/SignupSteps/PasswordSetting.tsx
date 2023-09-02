@@ -1,8 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { ISteps, IValid } from '../../models/steps';
+import { useDispatch, useSelector } from 'react-redux';
+import { setting } from '../../store/signupSlice';
+import { RootState } from '../../store/store';
 
 const PasswordSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
+	const dispatch = useDispatch();
 	const [password, setPassword] = useState<string>('');
 	const [pwCheck, setPwCheck] = useState<string>('');
 	const [confirm, setConfirm] = useState<boolean>(false);
@@ -17,13 +21,10 @@ const PasswordSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 		pw: false,
 		pwCheck: false,
 	});
-
-	const pwInputInvalid = !isValid.isPw && isTouched.pw;
-	const pwCheckInputInvalid = !isValid.isPw && isTouched.pwCheck;
+	const check = useSelector((state: RootState) => state.signup);
 	const alphaRegex = /(?=.*[a-zA-Z])/;
 	const characterRegex = /(?=.*[!@#$%^*+=-])/;
 	const numberRegex = /(?=.*[0-9])/;
-	const pwLength = password.length;
 	const handlingNext = () => {
 		// 유효성 검사 후
 		setStep(step + 1);
@@ -56,13 +57,13 @@ const PasswordSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 			setPwCheck(pwCheckCurrent);
 			if (password === pwCheckCurrent) {
 				setConfirm(true);
+				dispatch(setting({ password: pwCheckCurrent }));
 			} else {
 				setConfirm(false);
 			}
 		},
 		[password]
 	);
-
 	return (
 		<SPasswordSetting>
 			<h3 className='pw-title'>비밀번호를 입력해주세요.</h3>

@@ -1,8 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { ISteps } from '../../models/steps';
+import { useDispatch, useSelector } from 'react-redux';
+import { setting } from '../../store/signupSlice';
+import { RootState } from '../../store/store';
 
 const AddressSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
+	const dispatch = useDispatch();
+	const check = useSelector((state: RootState) => state.signup);
 	const [address, setAddress] = useState<string>('');
 	const [subaddress, setSubaddress] = useState<string>('');
 	const handlingNext = () => {
@@ -10,12 +15,15 @@ const AddressSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 		setStep(step + 1);
 	};
 	const onChangeMain = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-		setAddress(e.target.value);
+		const mainAddress = e.target.value;
+		setAddress(mainAddress);
+		dispatch(setting({ mainAddress: mainAddress }));
 	}, []);
 	const onChangeSub = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+		const subAddress = e.target.value;
 		setSubaddress(e.target.value);
+		dispatch(setting({ subAddress: subAddress }));
 	}, []);
-
 	return (
 		<SAddressSetting>
 			<h3 className='address-title'>

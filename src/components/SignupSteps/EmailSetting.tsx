@@ -1,8 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { ISteps } from '../../models/steps';
+import { useDispatch, useSelector } from 'react-redux';
+import { setting } from '../../store/signupSlice';
+import { RootState } from '../../store/store';
 
 const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
+	const dispatch = useDispatch();
+	const check = useSelector((state: RootState) => state.signup);
 	const [email, setEmail] = useState<string>('');
 	const [name, setName] = useState<string>('');
 	const [isEmail, setIsEmail] = useState<boolean>(false);
@@ -13,7 +18,9 @@ const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 		setStep(step + 1);
 	};
 	const onChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-		setName(e.target.value);
+		const newName = e.target.value;
+		setName(newName);
+		dispatch(setting({ name: newName }));
 	}, []);
 	const onChangeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 		const emailRegex =
@@ -25,6 +32,7 @@ const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 			setIsEmail(false);
 		} else {
 			setIsEmail(true);
+			dispatch(setting({ email: emailCurrent }));
 		}
 	}, []);
 	return (

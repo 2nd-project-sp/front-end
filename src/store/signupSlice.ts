@@ -18,7 +18,7 @@ const initialState = {
 	password: '',
 	phoneNumber: '',
 	sex: '',
-	profileImgUrl: '',
+	profileImgUrl: 'https://i.stack.imgur.com/frlIf.png',
 	introduce: '',
 	mainAddress: '',
 	subAddress: '',

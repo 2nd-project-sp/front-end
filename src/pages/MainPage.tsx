@@ -53,12 +53,10 @@ const PageContainer = styled.div`
 `;
 const SidebarContainer = styled.div`
 	flex: 1;
-	background-color: #f2f2f2;
-	margin-top: 100px;
-	margin-right: 80px;
 	margin: 100px 50px 30px 2rem;
 	@media screen and ${devices.md} {
-		margin: 1rem 1rem 0.1rem 1rem;
+		background-color: #f2f2f2;
+		margin: 0;
 	}
 `;
 const BannerContainer = styled.div`
@@ -67,6 +65,7 @@ const BannerContainer = styled.div`
 	@media screen and (${devices.md}) {
 		display: block; /* 모바일 화면일 때 보이도록 변경 */
 		margin-top: 60px;
+		background-color: #f2f2f2;
 		width: auto;
 		height: auto;
 	}

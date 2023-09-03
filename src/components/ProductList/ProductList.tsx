@@ -20,7 +20,7 @@ const Grid = styled.div`
 	grid-template-rows: auto;
 	grid-gap: 20px; /* 칸 사이의 간격 설정 */
 	margin-top: 100px;
-	margin-right: 2rem;
+	margin-right: 3rem;
 	@media screen and ${devices.md} {
 		display: grid;
 		grid-template-columns: 1fr 1fr;

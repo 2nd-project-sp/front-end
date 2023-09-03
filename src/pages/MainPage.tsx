@@ -54,8 +54,12 @@ const PageContainer = styled.div`
 const SidebarContainer = styled.div`
 	flex: 1;
 	background-color: #f2f2f2;
-	margin-top: 70px;
+	margin-top: 100px;
 	margin-right: 80px;
+	margin: 100px 50px 30px 2rem;
+	@media screen and ${devices.md} {
+		margin: 1rem 1rem 0.1rem 1rem;
+	}
 `;
 const BannerContainer = styled.div`
 	display: none; /* 기본적으로 숨김 */

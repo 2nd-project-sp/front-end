@@ -87,7 +87,7 @@ const DiscountedPrice = styled.strong``;
 const ProductInfo2 = styled.div`
 	ul {
 		list-style: none;
-		padding: 0;
+		padding: 0.2rem;
 		display: flex; /* 리스트 아이템을 가로로 정렬하기 위해 flex로 설정 */
 		flex-wrap: wrap; /* 리스트 아이템이 가로로 넘칠 경우 줄 바꿈 처리 */
 	}

@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import { devices } from '../../assets/styles/constants';
 import { ProductInterface, ProductLists } from '../../models/product';
 
-const ProductList: React.FC<ProductLists> = ({ products }: ProductLists) => {
+const ProductList: React.FC<ProductLists> = ({ products }) => {
 	return (
 		<Grid>
-			{products.map((product: ProductInterface, index: number) => (
+			{products?.map((product, index: number) => (
 				<Product product={product} key={`product-${index}`} />
 			))}
 		</Grid>

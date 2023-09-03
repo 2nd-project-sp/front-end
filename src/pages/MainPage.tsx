@@ -1,29 +1,24 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ProductList from '../components/ProductList/ProductList';
 import Sidebar from '../components/Sidebar';
 import Banner from '../components/Banner/Banner';
-import { ProductLists } from '../models/Product';
+// import { ProductLists } from '../models/Product';
 import styled from 'styled-components';
 import { devices } from '../assets/styles/constants';
-const MainPage: React.FC = () => {
-	const [products, setProducts] = useState<ProductLists>([]);
-	const [loading, setLoading] = useState(false);
+import { fetchProducts, selectProductData } from '../store/productsSlice';
 
+const MainPage: React.FC = () => {
+	const dispatch = useDispatch();
+	const [loading, setLoading] = useState(false);
+	const productData = useSelector(selectProductData);
+	console.log(productData);
+
+	const products = productData?.products;
 	useEffect(() => {
 		setLoading(true);
-		const fetchProducts = async () => {
-			try {
-				const response = await fetch('https://dummyjson.com/products');
-				const data = await response.json();
-				setProducts(data?.products);
-				setLoading(false);
-			} catch (error) {
-				console.error('Error fetching products:', error);
-			}
-		};
-
-		fetchProducts();
+		dispatch(fetchProducts());
 	}, []);
 	return (
 		<>

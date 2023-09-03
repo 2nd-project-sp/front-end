@@ -51,15 +51,14 @@ const SidebarContainer = styled.div`
 	margin: 100px 50px 30px 2rem;
 	@media screen and ${devices.md} {
 		background-color: #f2f2f2;
-		margin: 0;
+		margin: 0px;
 	}
 `;
 const BannerContainer = styled.div`
 	display: none; /* 기본적으로 숨김 */
-
 	@media screen and (${devices.md}) {
 		display: block; /* 모바일 화면일 때 보이도록 변경 */
-		margin-top: 60px;
+		margin-top: 2rem;
 		background-color: #f2f2f2;
 		width: auto;
 		height: auto;

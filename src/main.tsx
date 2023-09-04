@@ -1,6 +1,9 @@
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './global.css';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 import {
 	LoginPage,
 	MainPage,
@@ -49,7 +52,9 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<Provider store={store}>
-		<RouterProvider router={router} />
-	</Provider>
+	<QueryClientProvider client={queryClient}>
+		<Provider store={store}>
+			<RouterProvider router={router} />
+		</Provider>
+	</QueryClientProvider>
 );

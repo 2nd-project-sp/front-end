@@ -1,29 +1,28 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductList from '../components/ProductList/ProductList';
 import Sidebar from '../components/Sidebar';
 import Banner from '../components/Banner/Banner';
-// import { ProductLists } from '../models/Product';
 import styled from 'styled-components';
 import { devices } from '../assets/styles/constants';
-import { fetchProducts, selectProductData } from '../store/productsSlice';
+import { setProducts, selectProducts } from '../store/testProductSlice';
+import { useQuery } from '@tanstack/react-query';
+import { fetchProducts } from '../api/index';
 
 const MainPage: React.FC = () => {
 	const dispatch = useDispatch();
-	const [loading, setLoading] = useState(false);
-	const productData = useSelector(selectProductData);
-	console.log(productData);
+	const selectedProducts = useSelector(selectProducts);
+	const { data, isLoading, isError } = useQuery({queryKey:['testProducts'], queryFn: fetchProducts, staleTime: 3000, cacheTime: 60*1000});
 
-	const products = productData?.products;
 	useEffect(() => {
-		setLoading(true);
-		dispatch(fetchProducts());
-	}, []);
+		if (!isLoading && !isError) {
+			dispatch(setProducts(data.products));
+		}
+	}, [data, isLoading, isError]);
 	return (
 		<>
 			<PageContainer>
-				{loading && 'Loading...'}
+				{isLoading && 'Loading...'}
 				<BannerContainer>
 					<Banner />
 				</BannerContainer>
@@ -31,7 +30,7 @@ const MainPage: React.FC = () => {
 					<Sidebar />
 				</SidebarContainer>
 				<ProductListContainer>
-					<ProductList products={products} />
+					<ProductList products={selectedProducts} />
 				</ProductListContainer>
 			</PageContainer>
 		</>

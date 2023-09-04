@@ -12,13 +12,17 @@ import { fetchProducts } from '../api/index';
 const MainPage: React.FC = () => {
 	const dispatch = useDispatch();
 	const selectedProducts = useSelector(selectProducts);
-	const { data, isLoading, isError } = useQuery({queryKey:['testProducts'], queryFn: fetchProducts, staleTime: 3000, cacheTime: 60*1000});
-
-	useEffect(() => {
-		if (!isLoading && !isError) {
-			dispatch(setProducts(data.products));
-		}
-	}, [data, isLoading, isError]);
+	const { isLoading, isError } = useQuery({
+    queryKey: ['testProducts'],
+    queryFn: fetchProducts,
+    staleTime: 3000,
+    cacheTime: 60 * 1000,
+    onSuccess: (fetchedData) => {
+      if (!isError) {
+        dispatch(setProducts(fetchedData.products));
+      }
+    },
+  });
 	return (
 		<>
 			<PageContainer>

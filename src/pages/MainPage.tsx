@@ -51,7 +51,7 @@ const PageContainer = styled.div`
 `;
 const SidebarContainer = styled.div`
 	flex: 1;
-	margin: 100px 3rem 30px 0;
+	margin: 100px 3rem 30px 3rem;
 	@media screen and ${devices.md} {
 		background-color: #f2f2f2;
 		margin: 0px;

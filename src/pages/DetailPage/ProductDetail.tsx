@@ -6,6 +6,7 @@ import ProductCount from '../../components/ProductCount/ProductCount';
 import { fetchProducts, selectProductData } from '../../store/productsSlice'; // Import the renamed async thunk
 import ProductDesc from '../../components/ProductDesc/ProductDesc';
 import ProductReview from '../../components/ProductReview/ProductReview';
+import { addToCart } from '../../store/cartSlice';
 
 const ProductDetail: React.FC = () => {
 	const navigate = useNavigate();
@@ -28,12 +29,18 @@ const ProductDetail: React.FC = () => {
 	const reviewNum = selectedProduct ? selectedProduct.rating : 0;
 
 	const gotoMyBag = () => {
+		setShowPopup(false);  // 팝업을 닫는 로직 추가 (김혜린)
 		navigate('/mybag');
 	};
-	const putCart = () => {
-		setShowPopup(true);
-	};
 
+	// putCart 영역 선택된 값만 받아올 수 있도록 addTocart 따로 추가했습니다. (김혜린)
+	const putCart = () => {
+		if (selectedProduct) {
+		  dispatch(addToCart(selectedProduct));
+		}
+		setShowPopup(true);
+	  };
+	  
 	const xbutton = () => {
 		setShowPopup(false);
 	};

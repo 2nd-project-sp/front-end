@@ -1,5 +1,8 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
+import 'swiper/css/autoplay';
+import 'swiper/css/pagination';
 const Banner = () => {
 	const slidesData = [
 		'https://img.29cm.co.kr/item/202308/11ee3e606b4413b58a6919dc052253e6.jpg?width=500',
@@ -10,10 +13,13 @@ const Banner = () => {
 	];
 	return (
 		<Swiper
+		modules={[Autoplay, Pagination]}
 			spaceBetween={50}
 			slidesPerView={1}
 			onSlideChange={() => console.log('slide change')}
 			onSwiper={swiper => console.log(swiper)}
+			pagination={{ clickable: true }}
+			autoplay={{delay:3000}}
 		>
 			{slidesData.map((slide, index) => (
 				<SwiperSlide key={index}>

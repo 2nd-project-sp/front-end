@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import ProductCount from '../../components/ProductCount/ProductCount';
-import { fetchProducts, selectProductData } from '../../store/productsSlice'; // Import the renamed async thunk
+import { fetchProducts, selectProductData } from '../../store/productsSlice';
 import ProductDesc from '../../components/ProductDesc/ProductDesc';
 import ProductReview from '../../components/ProductReview/ProductReview';
+import ProductOption from '../../components/ProductOption/ProductOption';
 
 const ProductDetail: React.FC = () => {
 	const navigate = useNavigate();
@@ -49,7 +50,7 @@ const ProductDetail: React.FC = () => {
 			<div className='product-detail'>
 				{selectedProduct && (
 					<ProductBrand>
-						<BrandInfoCon>{selectedProduct.brand}</BrandInfoCon>
+						<BrandInfoCon>Brand {selectedProduct.brand}</BrandInfoCon>
 					</ProductBrand>
 				)}
 				{selectedProduct && (
@@ -86,8 +87,10 @@ const ProductDetail: React.FC = () => {
 									</ShippingInfo>
 								</TextBoxShipping>
 							</InfoConTextBox>
-
+							{/* 수량 */}
 							<ProductCount />
+							{/* 옵션 */}
+							<ProductOption />
 							<DetailButtonCon>
 								<ButtonConCart onClick={putCart}>장바구니 담기</ButtonConCart>
 								<ButtonConPurchase onClick={gotoMyBag}>바로 구매하기</ButtonConPurchase>

@@ -7,6 +7,7 @@ export interface ProductInterface {
 	category: string;
 	thumbnail: string;
 	rating: number;
+	quantity:number;
 }
 
 export interface ProductLists {

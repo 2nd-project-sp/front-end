@@ -13,7 +13,8 @@ const Header: React.FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const isLogin = useSelector((state: RootState) => state.login.isLogin);
-
+	const checkLogout = useSelector((state: RootState) => state.token);
+	console.log(checkLogout.token);
 	const myHandler = () => {
 		if (isLogin) {
 			navigate('/my');
@@ -28,12 +29,25 @@ const Header: React.FC = () => {
 			navigate('/login');
 		}
 	};
-	const loginHandler = () => {
-		if (isLogin) {
-			dispatch(logout(false));
-		} else {
-			navigate('/login');
-		}
+	const loginHandler = async () => {
+		// if (isLogin) {
+		// 	dispatch(logout(false));
+		// } else {
+		navigate('/login');
+	};
+	const logoutHandler = async () => {
+		const res = await fetch(
+			'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/logout',
+			{
+				method: 'POST',
+				headers: {
+					'ACCESS-TOKEN': `${checkLogout.token}`,
+				},
+				body: {} as any,
+			}
+		);
+		const json = await res.json();
+		console.log(json);
 	};
 	const homeHandler = () => {
 		navigate('/');
@@ -72,6 +86,11 @@ const Header: React.FC = () => {
 								<RiLoginBoxLine />
 							</div>
 							<span>{isLogin ? '로그아웃' : '로그인'}</span>
+						</div>
+						<div>
+							<button style={{ color: 'white' }} onClick={logoutHandler}>
+								로그아웃
+							</button>
 						</div>
 					</div>
 				</div>

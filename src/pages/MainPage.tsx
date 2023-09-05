@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductList from '../components/ProductList/ProductList';
+import { ProductLists } from '../models/product';
 import Sidebar from '../components/Sidebar';
 import Banner from '../components/Banner/Banner';
 import styled from 'styled-components';
@@ -13,16 +14,16 @@ const MainPage: React.FC = () => {
 	const dispatch = useDispatch();
 	const selectedProducts = useSelector(selectProducts);
 	const { isLoading, isError } = useQuery({
-    queryKey: ['testProducts'],
-    queryFn: fetchProducts,
-    staleTime: 3000,
-    cacheTime: 60 * 1000,
-    onSuccess: (fetchedData) => {
-      if (!isError) {
-        dispatch(setProducts(fetchedData.products));
-      }
-    },
-  });
+		queryKey: ['testProducts'],
+		queryFn: fetchProducts,
+		staleTime: 3000,
+		cacheTime: 60 * 1000,
+		onSuccess: fetchedData => {
+			if (!isError) {
+				dispatch(setProducts(fetchedData.products));
+			}
+		},
+	});
 	return (
 		<>
 			<PageContainer>
@@ -45,14 +46,14 @@ const PageContainer = styled.div`
 	display: flex;
 	flex: 5;
 	box-sizing: content-box; /* 박스 모델을 content-box로 설정 */
-	@media screen and ${devices.md} {
+	@media screen and (${devices.md}) {
 		flex-direction: column;
 	}
 `;
 const SidebarContainer = styled.div`
 	flex: 1;
 	margin: 100px 3rem 30px 3rem;
-	@media screen and ${devices.md} {
+	@media screen and (${devices.md}) {
 		background-color: #f2f2f2;
 		margin: 0px;
 	}

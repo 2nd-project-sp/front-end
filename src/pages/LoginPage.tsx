@@ -1,10 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import kakao from '../assets/kakao_login_medium_narrow.png';
 import naver from '../assets/btnG_완성형.png';
 import { login } from '../store/loginSlice';
+import { saveToken } from '../store/tokenSlice';
+import { logout } from '../store/loginSlice';
+import { RootState } from '../store/store';
 
 // interface form 설정 필요
 
@@ -26,10 +29,11 @@ const LoginPage: React.FC = () => {
 	const passwordInputInValid = !valid.isPassword && touched.password;
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const checkLogout = useSelector((state: RootState) => state.token);
 	const signupHandler = () => {
 		navigate('/signup');
 	};
-	const formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+	const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const emailRegex =
 			/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -46,12 +50,69 @@ const LoginPage: React.FC = () => {
 			isValid({ ...valid, isPassword: false });
 			count.current = count.current + 1;
 		} else {
-			navigate('/');
+			//navigate('/');
 			//localStorage.setItem('login', form.email);
+			const res = await fetch(
+				'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/login',
+				{
+					method: 'POST',
+					headers: {
+						'Content-type': 'application/json',
+					},
+					body: JSON.stringify({
+						email: form.email,
+						password: form.password,
+					}),
+				}
+			);
+			//console.log(res);
+			const temp = res.headers.get('ACCESS-TOKEN');
+			console.log(temp);
+			dispatch(saveToken(temp));
+			const json = await res.json();
+			//console.log(json);
 			dispatch(login(true));
 		}
 		setForm({ email: '', password: '' });
 	};
+
+	// Access-token 유효한지 확인
+	const testValidate = async () => {
+		const res = await fetch(
+			'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/validate',
+			{
+				method: 'POST',
+				headers: {
+					'ACCESS-TOKEN': `${checkLogout.token}`,
+				},
+				body: {} as any,
+			}
+		);
+		//console.log(res);
+		const json = await res.json();
+		console.log(json);
+	};
+	// Refresh-token 재발급 테스트
+	// Refresh-token 만료가 되었거나 값이 없거나 이럴 때, 로그인 필요
+	const testReissue = async () => {
+		const res = await fetch(
+			'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/reissue',
+			{
+				method: 'POST',
+				headers: {
+					'ACCESS-TOKEN': `${checkLogout.token}`,
+				},
+				body: {} as any,
+			}
+		);
+		//console.log(res);
+		const temp = res.headers.get('ACCESS-TOKEN');
+		console.log(temp);
+		const json = await res.json();
+		console.log(json);
+	};
+
+	// 전에 쓰던 것은 지우고, 재발급받을 때도 지우고
 	return (
 		<SLogin>
 			<div className='wrapper'>
@@ -97,12 +158,12 @@ const LoginPage: React.FC = () => {
 						<h3 className='title-sns'>SNS 계정으로 로그인하기</h3>
 						<div className='container-sns'>
 							<div className='sns'>
-								<div className='btn-sns_kakao'>
+								<div className='btn-sns_kakao' onClick={testReissue}>
 									<img src={kakao} alt='카카오 로그인' />
 								</div>
 							</div>
 							<div className='sns'>
-								<div className='btn-sns_naver'>
+								<div className='btn-sns_naver' onClick={testValidate}>
 									<img src={naver} alt='네이버 로그인' />
 								</div>
 							</div>

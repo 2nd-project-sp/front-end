@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,14 +10,28 @@ const Done: React.FC = () => {
 	const dispatch = useDispatch();
 	const check = useSelector((state: RootState) => state.signup);
 	const [contents, setContents] = useState<string>('');
-	const handlingNext = () => {
-		navigate('/');
+	const handlingNext = async () => {
+		//navigate('/');
+		const res = await fetch(
+			'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/sign',
+			{
+				method: 'POST',
+				headers: {
+					'Content-type': 'application/json',
+				},
+				body: JSON.stringify(check),
+				credentials: 'include',
+			}
+		);
+		const json = res.json();
+		console.log(json);
 	};
 	const onChangeIntroduce = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		const intro = e.target.value;
 		setContents(intro);
 		dispatch(setting({ introduce: intro }));
 	}, []);
+
 	return (
 		<SDone>
 			<h3 className='done-title'>🥳 회원가입이 되었습니다. 🥳</h3>

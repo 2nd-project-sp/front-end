@@ -35,6 +35,13 @@ const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 			dispatch(setting({ email: emailCurrent }));
 		}
 	}, []);
+	const onClickCheck = async () => {
+		const res = await fetch(
+			`http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/sign/${email}/exists`
+		);
+		const json = res.json();
+		console.log(json);
+	};
 	return (
 		<SEmailSetting>
 			<h3 className='email-title'>
@@ -58,6 +65,7 @@ const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 					className='email-input'
 					onChange={onChangeEmail}
 				/>
+				<button onClick={onClickCheck}>이메일 중복 검사</button>
 				{emailInputInValid && <p className='err-message'>* 이메일 형식이 맞지 않습니다.</p>}
 			</div>
 			<button

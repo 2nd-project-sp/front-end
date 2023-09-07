@@ -1,12 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import kakao from '../assets/kakao_login_medium_narrow.png';
 import naver from '../assets/btnG_완성형.png';
 import { login } from '../store/loginSlice';
-import { saveToken } from '../store/tokenSlice';
-import { logout } from '../store/loginSlice';
 import { RootState } from '../store/store';
 
 // interface form 설정 필요
@@ -52,25 +51,38 @@ const LoginPage: React.FC = () => {
 		} else {
 			//navigate('/');
 			//localStorage.setItem('login', form.email);
-			const res = await fetch(
-				'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/login',
-				{
-					method: 'POST',
-					headers: {
-						'Content-type': 'application/json',
-					},
-					body: JSON.stringify({
+			// const res = await fetch(
+			// 	'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/login',
+			// 	{
+			// 		method: 'POST',
+			// 		headers: {
+			// 			'Content-type': 'application/json',
+			// 		},
+			// 		body: JSON.stringify({
+			// 			email: form.email,
+			// 			password: form.password,
+			// 		}),
+			// 	}
+			// );
+			// //console.log(res);
+			// const temp = res.headers.get('ACCESS-TOKEN');
+			// console.log(temp);
+			// dispatch(saveToken(temp));
+			// const json = await res.json();
+			// //console.log(json);
+			const res = await axios
+				.post(
+					'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/login',
+					JSON.stringify({
 						email: form.email,
 						password: form.password,
 					}),
-				}
-			);
-			//console.log(res);
-			const temp = res.headers.get('ACCESS-TOKEN');
-			console.log(temp);
-			dispatch(saveToken(temp));
-			const json = await res.json();
-			//console.log(json);
+					{ headers: { 'Content-Type': `application/json` } }
+				)
+				.then(function (response) {
+					console.log(response);
+					return response.data;
+				});
 			dispatch(login(true));
 		}
 		setForm({ email: '', password: '' });

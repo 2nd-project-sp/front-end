@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface signupState {
+interface userInfo {
 	name: string;
 	email: string;
 	password: string;
@@ -22,19 +22,18 @@ const initialState = {
 	introduce: '',
 	mainAddress: '',
 	subAddress: '',
-} as signupState;
+} as userInfo;
 
-const signupSlice = createSlice({
-	name: 'signup',
+const userSlice = createSlice({
+	name: 'userinfo',
 	initialState,
 	reducers: {
-		setting(state, action) {
-			// 이전의 상태를 보존하면서 새로운 상태 반영
-			const newState = { ...state };
-			return { ...newState, ...action.payload };
+		saveUser(state, action) {
+			// 이전의 상태를 보존하지 않으면서 새로운 상태 적용
+			return { ...action.payload };
 		},
 	},
 });
 
-export const { setting } = signupSlice.actions;
-export default signupSlice.reducer;
+export const { saveUser } = userSlice.actions;
+export default userSlice.reducer;

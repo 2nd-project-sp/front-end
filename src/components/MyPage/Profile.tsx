@@ -1,6 +1,40 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import styled from 'styled-components';
 
+const USER_ID = '123';
+
 const Profile = () => {
+	const [userData, setUserData] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
+
+	// useEffect(() => {
+	// 	const fetchUser = async () => {
+	// 		setIsLoading(true);
+
+	// 		try {
+	// 			const res = await axios({
+	// 				method: 'get',
+	// 				url: `/v1/user/${USER_ID}`,
+	// 				headers: '',
+	// 				baseURL: 'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api',
+	// 			});
+
+	// 			console.log('ss');
+	// 			setUserData(res.data);
+
+	// 			setIsLoading(false);
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 		}
+	// 	};
+
+	// 	fetchUser();
+	// }, []);
+
+	if (isLoading) return <>Loading</>;
+
 	return (
 		<ProfileWrapper>
 			<h3>회원정보</h3>

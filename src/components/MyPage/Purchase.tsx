@@ -1,6 +1,36 @@
+import { useState } from 'react';
+
 import styled from 'styled-components';
 
 const Purchase = () => {
+	const [purchaseData, setPurchaseData] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
+
+	// useEffect(() => {
+	// 	const fetchPurchase = async () => {
+	// 		setIsLoading(true);
+
+	// 		try {
+	// 			const res = await axios({
+	// 				method: 'get',
+	// 				url: `/v1/user/${USER_ID}/order`,
+	// 				headers: '',
+	// 				baseURL: 'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api',
+	// 			});
+
+	// 			setUserData(res.data);
+
+	// 			setIsLoading(false);
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 		}
+	// 	};
+
+	// 	fetchPurchase();
+	// }, []);
+
+	if (isLoading) return <>Loading</>;
+
 	return (
 		<PurchaseWrapper>
 			<h3>주문배송조회</h3>
@@ -40,7 +70,7 @@ const Purchase = () => {
 
 const PurchaseWrapper = styled.div`
 	h3 {
-		fontsize: 22px;
+		font-size: 22px;
 		color: #000000;
 		line-height: 1.5;
 		font-weight: 500;
@@ -57,7 +87,7 @@ const PurchaseHeader = styled.div`
 
 	> div {
 		padding: 20px;
-		fontsize: 18px;
+		font-size: 18px;
 		font-weight: 700;
 		text-align: center;
 	}

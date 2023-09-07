@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import CategoryMenu from '../components/MyPage/CategoryMenu';
@@ -5,15 +7,29 @@ import Profile from '../components/MyPage/Profile';
 import Purchase from '../components/MyPage/Purchase';
 
 const MyPage = () => {
+	const location = useLocation();
+
+	const category = useMemo(() => {
+		const pathname = location.pathname;
+
+		if (pathname === '/my/profile' || pathname === '/my') {
+			return 'profile';
+		}
+
+		if (pathname === '/my/purchase') {
+			return 'purchase';
+		}
+	}, [location]);
+
 	return (
 		<MyPageContainer>
 			<MyPageLeft>
-				<CategoryMenu />
+				<CategoryMenu category={category} />
 			</MyPageLeft>
 
 			<MyPageRight>
-				<Profile />
-				<Purchase />
+				{category === 'profile' && <Profile />}
+				{category === 'purchase' && <Purchase />}
 			</MyPageRight>
 		</MyPageContainer>
 	);

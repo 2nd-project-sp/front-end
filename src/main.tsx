@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './global.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 const queryClient = new QueryClient();
 import {
 	LoginPage,
@@ -56,5 +56,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 		<Provider store={store}>
 			<RouterProvider router={router} />
 		</Provider>
+		<ReactQueryDevtools />
 	</QueryClientProvider>
 );

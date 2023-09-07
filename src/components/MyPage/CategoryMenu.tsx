@@ -1,13 +1,31 @@
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import styled from 'styled-components';
 
-const CategoryMenu = () => {
+const CategoryMenu = ({ category }) => {
+	const navigate = useNavigate();
+
+	const goToProfilePage = useCallback(() => {
+		navigate('/my/profile');
+	}, []);
+
+	const goToPurchasePage = useCallback(() => {
+		navigate('/my/purchase');
+	}, []);
+
 	return (
 		<CategoryWrapper>
 			<h3>이름</h3>
 			<span>나의 정보</span>
 			<ul>
-				<li>프로필</li>
-				<li>주문내역 조회</li>
+				<Category active={category === 'profile' ? 'active' : ''}>
+					<button onClick={goToProfilePage}>프로필</button>
+				</Category>
+
+				<Category active={category === 'purchase' ? 'active' : ''}>
+					<button onClick={goToPurchasePage}>주문내역 조회</button>
+				</Category>
 			</ul>
 		</CategoryWrapper>
 	);
@@ -34,17 +52,19 @@ const CategoryWrapper = styled.div`
 		display: flex;
 		flex-direction: column;
 		align-items: start;
+	}
+`;
 
-		li {
-			padding: 10px 10px;
-			font-size: 15px;
-			color: #5d5d5d;
-			font-weight: 200;
-			cursor: pointer;
+const Category = styled.li`
+	button {
+		padding: 10px 10px;
+		font-size: 15px;
+		font-weight: ${props => (props.active ? 400 : 200)};
+		color: ${props => (props.active ? '#000' : '#5d5d5d')};
+		cursor: pointer;
 
-			&:hover {
-				color: #000;
-			}
+		&:hover {
+			color: #000;
 		}
 	}
 `;

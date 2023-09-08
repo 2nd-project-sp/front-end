@@ -14,7 +14,7 @@ const fetchSignup = async () => {
 	await axios
 		.post(
 			'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/sign',
-			JSON.stringify(check),
+			{ data: check },
 			{ headers: { 'Content-Type': `application/json` } }
 		)
 		.then(function (response) {
@@ -39,9 +39,7 @@ export const useSignupQuery = () => {
 // 이메일 중복 확인 API 호출
 const fetchEmail = async () => {
 	const email = useSelector((state: RootState) => state.signup.email);
-	const response = await axios.get(
-		`http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/sign/${email}/exists`
-	);
+	const response = await axios.get(`http://15.164.128.162:8080/api/v1/user/sign/${email}/exists`);
 	return response.data;
 };
 

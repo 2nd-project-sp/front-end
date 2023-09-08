@@ -7,10 +7,13 @@ import kakao from '../assets/kakao_login_medium_narrow.png';
 import naver from '../assets/btnG_완성형.png';
 import { login } from '../store/loginSlice';
 import { RootState } from '../store/store';
+import { saveUser } from '../store/userSlice';
 
 // interface form 설정 필요
+axios.defaults.withCredentials = true;
 
 const LoginPage: React.FC = () => {
+	const JWT_EXPIRY_TIME = 3600 * 1000;
 	const [form, setForm] = useState({
 		email: '',
 		password: '',
@@ -37,7 +40,6 @@ const LoginPage: React.FC = () => {
 		const emailRegex =
 			/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 		const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-		console.log('success');
 		isTouched({ email: true, password: true });
 		isValid({ isEmail: true, isPassword: true });
 		if (form.email.trim() === '' || !emailRegex.test(form.email)) {
@@ -51,38 +53,40 @@ const LoginPage: React.FC = () => {
 		} else {
 			//navigate('/');
 			//localStorage.setItem('login', form.email);
-			// const res = await fetch(
-			// 	'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/login',
-			// 	{
-			// 		method: 'POST',
-			// 		headers: {
-			// 			'Content-type': 'application/json',
-			// 		},
-			// 		body: JSON.stringify({
-			// 			email: form.email,
-			// 			password: form.password,
-			// 		}),
-			// 	}
-			// );
+			// const res = await fetch('http://15.164.128.162:8080/api/v1/user/login', {
+			// 	method: 'POST',
+			// 	headers: {
+			// 		'Content-type': 'application/json',
+			// 	},
+			// 	body: JSON.stringify({
+			// 		email: form.email,
+			// 		password: form.password,
+			// 	}),
+			// });
 			// //console.log(res);
 			// const temp = res.headers.get('ACCESS-TOKEN');
 			// console.log(temp);
-			// dispatch(saveToken(temp));
-			// const json = await res.json();
-			// //console.log(json);
-			const res = await axios
-				.post(
-					'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/login',
-					JSON.stringify({
-						email: form.email,
-						password: form.password,
-					}),
-					{ headers: { 'Content-Type': `application/json` } }
-				)
-				.then(function (response) {
-					console.log(response);
-					return response.data;
+			//dispatch(saveToken(temp));
+			//const json = await res.json();
+			//console.log(json);
+			const data = {
+				email: form.email,
+				password: form.password,
+			};
+			console.log(data);
+			try {
+				const response = await axios.post('http://15.164.128.162:8080/api/v1/user/login', data, {
+					headers: {
+						'Content-Type': 'application/json',
+					},
 				});
+				console.log(response);
+			} catch (error) {
+				console.log(error);
+			}
+			// 유저 정보 저장
+			// 만약 로그인 성공시 -> res 안에 있는 정보를 바탕으로 조건문 구현
+			//dispatch(saveUser(res));
 			dispatch(login(true));
 		}
 		setForm({ email: '', password: '' });
@@ -104,6 +108,7 @@ const LoginPage: React.FC = () => {
 		const json = await res.json();
 		console.log(json);
 	};
+
 	// Refresh-token 재발급 테스트
 	// Refresh-token 만료가 되었거나 값이 없거나 이럴 때, 로그인 필요
 	const testReissue = async () => {

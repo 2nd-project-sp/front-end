@@ -12,10 +12,12 @@ import {
 	PaymentPage,
 	SignUpPage,
 	ProductDetail,
+	ProductInput
 } from './pages/index';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import ShippingPage from './pages/ShippingPage';
 
 const router = createBrowserRouter([
 	{
@@ -46,6 +48,12 @@ const router = createBrowserRouter([
 				path: 'product/:id', // 디테일 페이지 라우팅
 				element: <ProductDetail />,
 			},
+			{
+				path: 'ShippingPage', // 디테일 페이지 라우팅
+				element: <ShippingPage />,
+			},
+
+
 			{ path: 'signup', element: <SignUpPage /> },
 		],
 	},

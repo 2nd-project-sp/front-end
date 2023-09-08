@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const ProductOption: React.FC = () => {
+interface ProductOptionProps {
+    onOptionChange: (option: string) => void;
+}
+
+const ProductOption: React.FC<ProductOptionProps>= () => {
 	const [optionSelected, setOptionSelected] = useState<string>('');
 
 	const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

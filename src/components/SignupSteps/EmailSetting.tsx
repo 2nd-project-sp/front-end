@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { ISteps } from '../../models/steps';
 import { useDispatch } from 'react-redux';
 import { setting } from '../../store/signupSlice';
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '../../axiosInstance';
 
 const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 	const dispatch = useDispatch();
@@ -49,7 +50,7 @@ const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 
 	// 이메일 중복검사버튼 클릭
 	const onClickCheck = async () => {
-		const res = await axios(`http://15.164.128.162:8080/api/v1/user/sign/${email}/exists`);
+		const res = await axios(`/api/v1/user/sign/${email}/exists`);
 		setIsClicked(true);
 		setIsValidEmail({ ...isValidEmail, validMessage: res.data.message });
 		if (res.data.status === 'success') {

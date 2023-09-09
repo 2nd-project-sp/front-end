@@ -7,13 +7,15 @@ import kakao from '../assets/kakao_login_medium_narrow.png';
 import naver from '../assets/btnG_완성형.png';
 import { login } from '../store/loginSlice';
 import { RootState } from '../store/store';
-import { saveUser } from '../store/userSlice';
 
 // interface form 설정 필요
 axios.defaults.withCredentials = true;
 
 const LoginPage: React.FC = () => {
 	const JWT_EXPIRY_TIME = 3600 * 1000;
+	const count = useRef(0);
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const [form, setForm] = useState({
 		email: '',
 		password: '',
@@ -26,11 +28,9 @@ const LoginPage: React.FC = () => {
 		email: false,
 		password: false,
 	});
-	const count = useRef(0);
+	const [status, setStatus] = useState<string>('');
 	const emailInputInValid = !valid.isEmail && touched.email;
 	const passwordInputInValid = !valid.isPassword && touched.password;
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
 	const checkLogout = useSelector((state: RootState) => state.token);
 	const signupHandler = () => {
 		navigate('/signup');
@@ -51,29 +51,10 @@ const LoginPage: React.FC = () => {
 			isValid({ ...valid, isPassword: false });
 			count.current = count.current + 1;
 		} else {
-			//navigate('/');
-			//localStorage.setItem('login', form.email);
-			// const res = await fetch('http://15.164.128.162:8080/api/v1/user/login', {
-			// 	method: 'POST',
-			// 	headers: {
-			// 		'Content-type': 'application/json',
-			// 	},
-			// 	body: JSON.stringify({
-			// 		email: form.email,
-			// 		password: form.password,
-			// 	}),
-			// });
-			// //console.log(res);
-			// const temp = res.headers.get('ACCESS-TOKEN');
-			// console.log(temp);
-			//dispatch(saveToken(temp));
-			//const json = await res.json();
-			//console.log(json);
 			const data = {
 				email: form.email,
 				password: form.password,
 			};
-			console.log(data);
 			try {
 				const response = await axios.post('http://15.164.128.162:8080/api/v1/user/login', data, {
 					headers: {
@@ -81,13 +62,21 @@ const LoginPage: React.FC = () => {
 					},
 				});
 				console.log(response);
+				//console.log(response.headers['access-token']);
+				//navigate('/');
+				const token = response.headers['access-token'];
+				localStorage.setItem('ACCESS-TOKEN', token);
+				dispatch(login(true));
+				setStatus('success');
 			} catch (error) {
+				dispatch(login(false));
+				setStatus('fail');
 				console.log(error);
 			}
+
 			// 유저 정보 저장
 			// 만약 로그인 성공시 -> res 안에 있는 정보를 바탕으로 조건문 구현
 			//dispatch(saveUser(res));
-			dispatch(login(true));
 		}
 		setForm({ email: '', password: '' });
 	};
@@ -128,7 +117,6 @@ const LoginPage: React.FC = () => {
 		const json = await res.json();
 		console.log(json);
 	};
-
 	// 전에 쓰던 것은 지우고, 재발급받을 때도 지우고
 	return (
 		<SLogin>
@@ -167,6 +155,7 @@ const LoginPage: React.FC = () => {
 								5회 로그인 실패 시, 로그인이 10분 동안 제한됩니다.({count.current}/5)
 							</p>
 						)}
+						{status === 'fail' && <p className='login-fail'>아이디나 비밀번호가 틀렸습니다.</p>}
 						<button className='btn-login' type='submit'>
 							로그인하기
 						</button>

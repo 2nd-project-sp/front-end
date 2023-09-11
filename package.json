@@ -9,9 +9,15 @@
 		"preview": "vite preview",
 		"lint": "eslint ./src/**/*.{ts,tsx,js,jsx}",
 		"lint:fix": "eslint --fix ./src/**/*.{ts,tsx,js,jsx}",
+		"start": "react-scripts start",
 		"format": "prettier --write --cache ."
 	},
 	"dependencies": {
+		"@fortawesome/fontawesome-svg-core": "^6.4.2",
+		"@fortawesome/react-fontawesome": "^0.2.0",
+		"@reduxjs/toolkit": "^1.9.5",
+		"@tanstack/react-query": "^4.33.0",
+		"axios": "^1.5.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-icons": "^4.10.1",

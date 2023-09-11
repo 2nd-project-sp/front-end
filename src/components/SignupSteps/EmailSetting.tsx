@@ -4,7 +4,7 @@ import { ISteps } from '../../models/steps';
 import { useDispatch } from 'react-redux';
 import { setting } from '../../store/signupSlice';
 // import axios from 'axios';
-import axios from '../../axiosInstance';
+import axios from '../../util/axiosInstance';
 
 const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 	const dispatch = useDispatch();

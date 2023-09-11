@@ -11,7 +11,6 @@ const ProgressBar = ({ step }) => {
 	const getProgressWidth = (step: number) => {
 		return Math.floor((step / 4) * 100);
 	};
-	console.log(progressBar);
 	useEffect(() => {
 		switch (step) {
 			case 0:

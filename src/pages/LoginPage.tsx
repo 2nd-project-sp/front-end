@@ -1,18 +1,19 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import kakao from '../assets/kakao_login_medium_narrow.png';
 import naver from '../assets/btnG_완성형.png';
 import { login } from '../store/loginSlice';
 import { RootState } from '../store/store';
+import { setTokenResetTimer } from '../util/util';
 
 // interface form 설정 필요
 axios.defaults.withCredentials = true;
 
 const LoginPage: React.FC = () => {
-	const JWT_EXPIRY_TIME = 3600 * 1000;
+	let JWT_EXPIRY_TIME = 10000;
 	const count = useRef(0);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -31,9 +32,26 @@ const LoginPage: React.FC = () => {
 	const [status, setStatus] = useState<string>('');
 	const emailInputInValid = !valid.isEmail && touched.email;
 	const passwordInputInValid = !valid.isPassword && touched.password;
-	const checkLogout = useSelector((state: RootState) => state.token);
+	const checkLogout = useSelector((state: RootState) => state.login.isLogin);
 	const signupHandler = () => {
 		navigate('/signup');
+	};
+
+	// 토큰이 만료되었을 때
+	const resetToken = async () => {
+		const token = localStorage.getItem('ACCESS-TOKEN');
+		const res = await fetch('http://15.164.128.162:8080/api/v1/user/logout', {
+			method: 'POST',
+			headers: {
+				'ACCESS-TOKEN': `${token}`,
+			},
+			body: {} as any,
+		});
+		const json = await res.json();
+		console.log(json);
+		localStorage.setItem('ACCESS-TOKEN', '');
+		alert('인증이 만료되어 재 로그인이 필요합니다.');
+		navigate('/login');
 	};
 	const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -55,6 +73,7 @@ const LoginPage: React.FC = () => {
 				email: form.email,
 				password: form.password,
 			};
+
 			try {
 				const response = await axios.post('http://15.164.128.162:8080/api/v1/user/login', data, {
 					headers: {
@@ -62,27 +81,24 @@ const LoginPage: React.FC = () => {
 					},
 				});
 				console.log(response);
-				//console.log(response.headers['access-token']);
-				//navigate('/');
 				const token = response.headers['access-token'];
 				localStorage.setItem('ACCESS-TOKEN', token);
 				dispatch(login(true));
 				setStatus('success');
+				setTokenResetTimer(setTimeout(resetToken, JWT_EXPIRY_TIME));
+				navigate('/');
 			} catch (error) {
 				dispatch(login(false));
 				setStatus('fail');
 				console.log(error);
 			}
-
-			// 유저 정보 저장
-			// 만약 로그인 성공시 -> res 안에 있는 정보를 바탕으로 조건문 구현
-			//dispatch(saveUser(res));
 		}
 		setForm({ email: '', password: '' });
 	};
 
-	// Access-token 유효한지 확인
-	const testValidate = async () => {
+	// Refresh-token 재발급 테스트
+	// Refresh-token 만료가 되었거나 값이 없거나 이럴 때, 로그인 필요
+	/*const testReissue = async () => {
 		const res = await fetch(
 			'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/validate',
 			{
@@ -96,28 +112,39 @@ const LoginPage: React.FC = () => {
 		//console.log(res);
 		const json = await res.json();
 		console.log(json);
-	};
+	};*/
 
-	// Refresh-token 재발급 테스트
-	// Refresh-token 만료가 되었거나 값이 없거나 이럴 때, 로그인 필요
-	const testReissue = async () => {
-		const res = await fetch(
-			'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/reissue',
-			{
-				method: 'POST',
-				headers: {
-					'ACCESS-TOKEN': `${checkLogout.token}`,
-				},
-				body: {} as any,
-			}
-		);
+	// Access-token 유효한지 확인
+	const testValidate = async () => {
+		const token = localStorage.getItem('ACCESS-TOKEN');
+		// console.log(token);
+		// try {
+		// 	const response = await axios.post('http://15.164.128.162:8080/api/v1/user/validate', null, {
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 			'ACCESS-TOKEN': `${token}`,
+		// 		},
+		// 	});
+		// 	console.log(response);
+		// } catch (error) {
+		// 	console.log(error);
+		// }
+		const res = await fetch('http://15.164.128.162:8080/api/v1/user/validate', {
+			method: 'POST',
+			headers: {
+				'ACCESS-TOKEN': `${token}`,
+			},
+			body: {} as any,
+		});
 		//console.log(res);
-		const temp = res.headers.get('ACCESS-TOKEN');
-		console.log(temp);
 		const json = await res.json();
 		console.log(json);
 	};
-	// 전에 쓰던 것은 지우고, 재발급받을 때도 지우고
+
+	useEffect(() => {}, [checkLogout]);
+	// 로그아웃을 하면
+	// 전에 쓰던 토큰은 지우고, 재발급받을 때도 지우고
+	// console.log(checkLogout);
 	return (
 		<SLogin>
 			<div className='wrapper'>
@@ -164,12 +191,12 @@ const LoginPage: React.FC = () => {
 						<h3 className='title-sns'>SNS 계정으로 로그인하기</h3>
 						<div className='container-sns'>
 							<div className='sns'>
-								<div className='btn-sns_kakao' onClick={testReissue}>
+								<div className='btn-sns_kakao' onClick={testValidate}>
 									<img src={kakao} alt='카카오 로그인' />
 								</div>
 							</div>
 							<div className='sns'>
-								<div className='btn-sns_naver' onClick={testValidate}>
+								<div className='btn-sns_naver'>
 									<img src={naver} alt='네이버 로그인' />
 								</div>
 							</div>

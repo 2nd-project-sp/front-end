@@ -5,7 +5,6 @@ import {
 	EmailSetting,
 	PasswordSetting,
 	PhoneNum,
-	ProfilePic,
 	Done,
 	AddressSetting,
 } from '../components';

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setting } from '../../store/signupSlice';
 import { RootState } from '../../store/store';
+import axios from 'axios';
 
 const Done: React.FC = () => {
 	const navigate = useNavigate();
@@ -11,21 +12,19 @@ const Done: React.FC = () => {
 	const check = useSelector((state: RootState) => state.signup);
 	const [contents, setContents] = useState<string>('');
 	const handlingNext = async () => {
-		//navigate('/');
-		const res = await fetch(
-			'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/sign',
-			{
-				method: 'POST',
+		navigate('/');
+		try {
+			const response = await axios.post('http://15.164.128.162:8080/api/v1/user/sign', check, {
 				headers: {
-					'Content-type': 'application/json',
+					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(check),
-				credentials: 'include',
-			}
-		);
-		const json = res.json();
-		console.log(json);
+			});
+			console.log(response);
+		} catch (error) {
+			console.log(error);
+		}
 	};
+
 	const onChangeIntroduce = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		const intro = e.target.value;
 		setContents(intro);

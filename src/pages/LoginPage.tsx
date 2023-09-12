@@ -51,6 +51,7 @@ const LoginPage: React.FC = () => {
 		console.log(json);
 		localStorage.setItem('ACCESS-TOKEN', '');
 		alert('인증이 만료되어 재 로그인이 필요합니다.');
+		dispatch(login(false));
 		navigate('/login');
 	};
 	const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {

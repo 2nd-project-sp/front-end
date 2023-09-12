@@ -53,6 +53,7 @@ const Header: React.FC = () => {
 		navigate('/');
 	};
 	useEffect(() => {}, [isLogin]);
+	console.log(isLogin);
 	return (
 		<SHeader>
 			<div className='header-wrapper'>

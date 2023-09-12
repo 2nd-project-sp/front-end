@@ -2,12 +2,12 @@ import React from 'react';
 import Product from './Product';
 import styled from 'styled-components';
 import { devices } from '../../assets/styles/constants';
-import { ProductInterface, ProductLists } from '../../models/product';
+import { ProductLists, ProductInterface } from '../../models/product';
 
-const ProductList: React.FC<ProductLists> = ({ products }) => {
+const ProductList: React.FC<ProductLists> = ({ products }: ProductLists) => {
 	return (
 		<Grid>
-			{products?.map((product, index: number) => (
+			{products?.map((product: ProductInterface, index: number) => (
 				<Product product={product} key={`product-${index}`} />
 			))}
 		</Grid>

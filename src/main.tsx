@@ -1,8 +1,6 @@
-
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
 import './global.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient();
@@ -14,9 +12,7 @@ import {
 	PaymentPage,
 	SignUpPage,
 	ProductDetail,
-
 	ProductMarket,
-
 } from './pages/index';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -24,7 +20,6 @@ import { store } from './store/store';
 
 import ShippingPage from './pages/ShippingPage';
 import PaymentComplete from './pages/PaymentComplete';
-
 
 const router = createBrowserRouter([
 	{
@@ -67,13 +62,10 @@ const router = createBrowserRouter([
 				element: <PaymentComplete />,
 			},
 
-
-
 			{ path: 'signup', element: <SignUpPage /> },
 		],
 	},
 ]);
-
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<QueryClientProvider client={queryClient}>

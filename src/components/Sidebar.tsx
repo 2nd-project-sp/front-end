@@ -1,24 +1,9 @@
-import React from 'react';
+// import React from 'react';
 import styled from 'styled-components';
 import { devices } from '../assets/styles/constants';
 const Sidebar = () => {
-	const category = '여성의류';
-	const types = [
-		'ALL',
-		'NEW',
-		'상의',
-		'아우터',
-		'원피스',
-		'바지',
-		'니트웨어',
-		'스커트',
-		'엑티브웨어',
-		'이너웨어',
-		'홈웨어',
-		'하이엔드',
-		'점프수트',
-		'EXCLUSIVE',
-	];
+	const category = '카테고리';
+	const types = ['의류', '가방', '신발', '악세사리'];
 	return (
 		<>
 			<SidebarTitle>{category}</SidebarTitle>

@@ -69,6 +69,12 @@ const Header: React.FC = () => {
 						</div>
 					</div>
 				</div>
+				<div className='category'>
+					<button>WOMEN</button>
+					<button>MEN</button>
+					<button>DIGITAL</button>
+					<button>INTERIOR</button>
+				</div>
 				<div className='header-menu'>
 					<div className='menu-container'>
 						<div className='mypage' onClick={myHandler}>
@@ -146,7 +152,15 @@ const SHeader = styled.div`
 				}
 			}
 		}
-
+		.category {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			button {
+				color: white;
+				margin: 1rem;
+			}
+		}
 		.menu-container {
 			display: flex;
 			justify-content: center;
@@ -208,7 +222,9 @@ const SHeader = styled.div`
 					}
 				}
 			}
-
+			.category {
+				display: none;
+			}
 			.menu-container {
 				display: flex;
 				justify-content: center;

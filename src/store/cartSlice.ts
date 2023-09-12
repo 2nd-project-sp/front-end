@@ -7,7 +7,7 @@ export const addToCart = createAction<{
     quantity: number,
     option: string  // New field to represent the selected size option
   }>("cart/add");
-createAction<{ product: ProductInterface, quantity: number }>("cart/add");
+// createAction<{ product: ProductInterface, quantity: number }>("cart/add");
 
 interface CartState {
     products: ProductInterface[];

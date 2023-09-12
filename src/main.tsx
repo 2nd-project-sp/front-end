@@ -23,6 +23,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 
 import ShippingPage from './pages/ShippingPage';
+import PaymentComplete from './pages/PaymentComplete';
 
 
 const router = createBrowserRouter([
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
 			{
 				path: 'ShippingPage', // 디테일 페이지 라우팅
 				element: <ShippingPage />,
+			},
+			{
+				path: 'PaymentComplete',
+				element: <PaymentComplete />,
 			},
 
 

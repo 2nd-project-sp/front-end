@@ -13,13 +13,13 @@ const Banner = () => {
 	];
 	return (
 		<Swiper
-		modules={[Autoplay, Pagination]}
+			modules={[Autoplay, Pagination]}
 			spaceBetween={50}
 			slidesPerView={1}
 			onSlideChange={() => console.log('slide change')}
-			onSwiper={swiper => console.log(swiper)}
+			// onSwiper={swiper => console.log(swiper)}
 			pagination={{ clickable: true }}
-			autoplay={{delay:3000}}
+			autoplay={{ delay: 3000 }}
 		>
 			{slidesData.map((slide, index) => (
 				<SwiperSlide key={index}>

@@ -8,54 +8,92 @@ import { v4 as uuidv4 } from 'uuid';
 const ProductMarket: React.FC = () => {
 	const dispatch = useDispatch();
 	const [quantity, setQuantity] = useState(1);
+	const [showDiscount, setShowDiscount] = useState(false);
+	const [isNew, setIsNew] = useState(false);
+
+	const option = ['여성의류', '남성의류', '인테리어', '주방'];
 	const [productInfo, setProductInfo] = useState({
 		id: uuidv4(),
 		title: '',
-		category: '',
+		categoryId: '',
 		price: 0,
-		brand: '',
+		brandId: '',
 		description: '',
 		image: '',
 		quantity: 1,
+		showDiscount: false,
+		discountRate: 0,
+		delivaryPrice: 0,
+		isNew: false,
 	});
 
-	const option = ['여성의류', '남성의류', '인테리어', '주방'];
-
-	const handleSubmit = e => {
+	const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault();
-		const { id, title, price, brand, description, image, quantity, category } = productInfo;
-		const updatedProductInfo = {
+		const {
 			id,
-			category,
 			title,
 			price,
-			brand,
+			brandId,
 			description,
 			image,
 			quantity,
+			categoryId,
+			showDiscount,
+			discountRate,
+			delivaryPrice,
+			isNew,
+		} = productInfo;
+
+		const updatedProductInfo = {
+			id,
+			categoryId,
+			title,
+			price,
+			brandId,
+			description,
+			image,
+			quantity,
+			showDiscount,
+			discountRate,
+			delivaryPrice,
+			isNew,
 		};
 		dispatch(addToManage(updatedProductInfo)); //디스패치하고
 		//비워
 		setProductInfo({
 			id: uuidv4(),
-			category: '',
+			categoryId: '',
 			title: '',
 			price: 0,
-			brand: '',
+			brandId: '',
 			description: '',
 			image: '',
 			quantity: 1,
+			showDiscount: false,
+			discountRate: 0,
+			delivaryPrice: 0,
+			isNew: false,
 		});
 		setQuantity(1);
 	};
 
-	const fileInputRef = useRef<HTMLInputElement | null>(null);
+	console.log('여기서는 되는데', isNew);
 
+	const fileInputRef = useRef<HTMLInputElement | null>(null);
+	//할인 유무 핸들러
+	const discountHandler = () => {
+		setShowDiscount(!showDiscount);
+	};
+	//신상 유무 핸들러
+	const newHandler = () => {
+		setIsNew(!isNew);
+	};
+
+	//이미지 임포트
 	const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files && event.target.files[0];
 		if (file) {
 			const imageUrl = URL.createObjectURL(file);
-			// setProductImage(imageUrl);
 			setProductInfo({ ...productInfo, image: imageUrl });
 		}
 	};
@@ -110,13 +148,37 @@ const ProductMarket: React.FC = () => {
 							{productInfo ? <img src={productInfo.image} /> : ''}
 						</ProductImagePreview>
 					</ProductAddInput>
+
+					<ProductAddInput>
+						신상품 <input type='checkbox' checked={isNew} onChange={newHandler} />
+						{isNew && <div>신상이네요</div>}
+					</ProductAddInput>
+					<ProductAddInput>
+						할인
+						<input type='checkbox' checked={showDiscount} onChange={discountHandler} />
+						{showDiscount ? (
+							<DisCountRate>
+								<input
+									placeholder='할인율을 입력하세요'
+									value={productInfo.discountRate}
+									onChange={e => {
+										setProductInfo({ ...productInfo, discountRate: Number(e.target.value) });
+									}}
+								/>
+								%
+							</DisCountRate>
+						) : (
+							''
+						)}
+					</ProductAddInput>
+
 					<ProductAddInput>
 						<div>카테고리</div>
 						<select
-							value={productInfo.category}
+							value={productInfo.categoryId}
 							onChange={e => {
 								console.log('이벤트', e);
-								setProductInfo({ ...productInfo, category: e.target.value });
+								setProductInfo({ ...productInfo, categoryId: e.target.value });
 							}}
 						>
 							<option value=''>카테고리 선택</option>
@@ -140,9 +202,9 @@ const ProductMarket: React.FC = () => {
 					<ProductAddInput>
 						<div>브랜드</div>
 						<input
-							value={productInfo.brand}
+							value={productInfo.brandId}
 							onChange={e => {
-								setProductInfo({ ...productInfo, brand: e.target.value });
+								setProductInfo({ ...productInfo, brandId: e.target.value });
 							}}
 							placeholder='상품의 브랜드를 입력하세요'
 						></input>
@@ -153,10 +215,19 @@ const ProductMarket: React.FC = () => {
 						<input
 							value={productInfo.price}
 							onChange={e => {
-								setProductInfo({ ...productInfo, price: e.target.value });
+								setProductInfo({ ...productInfo, price: Number(e.target.value) });
 							}}
 							placeholder='상품의 가격을 입력하세요'
 						></input>
+					</ProductAddInput>
+					<ProductAddInput>
+						<div>배송비</div>
+						<input
+							value={productInfo.delivaryPrice}
+							onChange={e => {
+								setProductInfo({ ...productInfo, delivaryPrice: Number(e.target.value) });
+							}}
+						/>
 					</ProductAddInput>
 					<ProductAddInput>
 						<div>설명</div>
@@ -286,5 +357,18 @@ const Quantity = styled.span`
 	> input::-webkit-outer-spin-button,
 	> input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
+	}
+`;
+
+const DisCountRate = styled.div`
+	display: flex;
+	align-items: center;
+	margin-left: 10px;
+
+	> input {
+		margin-left: 10px;
+		width: 30px;
+		border: none;
+		border-bottom: 1px solid #f4f4f4;
 	}
 `;

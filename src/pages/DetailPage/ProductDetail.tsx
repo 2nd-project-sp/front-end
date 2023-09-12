@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import ProductCount from '../../components/ProductCount/ProductCount';
-import { fetchProducts, selectProductData } from '../../store/productsSlice'; // Import the renamed async thunk
+import { fetchProducts, selectProductData } from '../../store/productsSlice';
 import ProductDesc from '../../components/ProductDesc/ProductDesc';
 import ProductReview from '../../components/ProductReview/ProductReview';
+import ProductOption from '../../components/ProductOption/ProductOption';
+import { addToCart } from '../../store/cartSlice'; //CartSlice 작업 추가(김혜린)
 
 const ProductDetail: React.FC = () => {
 	const navigate = useNavigate();
@@ -19,20 +21,36 @@ const ProductDetail: React.FC = () => {
 	const [showPopup, setShowPopup] = useState(false);
 
 	const productsArray = productData.products;
-	const selectedProduct = productsArray && productsArray.find(it => it.id === idAsNumber);
+	const selectedProduct = productsArray && productsArray.find((it: { id: number; }) => it.id === idAsNumber);// 상품정보 id값으로 받아올 변수선언(김혜린)
 
 	const discountPer = 50;
 	const currentPrice = selectedProduct
 		? selectedProduct.price - (selectedProduct.price * discountPer) / 100
 		: 0;
+
 	const reviewNum = selectedProduct ? selectedProduct.rating : 0;
 
+	const [selectedQuantity, setSelectedQuantity] = useState<number>(1); // Producount에서 선택된 수량 전달받기
+
 	const gotoMyBag = () => {
+		setShowPopup(false);  // 팝업을 닫는 로직 추가 (김혜린)
 		navigate('/mybag');
 	};
+
+	// putCart 영역 선택된 값만 받아올 수 있도록 addTocart 따로 추가했습니다. (김혜린)
 	const putCart = () => {
-		setShowPopup(true);
-	};
+    if (selectedProduct) {
+        const updatedProduct = {
+            ...selectedProduct,
+            price: currentPrice
+        };
+        dispatch(addToCart({
+			product: updatedProduct, quantity: selectedQuantity,
+			option: ''
+		}));
+    }
+    setShowPopup(true);
+};
 
 	const xbutton = () => {
 		setShowPopup(false);
@@ -44,12 +62,13 @@ const ProductDetail: React.FC = () => {
 		}
 	}, [dispatch, id]);
 
+
 	return (
 		<ProductDetailWrapper>
 			<div className='product-detail'>
 				{selectedProduct && (
 					<ProductBrand>
-						<BrandInfoCon>{selectedProduct.brand}</BrandInfoCon>
+						<BrandInfoCon>Brand {selectedProduct.brand}</BrandInfoCon>
 					</ProductBrand>
 				)}
 				{selectedProduct && (
@@ -86,8 +105,12 @@ const ProductDetail: React.FC = () => {
 									</ShippingInfo>
 								</TextBoxShipping>
 							</InfoConTextBox>
-
-							<ProductCount />
+						    {/* 카운트 함수가 동작할떄, 상태 업데이트 되도록 수정(김혜린) */}
+							<ProductCount onQuantityChange={(quantity: number) => setSelectedQuantity(quantity)} />
+							{/* 옵션 함수가 동작할때, 상태 업데이트 되도록 수정(김혜린)*/}
+							<ProductOption onOptionChange={function (_option: string): void {
+								throw new Error('Function not implemented.');
+							} } />
 							<DetailButtonCon>
 								<ButtonConCart onClick={putCart}>장바구니 담기</ButtonConCart>
 								<ButtonConPurchase onClick={gotoMyBag}>바로 구매하기</ButtonConPurchase>
@@ -153,6 +176,7 @@ const DetailInfoCon = styled.div`
 const InfoConTextBox = styled.div`
 	width: 100%;
 `;
+
 const TextBoxText = styled.div`
 	width: 100%;
 	display: flex;

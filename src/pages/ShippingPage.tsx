@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 
-
 const ShippingPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
+    const [isDirectPaymentSelected, setDirectPaymentSelected] = useState(false);
+    const [paymentError, setPaymentError] = useState('');
     const navigate = useNavigate();
     const products = useSelector((state: RootState) => state.cart.products);
 
@@ -18,13 +19,27 @@ const ShippingPage: React.FC = () => {
 
     const handleSaveShippingInfo = () => {
         if (!isValidEmail(email)) {
-            setEmailError('Please enter a valid email address.');
+            setEmailError('이메일값을 필수로 입력하셔야 합니다.');
             return;
         }
-        setEmailError('');
+        if (!isDirectPaymentSelected) {
+            setPaymentError('무통장입금을 선택해주세요.');
+            return;
+        }
 
-        // TODO: 배송지 정보 저장 로직
-        navigate('/pay');
+        const formData = {
+            name: document.querySelector<HTMLInputElement>("input[name='name']")?.value,
+            address: document.querySelector<HTMLInputElement>("input[name='address']")?.value,
+            city: document.querySelector<HTMLInputElement>("input[name='city']")?.value,
+            phone: document.querySelector<HTMLInputElement>("input[name='phone']")?.value,
+            email: email,
+            shippingRequest: document.querySelector<HTMLSelectElement>("select[name='shippingRequest']")?.value,
+        }
+        try {
+            navigate('/PaymentComplete', { state: { formData } });
+        } catch (error) {
+            console.error("Error navigating:", error);
+        }
     }
 
     const isValidEmail = (email: string) => {
@@ -64,16 +79,18 @@ const ShippingPage: React.FC = () => {
                                 placeholder="이메일을 입력하세요"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                {...emailError && <ErrorPopup>{emailError}</ErrorPopup>}
                             />
                         </StyledLabel>
+                        <ErrorContainer>
+                            {emailError && <ErrorPopup>{emailError}</ErrorPopup>}
+                        </ErrorContainer>
                         <StyledLabel>
                             배송 요청사항:
                             <StyledSelect name="shippingRequest">
                                 <option value="none">선택하세요</option>
-                                <option value="frontDoor">문 앞에 두고 가세요</option>
-                                <option value="ringBell">벨 누르고 기다려주세요</option>
-                                <option value="noRingBell">벨 누르지 말고 문 앞에 두고 가세요</option>
+                                <option value="문 앞에 두고 가세요">문 앞에 두고 가세요</option>
+                                <option value="벨 누르고 기다려주세요">벨 누르고 기다려주세요</option>
+                                <option value="벨 누르지 말고 문 앞에 두고 가세요">벨 누르지 말고 문 앞에 두고 가세요</option>
                             </StyledSelect>
                         </StyledLabel>
                     </ShippingForm>
@@ -90,16 +107,23 @@ const ShippingPage: React.FC = () => {
                                 <span>{product.title}</span>
                                 <div>
                                     <span> 가격: ${product.price} </span>
-                                    <span> 수량: {product.quantity}</span>  {/* 상품 가격 x 수량 */}
-                                    <span> 합계: ${product.price * product.quantity}</span>  {/* 상품의 총액 */}
+                                    <span> 수량: {product.quantity}</span>
+                                    <span> 합계: ${product.price * product.quantity}</span>
                                 </div>
                             </CartItem>
                         ))}
-                        <TotalPrice>총 금액: ${calculateTotalPrice(products)}</TotalPrice>  {/* 전체 항목의 총 금액 */}
+                        <TotalPrice>총 금액: ${calculateTotalPrice(products)}</TotalPrice>
                         <SaveButton onClick={handleSaveShippingInfo}>CHECK OUT</SaveButton>
                     </CartContainer>
                 </CartSection>
             </ContentContainer>
+            <h2>결제수단</h2>
+            <DirectPaymentButton
+                selected={isDirectPaymentSelected}
+                onClick={() => setDirectPaymentSelected(!isDirectPaymentSelected)}>
+                무통장입금
+            </DirectPaymentButton>
+            <ErrorPopup>{paymentError}</ErrorPopup>
         </ShippingContainer>
     );
 }
@@ -210,9 +234,9 @@ const Title = styled.h1`
 
 const StyledLabel = styled.label`
     display: flex;
-    font-size: 1.1em;
+    font-size: 1em;
     margin-bottom: 10px;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
 `;
 
@@ -243,12 +267,30 @@ const SaveButton = styled.button`
 `;
 
 const ErrorPopup = styled.div`
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 10px 20px;
-    border: 1px solid #f5c6cb;
+    color: red;
+    padding: 5px 10px;
     border-radius: 5px;
     margin: 10px 0;
 `;
+
+const ErrorContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8em;
+    margin-top: px;  // 위쪽 여백 조정
+    align-items: flex-start;  // 왼쪽 정렬
+`;
+
+const DirectPaymentButton = styled.button<{ selected: boolean }>`
+  padding: 10px 20px;
+  background-color: ${props => props.selected ? '#333' : '#ccc'};
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2em;
+  margin-top: 20px;
+`;
+
 
 export default ShippingPage;

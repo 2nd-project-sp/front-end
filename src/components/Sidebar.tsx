@@ -1,16 +1,21 @@
 // import React from 'react';
 import styled from 'styled-components';
 import { devices } from '../assets/styles/constants';
+import { useNavigate } from 'react-router';
 const Sidebar = () => {
+	const navigate = useNavigate();
 	const category = '카테고리';
 	const types = ['의류', '가방', '신발', '악세사리'];
+	const categoryHandler = () => {
+		navigate('/');
+	};
 	return (
 		<>
 			<SidebarTitle>{category}</SidebarTitle>
 			<SidebarContent>
 				{types.map((type, index) => (
 					<Type key={`type-${index}`}>
-						<a href='/'>{type}</a>
+						<button onClick={categoryHandler}>{type}</button>
 					</Type>
 				))}
 			</SidebarContent>

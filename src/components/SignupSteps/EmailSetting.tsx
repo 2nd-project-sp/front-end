@@ -1,27 +1,39 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { ISteps } from '../../models/steps';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setting } from '../../store/signupSlice';
-import { RootState } from '../../store/store';
+// import axios from 'axios';
+import axios from '../../util/axiosInstance';
 
 const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 	const dispatch = useDispatch();
-	const check = useSelector((state: RootState) => state.signup);
 	const [email, setEmail] = useState<string>('');
 	const [name, setName] = useState<string>('');
 	const [isEmail, setIsEmail] = useState<boolean>(false);
 	const [isTouched, setIsTouched] = useState<boolean>(false);
+	const [isValidEmail, setIsValidEmail] = useState({
+		validEmail: false,
+		validMessage: '',
+	});
+	const [isClicked, setIsClicked] = useState<boolean>(false);
 	const emailInputInValid = !isEmail && isTouched;
+	const finalConfirm = isEmail && name && isValidEmail.validEmail;
+
+	// 다음 페이지로 이동
 	const handlingNext = () => {
 		// 유효성 검사 후
 		setStep(step + 1);
 	};
+
+	// 이름 입력
 	const onChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 		const newName = e.target.value;
 		setName(newName);
 		dispatch(setting({ name: newName }));
 	}, []);
+
+	// 이메일 입력
 	const onChangeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 		const emailRegex =
 			/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -35,12 +47,17 @@ const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 			dispatch(setting({ email: emailCurrent }));
 		}
 	}, []);
+
+	// 이메일 중복검사버튼 클릭
 	const onClickCheck = async () => {
-		const res = await fetch(
-			`http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/sign/${email}/exists`
-		);
-		const json = res.json();
-		console.log(json);
+		const res = await axios(`/api/v1/user/sign/${email}/exists`);
+		setIsClicked(true);
+		setIsValidEmail({ ...isValidEmail, validMessage: res.data.message });
+		if (res.data.status === 'success') {
+			setIsValidEmail({ validMessage: res.data.message, validEmail: true });
+		} else {
+			setIsValidEmail({ validMessage: res.data.message, validEmail: false });
+		}
 	};
 	return (
 		<SEmailSetting>
@@ -65,14 +82,23 @@ const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 					className='email-input'
 					onChange={onChangeEmail}
 				/>
-				<button onClick={onClickCheck}>이메일 중복 검사</button>
+				<button onClick={onClickCheck} className='btn-check-email'>
+					이메일 중복 검사
+				</button>
+
+				{isClicked && (
+					<p className={isValidEmail.validEmail ? 'email-message_success' : 'email-message_fail'}>
+						{isValidEmail.validMessage}
+					</p>
+				)}
+
 				{emailInputInValid && <p className='err-message'>* 이메일 형식이 맞지 않습니다.</p>}
 			</div>
 			<button
 				type='button'
-				className={isEmail && name ? 'btn-next' : 'btn-next_invalid'}
+				className={finalConfirm ? 'btn-next' : 'btn-next_invalid'}
 				onClick={handlingNext}
-				disabled={isEmail && name ? false : true}
+				disabled={finalConfirm ? false : true}
 			>
 				다음
 			</button>
@@ -116,6 +142,31 @@ const SEmailSetting = styled.div`
 		}
 
 		.err-message {
+			font-size: 13px;
+			color: red;
+			margin-left: 5px;
+			display: flex;
+		}
+
+		.btn-check-email {
+			display: flex;
+			justify-content: flex-end;
+			margin-top: 10px;
+			margin-left: auto;
+			border: 1px solid #d4d4d4;
+			padding: 4px 4px;
+			background-color: grey;
+			color: white;
+			border-radius: 5px;
+		}
+
+		.email-message_success {
+			font-size: 13px;
+			color: #1abc9c;
+			margin-left: 5px;
+			display: flex;
+		}
+		.email-message_fail {
 			font-size: 13px;
 			color: red;
 			margin-left: 5px;

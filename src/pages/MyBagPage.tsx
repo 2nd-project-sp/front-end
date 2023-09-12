@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef  } from 'react';
 import styled from 'styled-components';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import { setProducts, increaseQuantity, decreaseQuantity, removeProduct } from '../store/cartSlice';
 import { ProductInterface } from '../models/product';
 import { PayloadAction, createAction } from '@reduxjs/toolkit';
-import ProductOption from '../components/ProductOption/ProductOption';
+// import ProductOption from '../components/ProductOption/ProductOption';
 
 
 // 장바구니에 상품 추가 액션 생성
@@ -18,9 +18,7 @@ const MyBagPage: React.FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const products = useSelector((state: RootState) => state.cart.products);
-	// const { id } = useParams<{ id?: string }>();
-	// const idAsNumber = parseInt(id, 10);
-	// const selectedProduct = products && products.find((it: { id: number; }) => it.id === idAsNumber);
+
 	// 감소 함수
 	const handleDecreaseQuantity = useCallback((index: number) => {
 		dispatch(decreaseQuantity(index));
@@ -36,19 +34,9 @@ const MyBagPage: React.FC = () => {
 		dispatch(removeProduct(index));
 	}, [dispatch]);
 
-	// 이미지 URL 추출 함수
-	const getImageUrl = useCallback((jsonString: string) => {
-		try {
-			const data = JSON.parse(jsonString);
-			return data.url;
-		} catch {
-			return "오류";
-		}
-	}, []);
-
 	// 총 가격 계산
 	const totalPrice = useMemo(() => {
-		return products.reduce((total, product) => {
+		return products.reduce((total: number, product: { price: any; quantity: any; }) => {
 			return total + (Number(product.price) || 1) * (Number(product.quantity) || 1);
 		}, 0);
 	}, [products]);

@@ -1,35 +1,55 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
+import axiosClient from '../../util/axiosInstance';
+
+interface OrderItem {
+	brandName: string;
+	count: number;
+	deliveryPrice: number;
+	optionCategory: string;
+	optionName: string;
+	orderDate: string;
+	price: number;
+	productName: string;
+}
+
+interface OrderList {
+	orderList: OrderItem[];
+}
 
 const Purchase = () => {
-	const [purchaseData, setPurchaseData] = useState(null);
+	const [purchaseData, setPurchaseData] = useState<OrderList | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isError, setIsError] = useState(false);
 
-	// useEffect(() => {
-	// 	const fetchPurchase = async () => {
-	// 		setIsLoading(true);
+	useEffect(() => {
+		const fetchPurchase = async () => {
+			setIsLoading(true);
 
-	// 		try {
-	// 			const res = await axios({
-	// 				method: 'get',
-	// 				url: `/v1/user/${USER_ID}/order`,
-	// 				headers: '',
-	// 				baseURL: 'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api',
-	// 			});
+			try {
+				const res = await axiosClient({
+					method: 'get',
+					url: `/api/v1/user/order`,
+				});
 
-	// 			setUserData(res.data);
+				setPurchaseData(res.data.data);
 
-	// 			setIsLoading(false);
-	// 		} catch (err) {
-	// 			console.log(err);
-	// 		}
-	// 	};
+				setIsLoading(false);
+			} catch (err) {
+				console.log('주문내역 조회에 오류가 발생했습니다.');
+				setIsError(true);
+			}
+		};
 
-	// 	fetchPurchase();
-	// }, []);
+		fetchPurchase();
+	}, []);
 
 	if (isLoading) return <>Loading</>;
+
+	if (!purchaseData || isError) return <p>유저정보를 불러올 수 없습니다.</p>;
+
+	if (purchaseData.orderList.length === 0) return <p>주문내역이 없습니다.</p>;
 
 	return (
 		<PurchaseWrapper>
@@ -40,29 +60,40 @@ const Purchase = () => {
 					<div>배송비</div>
 					<div>진행상태</div>
 				</PurchaseHeader>
-				<div>
-					<span>주문일자 2022-08-25</span> <span>주문번호 abcdefghijkilnop</span>
-				</div>
-				<PurchaseBody>
-					<li>
-						<div>
-							<img
-								width={80}
-								height={80}
-								src='https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww&w=1000&q=80'
-								alt=''
-							/>
+				{purchaseData.orderList.map((item: OrderItem) => {
+					return (
+						<>
 							<div>
-								<span>벨라 메리제인 플랫</span>
-								<span>옵션</span>
-								<span>71000d원 / 수량 1개</span>
+								<span>주문일자 {item.orderDate}</span> <span>주문번호 abcdefghijkilnop</span>
 							</div>
-						</div>
-						<div>무료배송</div>
-						<div>배송완료</div>
-					</li>
-					<li></li>
-				</PurchaseBody>
+							<PurchaseBody>
+								<li>
+									<div>
+										<img
+											width={80}
+											height={80}
+											src='https://images.unsplash.com/photo-1579353977828-2a4eab540b9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FtcGxlfGVufDB8fDB8fHww&w=1000&q=80'
+											alt=''
+										/>
+										<div>
+											<span>{item.brandName}</span>
+											<span>{item.productName}</span>
+											<span>
+												옵션 : {item.optionCategory}/{item.optionName}
+											</span>
+											<span>
+												{item.price}원 / 수량 {item.count}개
+											</span>
+										</div>
+									</div>
+									<div>{item.deliveryPrice === 0 ? '무료배송' : item.deliveryPrice + '원'}</div>
+									<div>주문확인</div>
+								</li>
+								<li></li>
+							</PurchaseBody>
+						</>
+					);
+				})}
 			</PurchaseTable>
 		</PurchaseWrapper>
 	);

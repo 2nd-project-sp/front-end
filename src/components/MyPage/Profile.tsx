@@ -1,39 +1,72 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
+import axiosClient from '../../util/axiosInstance';
 
-const USER_ID = '123';
+interface User {
+	email: string;
+	sex: string;
+	name: string;
+	phoneNumber: string;
+	profileImgUrl: string;
+	mainAddress: string[];
+	detailAddress: string[];
+	introduce: string;
+}
 
-const Profile = () => {
-	const [userData, setUserData] = useState(null);
+const Profile: React.FC = () => {
+	const userId = localStorage.getItem('userId');
+
+	const [userData, setUserData] = useState<User | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isError, setIsError] = useState(false);
 
-	// useEffect(() => {
-	// 	const fetchUser = async () => {
-	// 		setIsLoading(true);
+	const withdraw = useCallback(async () => {
+		if (confirm('탈퇴하시겠습니까?')) {
+			try {
+				const res = await axiosClient({
+					method: 'patch',
+					url: `/api/v1/user/${userId}/withdrawal`,
+					data: {
+						id: userId,
+					},
+				});
 
-	// 		try {
-	// 			const res = await axios({
-	// 				method: 'get',
-	// 				url: `/v1/user/${USER_ID}`,
-	// 				headers: '',
-	// 				baseURL: 'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api',
-	// 			});
+				console.log(res);
+				alert('탈퇴가 완료되었습니다.');
+			} catch (err) {
+				console.log('탈퇴 오류가 발생했습니다.');
+			}
+		}
+	}, []);
 
-	// 			console.log('ss');
-	// 			setUserData(res.data);
+	useEffect(() => {
+		const fetchUser = async () => {
+			setIsLoading(true);
 
-	// 			setIsLoading(false);
-	// 		} catch (err) {
-	// 			console.log(err);
-	// 		}
-	// 	};
+			try {
+				const res = await axiosClient({
+					method: 'get',
+					url: `api/v1/user/${userId}`,
+					params: {
+						id: userId,
+					},
+				});
 
-	// 	fetchUser();
-	// }, []);
+				setUserData(res.data.data);
+
+				setIsLoading(false);
+			} catch (err) {
+				console.log('유저 정보를 불러오는데 실패하였습니다.');
+				setIsError(true);
+			}
+		};
+
+		fetchUser();
+	}, []);
 
 	if (isLoading) return <>Loading</>;
+
+	if (!userData || isError) return <p>유저정보를 불러올 수 없습니다.</p>;
 
 	return (
 		<ProfileWrapper>
@@ -45,14 +78,18 @@ const Profile = () => {
 						<li>
 							<div>
 								<span>아이디(이메일)</span>
-								<p>dev@gmail.com</p>
+								<p>{userData.email}</p>
 							</div>
 						</li>
 						<li>
 							<div>
+								<span>회원탈퇴</span>
+								<button onClick={withdraw}>회원 탈퇴하기</button>
+							</div>
+							{/* <div>
 								<span>비밀번호</span>
 								<p>********</p>
-							</div>
+							</div> */}
 						</li>
 					</ul>
 				</li>
@@ -63,31 +100,31 @@ const Profile = () => {
 						<li>
 							<div>
 								<span>성명</span>
-								<p>임빛나</p>
+								<p>{userData.name}</p>
 							</div>
 						</li>
 						<li>
 							<div>
 								<span>연락처</span>
-								<p>010-0001-0001</p>
+								<p>{userData.phoneNumber}</p>
 							</div>
 						</li>
-						<li>
+						{/* <li>
 							<div>
 								<span>생일</span>
 								<p>2013년 8월 30일</p>
 							</div>
-						</li>
+						</li> */}
 						<li>
 							<div>
 								<span>성별</span>
-								<p>여</p>
+								<p>{userData.sex === 'female' ? '여' : '남'}</p>
 							</div>
 						</li>
 						<li>
 							<div>
 								<span>주소정보</span>
-								<p>서울특별시 가나다구</p>
+								<p>{userData.mainAddress}</p>
 							</div>
 						</li>
 					</ul>
@@ -135,6 +172,11 @@ const ProfileWrapper = styled.div`
 							display: inline-block;
 							width: 70px;
 							padding-right: 20px;
+						}
+						button {
+							border: 1px solid #ccc;
+							padding: 5px;
+							border-radius: 5px;
 						}
 					}
 				}

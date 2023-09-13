@@ -52,8 +52,13 @@ const Header: React.FC = () => {
 	const homeHandler = () => {
 		navigate('/');
 	};
+
+	const categoryHandler = event => {
+		const value = event.target.getAttribute('data-value');
+		navigate(`/category/${value}?code=1`);
+	};
 	useEffect(() => {}, [isLogin]);
-	console.log(isLogin);
+	//console.log(isLogin);
 	return (
 		<SHeader>
 			<div className='header-wrapper'>
@@ -68,6 +73,20 @@ const Header: React.FC = () => {
 							Home
 						</div>
 					</div>
+				</div>
+				<div className='category'>
+					<button data-value='women' onClick={categoryHandler}>
+						WOMEN
+					</button>
+					<button data-value='men' onClick={categoryHandler}>
+						MEN
+					</button>
+					<button data-value='digital' onClick={categoryHandler}>
+						DIGITAL
+					</button>
+					<button data-value='interior' onClick={categoryHandler}>
+						INTERIOR
+					</button>
 				</div>
 				<div className='header-menu'>
 					<div className='menu-container'>
@@ -146,7 +165,15 @@ const SHeader = styled.div`
 				}
 			}
 		}
-
+		.category {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			button {
+				color: white;
+				margin: 1rem;
+			}
+		}
 		.menu-container {
 			display: flex;
 			justify-content: center;
@@ -208,7 +235,9 @@ const SHeader = styled.div`
 					}
 				}
 			}
-
+			.category {
+				display: none;
+			}
 			.menu-container {
 				display: flex;
 				justify-content: center;

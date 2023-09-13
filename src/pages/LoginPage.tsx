@@ -13,7 +13,7 @@ import { setTokenResetTimer } from '../util/util';
 axios.defaults.withCredentials = true;
 
 const LoginPage: React.FC = () => {
-	let JWT_EXPIRY_TIME = 10000;
+	let JWT_EXPIRY_TIME = 3600 * 1000;
 	const count = useRef(0);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -50,6 +50,7 @@ const LoginPage: React.FC = () => {
 		const json = await res.json();
 		console.log(json);
 		localStorage.setItem('ACCESS-TOKEN', '');
+		//localStorage.setItem('userId', )
 		alert('인증이 만료되어 재 로그인이 필요합니다.');
 		dispatch(login(false));
 		navigate('/login');
@@ -82,8 +83,11 @@ const LoginPage: React.FC = () => {
 					},
 				});
 				console.log(response);
+				console.log(response.data.data.userId);
+				const userId = response.data.data.userId;
 				const token = response.headers['access-token'];
 				localStorage.setItem('ACCESS-TOKEN', token);
+				localStorage.setItem('userId', userId);
 				dispatch(login(true));
 				setStatus('success');
 				setTokenResetTimer(setTimeout(resetToken, JWT_EXPIRY_TIME));

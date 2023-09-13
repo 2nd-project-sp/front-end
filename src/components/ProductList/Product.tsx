@@ -1,43 +1,57 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { devices } from '../../assets/styles/constants';
 import { ProductInterface } from '../../models/product';
+interface ProductCardProps {
+	isSale: boolean;
+}
+const Product: React.FC<ProductInterface> = ({ product }: ProductInterface) => {
+	const now: Date = new Date();
+	const nowMilliseconds: number = now.getTime();
+	const endDate: Date = new Date(product.saleEndDate);
+	const endMilliseconds: number = endDate.getTime();
 
-const Product: React.FC<ProductInterface> = ({ product }) => {
+	const isSale: boolean = endMilliseconds - nowMilliseconds > 0 ? true : false;
+
 	return (
-		<Link to={`/product/${product.id}`}>
-			<ProductCard>
-				<ProductImage>
-					{/* <img src={product.image} alt={product.title} /> */}
+		<ProductCard data-is-sale={isSale}>
+			<Link to={`/product/${product.id}`}>
+				<ProductImage data-is-sale={isSale}>
+					{/* <img src={product.imageUrl} alt={product.name} /> */}
 					<img
 						src={
-							'	https://img.29cm.co.kr/item/202308/11ee35923504abf7aa4f312e96f92cf3.jpg?width=400'
+							'https://img.29cm.co.kr/item/202308/11ee35923504abf7aa4f312e96f92cf3.jpg?width=400'
 						}
-						alt={product.title}
+						alt={product.name}
 					/>
 				</ProductImage>
 				<ProductTitle>
-					<p>{product.category}</p>
-					<h5>{product.title}</h5>
-					<strong>{product.price}</strong>
+					{/* <p>{product.category}</p> */}
+					<h5>{product.name}</h5>
+					<strong>{product.name}</strong>
 				</ProductTitle>
 				<ProductInfo>
-					<Discount>10%</Discount>
-					<DiscountedPrice>{Math.round(product.price * 0.9)}</DiscountedPrice>
+					{product.discountRate > 0 && <Discount>{`${product.discountRate}%`}</Discount>}
+					{product.discountRate > 0 && (
+						<DiscountedPrice>
+							{`${Math.round(product.price * (1 - product.discountRate / 100))}`}
+						</DiscountedPrice>
+					)}
+					{!product.discountRate && <Price>{product.price}</Price>}
 				</ProductInfo>
 				<ProductInfo2>
 					<ul>
 						<li color='#1d1d1d'>쿠폰</li>
-						<li color='#1d1d1d'>신상품</li>
+						{product.isNew && <li color='#1d1d1d'>신상품</li>}
 					</ul>
 				</ProductInfo2>
-			</ProductCard>
-		</Link>
+			</Link>
+		</ProductCard>
 	);
 };
 
-const ProductCard = styled.div`
+const ProductCard = styled.div<ProductCardProps>`
 	display: flex;
 	flex-direction: column;
 	margin-bottom: 1rem;
@@ -45,28 +59,31 @@ const ProductCard = styled.div`
 	font-size: 16px;
 	font-family: campton, 'Apple SD Gothic Neo', NanumBarunGothic, 나눔바른고딕, 'Malgun Gothic',
 		'맑은 고딕', dotum, sans-serif;
+	background-color: ${props => (props['data-is-sale'] ? '' : 'rgba(157, 158, 157, 0.7)')};
+	pointer-events: ${props => (props['data-is-sale'] ? '' : 'none')};
+	opacity: ${props => (props['data-is-sale'] ? '' : 50)};
 `;
 const ProductTitle = styled.div`
+	margin-bottom: 0.8rem;
 	h5 {
-		margin-bottom: 1rem;
 		margin-top: 0.5rem;
+		text-decoration: underline;
+		margin-bottom: 0.5rem;
 	}
 	strong {
-		color: rgb(196, 196, 196);
+		color: rgb(157, 158, 157);
 		line-height: 1;
 		font-weight: normal;
-		text-decoration: line-through;
 		line-height: 1.4;
 	}
 	@media screen and ${devices.md} {
 		h5 {
-			margin-bottom: 1rem;
+			text-decoration: underline;
 		}
 		strong {
-			color: rgb(196, 196, 196);
+			color: rgb(157, 158, 157);
 			line-height: 1;
 			font-weight: normal;
-			text-decoration: line-through;
 		}
 	}
 `;
@@ -78,12 +95,17 @@ const ProductInfo = styled.div`
 	}
 `;
 const Discount = styled.span`
-	margin-right: 1rem; /* 여백을 조정할 수 있는 값으로 변경하세요 */
+	margin-right: 0.5rem; /* 여백을 조정할 수 있는 값으로 변경하세요 */
 	color: var(--ruler-scale-color-red-500);
 	font-weight: bold;
 `;
 
-const DiscountedPrice = styled.strong``;
+const DiscountedPrice = styled.strong`
+	color: var(--ruler-scale-color-red-500);
+`;
+const Price = styled.div`
+	font-weight: bold;
+`;
 const ProductInfo2 = styled.div`
 	ul {
 		list-style: none;
@@ -101,7 +123,7 @@ const ProductInfo2 = styled.div`
 		margin-bottom: 0.5rem; /* 아래 여백 설정 */
 	}
 `;
-const ProductImage = styled.div`
+const ProductImage = styled.div<ProductCardProps>`
 	overflow: hidden;
 	position: relative;
 	padding-top: 100%;
@@ -112,6 +134,7 @@ const ProductImage = styled.div`
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
+		z-index: ${props => (props['data-is-sale'] ? '' : '-50')};
 	}
 `;
 export default Product;

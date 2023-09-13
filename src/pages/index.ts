@@ -13,9 +13,7 @@ export {
 	MyBagPage,
 	MyPage,
 	MainPage,
-
 	ProductMarket,
-
 	PaymentPage,
 	SignUpPage,
 	ProductDetail,

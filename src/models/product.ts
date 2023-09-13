@@ -6,6 +6,7 @@ export interface ProductInterface {
 	image: string;
 	description: string;
 	category: string;
+	subCategoryId: string;
 	categoryId: string;
 	thumbnail: string;
 	rating: number;

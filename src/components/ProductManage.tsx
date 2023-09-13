@@ -7,6 +7,7 @@ import { updateQuantity } from '../store/manageSlice';
 const ProductManage: React.FC = () => {
 	const dispatch = useDispatch();
 	const productInfo = useSelector(state => state.manage.products);
+	console.log(productInfo);
 
 	const [editedProducts, setEditedProducts] = useState<{ [key: number]: boolean }>({});
 	const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});
@@ -79,7 +80,9 @@ const ProductManage: React.FC = () => {
 											''
 										)}
 									</ProductManageInfoTitle>
-									<ProductManageInfo>{product.categoryId}</ProductManageInfo>
+									<ProductManageInfo>
+										{product.categoryId} {product.subCategoryId}
+									</ProductManageInfo>
 									<ProductManageInfo>브랜드: {product.brandId}</ProductManageInfo>
 									{product.discountRate ? (
 										<DiscountPrice>

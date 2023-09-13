@@ -34,14 +34,14 @@ const ProductMarket: React.FC = () => {
 		e.preventDefault();
 		const {
 			id,
+			categoryId,
+			subCategoryId,
 			title,
 			price,
 			brandId,
 			description,
 			image,
 			quantity,
-			categoryId,
-			subCategoryId,
 			showDiscount,
 			discountRate,
 			delivaryPrice,
@@ -51,7 +51,7 @@ const ProductMarket: React.FC = () => {
 		const updatedProductInfo = {
 			id,
 			categoryId,
-			subCategoryId: '',
+			subCategoryId,
 			title,
 			price,
 			brandId,
@@ -85,6 +85,7 @@ const ProductMarket: React.FC = () => {
 		setShowDiscount(false);
 	};
 
+	console.log(productInfo.subCategoryId);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	//할인 유무 핸들러
 	const discountHandler = () => {
@@ -186,21 +187,26 @@ const ProductMarket: React.FC = () => {
 						<select
 							value={productInfo.categoryId}
 							onChange={e => {
-								setProductInfo({ ...productInfo, categoryId: e.target.value });
+								const categoryId = e.target.value;
+								setProductInfo({ ...productInfo, categoryId: categoryId });
 							}}
 						>
-							<option value=''>카테고리 선택</option>
+							<option value=''>카테고리</option>
 							{option.map(it => (
 								<option value={it} key={it}>
 									{it}
 								</option>
 							))}
 						</select>
+
 						<select
 							value={productInfo.subCategoryId}
-							onChange={e => setProductInfo({ ...productInfo, subCategoryId: e.target.value })}
+							onChange={e => {
+								const subCategoryId = e.target.value;
+								setProductInfo({ ...productInfo, subCategoryId: subCategoryId });
+							}}
 						>
-							<option value=''>서브카테고리 선택</option>
+							<option value=''>서브카테고리</option>
 							{subOption.map(it => (
 								<option value={it} key={it}>
 									{it}

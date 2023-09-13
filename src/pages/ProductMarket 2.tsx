@@ -10,15 +10,12 @@ const ProductMarket: React.FC = () => {
 	const [quantity, setQuantity] = useState(1);
 	const [showDiscount, setShowDiscount] = useState(false);
 	const [isNew, setIsNew] = useState(false);
-	// console.log(isNew);
-	const option = ['WOMEN', 'MEN', 'DIGITAL', 'INTERIOR', 'BEAUTY', 'KIDS'];
-	const subOption = ['의류', '가방', '신발', '악세사리'];
 
+	const option = ['여성의류', '남성의류', '인테리어', '주방'];
 	const [productInfo, setProductInfo] = useState({
 		id: uuidv4(),
 		title: '',
 		categoryId: '',
-		subCategoryId: '',
 		price: 0,
 		brandId: '',
 		description: '',
@@ -30,18 +27,17 @@ const ProductMarket: React.FC = () => {
 		isNew: false,
 	});
 
-	const handleSubmit = e => {
+	const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault();
 		const {
 			id,
-			categoryId,
-			subCategoryId,
 			title,
 			price,
 			brandId,
 			description,
 			image,
 			quantity,
+			categoryId,
 			showDiscount,
 			discountRate,
 			delivaryPrice,
@@ -51,7 +47,6 @@ const ProductMarket: React.FC = () => {
 		const updatedProductInfo = {
 			id,
 			categoryId,
-			subCategoryId,
 			title,
 			price,
 			brandId,
@@ -68,7 +63,6 @@ const ProductMarket: React.FC = () => {
 		setProductInfo({
 			id: uuidv4(),
 			categoryId: '',
-			subCategoryId: '',
 			title: '',
 			price: 0,
 			brandId: '',
@@ -81,11 +75,10 @@ const ProductMarket: React.FC = () => {
 			isNew: false,
 		});
 		setQuantity(1);
-		setIsNew(false);
-		setShowDiscount(false);
 	};
 
-	console.log(productInfo.subCategoryId);
+	console.log('여기서는 되는데', isNew);
+
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	//할인 유무 핸들러
 	const discountHandler = () => {
@@ -94,10 +87,6 @@ const ProductMarket: React.FC = () => {
 	//신상 유무 핸들러
 	const newHandler = () => {
 		setIsNew(!isNew);
-		setProductInfo(prevProductInfo => ({
-			...prevProductInfo,
-			isNew: !prevProductInfo.isNew,
-		}));
 	};
 
 	//이미지 임포트
@@ -162,6 +151,7 @@ const ProductMarket: React.FC = () => {
 
 					<ProductAddInput>
 						신상품 <input type='checkbox' checked={isNew} onChange={newHandler} />
+						{isNew && <div>신상이네요</div>}
 					</ProductAddInput>
 					<ProductAddInput>
 						할인
@@ -187,27 +177,12 @@ const ProductMarket: React.FC = () => {
 						<select
 							value={productInfo.categoryId}
 							onChange={e => {
-								const categoryId = e.target.value;
-								setProductInfo({ ...productInfo, categoryId: categoryId });
+								console.log('이벤트', e);
+								setProductInfo({ ...productInfo, categoryId: e.target.value });
 							}}
 						>
-							<option value=''>카테고리</option>
+							<option value=''>카테고리 선택</option>
 							{option.map(it => (
-								<option value={it} key={it}>
-									{it}
-								</option>
-							))}
-						</select>
-
-						<select
-							value={productInfo.subCategoryId}
-							onChange={e => {
-								const subCategoryId = e.target.value;
-								setProductInfo({ ...productInfo, subCategoryId: subCategoryId });
-							}}
-						>
-							<option value=''>서브카테고리</option>
-							{subOption.map(it => (
 								<option value={it} key={it}>
 									{it}
 								</option>
@@ -280,6 +255,7 @@ const ProductMarket: React.FC = () => {
 					</form>
 				</ProductAdd>
 			</ProductMarketWrapper>
+
 			<ProductManage />
 		</>
 	);
@@ -301,8 +277,6 @@ const ProductMarketTitle = styled.div`
 	font-weight: 700;
 	font-size: 20px;
 	border-bottom: 2px solid rgb(0, 0, 0);
-	display: flex;
-	justify-content: flex-start;
 `;
 const ProductAdd = styled.div`
 	width: 50%;

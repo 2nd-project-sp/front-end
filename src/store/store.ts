@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { testProductsReducer } from './testProductSlice';
-
 import loginSlice from './loginSlice';
 import signupSlice from './signupSlice';
 import tokenSlice from './tokenSlice';
@@ -14,14 +13,10 @@ export const store = configureStore({
 		login: loginSlice,
 		signup: signupSlice,
 		token: tokenSlice,
-
 		testProducts: testProductsReducer,
 		cart: cartSlice,
 		manage: manageSlice,
-
 		products: productsReducer,
-	
-
 	},
 });
 

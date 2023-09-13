@@ -10,7 +10,7 @@ axiosClient.interceptors.request.use(
 	config => {
 		const token = localStorage.getItem('ACCESS-TOKEN');
 		if (token) {
-			config.headers['ACCESS-TOKEN'] = `Bearer ${token}`;
+			config.headers['ACCESS-TOKEN'] = `${token}`;
 		}
 		return config;
 	},

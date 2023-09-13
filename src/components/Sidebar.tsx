@@ -8,18 +8,41 @@ const Sidebar = () => {
 	const { category } = useParams();
 	const [categorySelected, setCategorySelected] = useState<string>('');
 	const OPTIONS = [
-		{ value: '', name: '선택' },
+		{ value: '', name: 'HOME' },
 		{ value: 'women', name: 'WOMEN' },
 		{ value: 'men', name: 'MEN' },
 		{ value: 'digital', name: 'DIGITAL' },
 		{ value: 'interior', name: 'INTERIOR' },
 	];
-	const types = [
-		{ value: 1, name: '의류' },
-		{ value: 2, name: '가방' },
-		{ value: 3, name: '신발' },
-		{ value: 4, name: '악세사리' },
-	];
+	if (categorySelected !== category) {
+		setCategorySelected(category);
+	}
+	const types = {
+		women: [
+			{ value: 1, name: '의류' },
+			{ value: 2, name: '가방' },
+			{ value: 3, name: '신발' },
+			{ value: 4, name: '악세사리' },
+		],
+		men: [
+			{ value: 1, name: '의류' },
+			{ value: 2, name: '가방' },
+			{ value: 3, name: '신발' },
+			{ value: 4, name: '악세사리' },
+		],
+		digital: [
+			{ value: 1, name: '모바일•PC' },
+			{ value: 2, name: '음향기기' },
+			{ value: 3, name: '게임' },
+			{ value: 4, name: '사진' },
+		],
+		interior: [
+			{ value: 1, name: '가구' },
+			{ value: 2, name: '조명' },
+			{ value: 3, name: '홈데코' },
+			{ value: 4, name: '아트디자인' },
+		],
+	};
 	const categoryHandler = value => {
 		navigate(`/category/${category}?code=${value}`);
 	};
@@ -34,6 +57,7 @@ const Sidebar = () => {
 			navigate(`/category/${event.target.value}?code=1`);
 		}
 	};
+	const selectedCategoryTypes = types[category] || [];
 	return (
 		<>
 			<SidebarTitle>
@@ -47,7 +71,7 @@ const Sidebar = () => {
 			</SidebarTitle>
 			{category && (
 				<SidebarContent>
-					{types.map((type, index) => (
+					{selectedCategoryTypes.map((type, index) => (
 						<Type key={`type-${index}`}>
 							<button onClick={() => categoryHandler(type.value)}>{type.name}</button>
 						</Type>

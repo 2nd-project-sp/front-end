@@ -58,7 +58,9 @@ const ProductManage: React.FC = () => {
 	return (
 		<>
 			<ProductManageWrapper>
-				<ProductManageTitle>판매 관리</ProductManageTitle>
+				<ProductManageTitle>
+					<div>판매 관리</div>
+				</ProductManageTitle>
 				<ProductInfoCon>
 					{productInfo &&
 						productInfo.map((product: ProductInterface) => (
@@ -67,8 +69,16 @@ const ProductManage: React.FC = () => {
 									<img src={product.image} alt='판매 상품 이미지' />
 								</ProductManageImg>
 								<ProductText>
-									{product.isNew ? <NewItem>신</NewItem> : ''}
-									<ProductManageInfoTitle>{product.title}</ProductManageInfoTitle>
+									<ProductManageInfoTitle>
+										{product.isNew ? (
+											<NewItem>
+												<div>new</div>
+												{product.title}
+											</NewItem>
+										) : (
+											''
+										)}
+									</ProductManageInfoTitle>
 									<ProductManageInfo>{product.categoryId}</ProductManageInfo>
 									<ProductManageInfo>브랜드: {product.brandId}</ProductManageInfo>
 									{product.discountRate ? (
@@ -120,7 +130,20 @@ export default ProductManage;
 
 const NewItem = styled.div`
 	font-weight: 700;
-	color: #fd3535;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	> div {
+		color: #ffff;
+		display: flex;
+		width: 40px;
+		height: 20px;
+		background-color: #000000;
+		justify-content: center;
+		align-items: center;
+		border-radius: 50px;
+		margin-right: 5px;
+	}
 `;
 
 const ProductManageWrapper = styled.div`
@@ -131,9 +154,11 @@ const ProductManageWrapper = styled.div`
 	align-items: center;
 `;
 const ProductManageTitle = styled.div`
+	display: flex;
+	justify-content: flex-start;
 	width: 50%;
 	font-weight: 700;
-	margin-bottom: 30px;
+	margin-bottom: 20px;
 	font-size: 20px;
 	border-bottom: 2px solid rgb(0, 0, 0);
 `;

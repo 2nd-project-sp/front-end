@@ -4,13 +4,13 @@ import { devices } from '../assets/styles/constants';
 import { useNavigate } from 'react-router';
 const Sidebar = () => {
 	const navigate = useNavigate();
-	const [categorySelected, setCategorySelected] = useState<string>('');
-	// const category = ['WOMEN', 'MEN', 'DIGITAL', 'INTERIOR'];
+	const [categorySelected, setCategorySelected] = useState<string>('main');
 	const OPTIONS = [
-		{ value: 'WOMEN', name: 'WOMEN' },
-		{ value: 'MEN', name: 'MEN' },
-		{ value: 'DIGITAL', name: 'DIGITAL' },
-		{ value: 'INTERIOR', name: 'INTERIOR' },
+		{ value: 'main', name: '선택' },
+		{ value: 'women', name: 'WOMEN' },
+		{ value: 'men', name: 'MEN' },
+		{ value: 'digital', name: 'DIGITAL' },
+		{ value: 'interior', name: 'INTERIOR' },
 	];
 	const types = ['의류', '가방', '신발', '악세사리'];
 	const categoryHandler = () => {
@@ -18,6 +18,11 @@ const Sidebar = () => {
 	};
 	const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		setCategorySelected(event.target.value);
+		if (event.target.value !== 'main') {
+			navigate(`/category/${categorySelected}?code=1`)
+		} else {
+			navigate(`/`)
+		}
 	};
 	return (
 		<>

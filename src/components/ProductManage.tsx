@@ -57,7 +57,7 @@ const ProductManage: React.FC = () => {
 				<ProductManageTitle>판매 관리</ProductManageTitle>
 				<ProductInfoCon>
 					{productInfo &&
-						productInfo.map((product: ProductInterface, index: number) => (
+						productInfo.map((product: ProductInterface) => (
 							<Products key={product.id}>
 								<ProductManageImg>
 									<img src={product.image} alt='판매 상품 이미지' />

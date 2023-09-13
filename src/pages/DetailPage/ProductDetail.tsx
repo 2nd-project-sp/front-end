@@ -137,14 +137,21 @@ const ProductDetail: React.FC = () => {
 					</ProductDetailInfoCon>
 				)}
 				<ProductDesc selectedProduct={selectedProduct} />
-				<ProductReview />
 			</div>
 		</ProductDetailWrapper>
 	);
 };
 //Styled Component
 const ProductDetailWrapper = styled.div`
-	margin-top: 70px;
+	margin-top: 120px;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	> div {
+		width: 80%;
+	}
 `;
 
 const ProductBrand = styled.div`

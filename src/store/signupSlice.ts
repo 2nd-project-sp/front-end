@@ -29,15 +29,7 @@ const signupSlice = createSlice({
 	initialState,
 	reducers: {
 		setting(state, action) {
-			// state.name = action.payload.name;
-			// state.email = action.payload.email;
-			// state.password = action.payload.password;
-			// state.phoneNumber = action.payload.phoneNumber;
-			// state.sex = action.payload.sex;
-			// state.profileImgUrl = action.payload.profileImgUrl;
-			// state.introduce = action.payload.introduce;
-			// state.mainAddress = action.payload.mainAddress;
-			// state.subAddress = action.payload.subAddress;
+			// 이전의 상태를 보존하면서 새로운 상태 반영
 			const newState = { ...state };
 			return { ...newState, ...action.payload };
 		},

@@ -4,17 +4,21 @@ import { devices } from '../assets/styles/constants';
 import { useNavigate } from 'react-router';
 const Sidebar = () => {
 	const navigate = useNavigate();
-	const [categorySelected, setCategorySelected] = useState<string>('main');
+	const [categorySelected, setCategorySelected] = useState<string>('women');
 	const OPTIONS = [
-		{ value: 'main', name: '선택' },
 		{ value: 'women', name: 'WOMEN' },
 		{ value: 'men', name: 'MEN' },
 		{ value: 'digital', name: 'DIGITAL' },
 		{ value: 'interior', name: 'INTERIOR' },
 	];
-	const types = ['의류', '가방', '신발', '악세사리'];
-	const categoryHandler = () => {
-		navigate('/');
+	const types = [
+		{ value: 1, name: '의류' },
+		{ value: 2, name: '가방' },
+		{ value: 3, name: '신발' },
+		{ value: 4, name: '악세사리' },
+	];
+	const categoryHandler = value => {
+		navigate(`/category/${categorySelected}?code=${value}`);
 	};
 	const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		setCategorySelected(event.target.value);
@@ -39,7 +43,7 @@ const Sidebar = () => {
 			<SidebarContent>
 				{types.map((type, index) => (
 					<Type key={`type-${index}`}>
-						<button onClick={categoryHandler}>{type}</button>
+						<button onClick={() => categoryHandler(type.value)}>{type.name}</button>
 					</Type>
 				))}
 			</SidebarContent>
@@ -66,6 +70,9 @@ const Sidebar = () => {
 export default Sidebar;
 
 const SidebarTitle = styled.h2`
+	select {
+		display: none;
+	}
 	font-size: 1.5rem;
 	text-align: left;
 	margin-top: 10px;
@@ -73,14 +80,22 @@ const SidebarTitle = styled.h2`
 	border-bottom: 3px solid #000;
 	padding-bottom: 20px;
 	@media screen and (${devices.md}) {
-		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		select {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 150px;
+			text-align: center;
+			font-size: 1rem;
+		}
 		border: none;
-		font-size: 1rem;
 		margin-bottom: 0px;
 		padding-bottom: 0px;
 	}
 `;
-
 const SidebarContent = styled.div`
 	@media screen and (${devices.md}) {
 		display: grid;

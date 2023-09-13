@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { PiHandbagBold } from 'react-icons/pi';
 import { RiLoginBoxLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../store/loginSlice';
+import { logout, login } from '../store/loginSlice';
 import { RootState } from '../store/store';
 import { devices } from '../assets/styles/constants';
+import { clearTokenResetTimer } from '../util/util';
 
 const Header: React.FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const isLogin = useSelector((state: RootState) => state.login.isLogin);
-	const checkLogout = useSelector((state: RootState) => state.token);
-	console.log(checkLogout.token);
+
 	const myHandler = () => {
 		if (isLogin) {
 			navigate('/my');
@@ -29,29 +29,31 @@ const Header: React.FC = () => {
 			navigate('/login');
 		}
 	};
-	const loginHandler = async () => {
-		// if (isLogin) {
-		// 	dispatch(logout(false));
-		// } else {
-		navigate('/login');
-	};
+
 	const logoutHandler = async () => {
-		const res = await fetch(
-			'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/logout',
-			{
+		if (isLogin) {
+			const token = localStorage.getItem('ACCESS-TOKEN');
+			const res = await fetch('http://15.164.128.162:8080/api/v1/user/logout', {
 				method: 'POST',
 				headers: {
-					'ACCESS-TOKEN': `${checkLogout.token}`,
+					'ACCESS-TOKEN': `${token}`,
 				},
 				body: {} as any,
-			}
-		);
-		const json = await res.json();
-		console.log(json);
+			});
+			const json = await res.json();
+			console.log(json);
+			clearTokenResetTimer();
+			localStorage.setItem('ACCESS-TOKEN', '');
+			dispatch(login(false));
+		} else {
+			navigate('/login');
+		}
 	};
 	const homeHandler = () => {
 		navigate('/');
 	};
+	useEffect(() => {}, [isLogin]);
+	//console.log(isLogin);
 	return (
 		<SHeader>
 			<div className='header-wrapper'>
@@ -67,6 +69,12 @@ const Header: React.FC = () => {
 						</div>
 					</div>
 				</div>
+				<div className='category'>
+					<button>WOMEN</button>
+					<button>MEN</button>
+					<button>DIGITAL</button>
+					<button>INTERIOR</button>
+				</div>
 				<div className='header-menu'>
 					<div className='menu-container'>
 						<div className='mypage' onClick={myHandler}>
@@ -81,16 +89,11 @@ const Header: React.FC = () => {
 							</div>
 							<span>장바구니</span>
 						</div>
-						<div className='login' onClick={loginHandler}>
+						<div className='login' onClick={logoutHandler}>
 							<div className='menu-icon'>
 								<RiLoginBoxLine />
 							</div>
 							<span>{isLogin ? '로그아웃' : '로그인'}</span>
-						</div>
-						<div>
-							<button style={{ color: 'white' }} onClick={logoutHandler}>
-								로그아웃
-							</button>
 						</div>
 					</div>
 				</div>
@@ -149,7 +152,15 @@ const SHeader = styled.div`
 				}
 			}
 		}
-
+		.category {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			button {
+				color: white;
+				margin: 1rem;
+			}
+		}
 		.menu-container {
 			display: flex;
 			justify-content: center;
@@ -211,7 +222,9 @@ const SHeader = styled.div`
 					}
 				}
 			}
-
+			.category {
+				display: none;
+			}
 			.menu-container {
 				display: flex;
 				justify-content: center;

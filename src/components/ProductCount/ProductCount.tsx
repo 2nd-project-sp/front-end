@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-const ProductCount: React.FC = () => {
+interface ProductCountProps {//카운트 증감소를 Props로 전달받기 위해 선언(김혜린)
+	onQuantityChange: (quantity: number) => void;
+}
+
+const ProductCount: React.FC<ProductCountProps> = ({ onQuantityChange }) => {
 	const [quantity, setQuantity] = useState(1);
+
+	useEffect(() => {
+		// 상태가 변경될 때마다 onQuantityChange를 호출하여 변경을 알림(김혜린추가)
+		onQuantityChange(quantity);
+	}, [quantity, onQuantityChange]);
 
 	const increaseQuantity = () => {
 		setQuantity(quantity + 1);
@@ -22,11 +31,13 @@ const ProductCount: React.FC = () => {
 		</ProductCountContainer>
 	);
 };
+
 const ProductCountContainer = styled.div`
 	display: flex;
 	align-items: center;
 	margin-top: 20px;
 `;
+
 const QuantityButton = styled.button`
 	background-color: #f0f0f0;
 	border: none;
@@ -34,6 +45,7 @@ const QuantityButton = styled.button`
 	font-size: 16px;
 	cursor: pointer;
 `;
+
 const Quantity = styled.span`
 	width: 30px;
 	text-align: center;

@@ -1,38 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { devices } from '../assets/styles/constants';
+import { useNavigate } from 'react-router';
 const Sidebar = () => {
-	const category = '여성의류';
-	const types = [
-		'ALL',
-		'NEW',
-		'상의',
-		'아우터',
-		'원피스',
-		'바지',
-		'니트웨어',
-		'스커트',
-		'엑티브웨어',
-		'이너웨어',
-		'홈웨어',
-		'하이엔드',
-		'점프수트',
-		'EXCLUSIVE',
+	const navigate = useNavigate();
+	const [categorySelected, setCategorySelected] = useState<string>('');
+	// const category = ['WOMEN', 'MEN', 'DIGITAL', 'INTERIOR'];
+	const OPTIONS = [
+		{ value: 'WOMEN', name: 'WOMEN' },
+		{ value: 'MEN', name: 'MEN' },
+		{ value: 'DIGITAL', name: 'DIGITAL' },
+		{ value: 'INTERIOR', name: 'INTERIOR' },
 	];
+	const types = ['의류', '가방', '신발', '악세사리'];
+	const categoryHandler = () => {
+		navigate('/');
+	};
+	const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		setCategorySelected(event.target.value);
+	};
 	return (
 		<>
-			<SidebarTitle>{category}</SidebarTitle>
+			<SidebarTitle>
+				<select value={categorySelected} onChange={handleCategoryChange}>
+					{OPTIONS.map(option => (
+						<option key={option.value} value={option.value}>
+							{option.name}
+						</option>
+					))}
+				</select>
+			</SidebarTitle>
 			<SidebarContent>
 				{types.map((type, index) => (
 					<Type key={`type-${index}`}>
-						<a href='/'>{type}</a>
+						<button onClick={categoryHandler}>{type}</button>
 					</Type>
 				))}
 			</SidebarContent>
 		</>
 	);
 };
+// const [optionSelected, setOptionSelected] = useState<string>('');
 
+// 	const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+// 		setOptionSelected(event.target.value);
+// 	};
+
+// 	return (
+// 		<ProductOptionContainer>
+// 			<ProductOptionSelect value={optionSelected} onChange={handleOptionChange}>
+// 				<option value=''>옵션 선택</option>
+// 				<option value='mall1'>S</option>
+// 				<option value='mall2'>M</option>
+// 				<option value='mall3'>L</option>
+// 				<option value='mall3'>XL</option>
+// 			</ProductOptionSelect>
+// 		</ProductOptionContainer>
+// 	);
 export default Sidebar;
 
 const SidebarTitle = styled.h2`

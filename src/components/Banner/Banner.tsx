@@ -16,7 +16,7 @@ const Banner = () => {
 			modules={[Autoplay, Pagination]}
 			spaceBetween={50}
 			slidesPerView={1}
-			onSlideChange={() => console.log('slide change')}
+			// onSlideChange={() => console.log('slide change')}
 			pagination={{ clickable: true }}
 			autoplay={{ delay: 3000 }}
 		>

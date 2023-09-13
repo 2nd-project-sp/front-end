@@ -50,23 +50,6 @@ const Sidebar = () => {
 		</>
 	);
 };
-// const [optionSelected, setOptionSelected] = useState<string>('');
-
-// 	const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-// 		setOptionSelected(event.target.value);
-// 	};
-
-// 	return (
-// 		<ProductOptionContainer>
-// 			<ProductOptionSelect value={optionSelected} onChange={handleOptionChange}>
-// 				<option value=''>옵션 선택</option>
-// 				<option value='mall1'>S</option>
-// 				<option value='mall2'>M</option>
-// 				<option value='mall3'>L</option>
-// 				<option value='mall3'>XL</option>
-// 			</ProductOptionSelect>
-// 		</ProductOptionContainer>
-// 	);
 export default Sidebar;
 
 const SidebarTitle = styled.h2`

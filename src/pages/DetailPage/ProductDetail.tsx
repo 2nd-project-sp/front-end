@@ -5,7 +5,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ProductCount from '../../components/ProductCount/ProductCount';
 import { fetchProducts, selectProductData } from '../../store/productsSlice';
 import ProductDesc from '../../components/ProductDesc/ProductDesc';
+import ProductReview from '../../components/ProductReview/ProductReview';
 import ProductOption from '../../components/ProductOption/ProductOption';
+import { addToCart } from '../../store/cartSlice'; //CartSlice 작업 추가(김혜린)
 
 const ProductDetail: React.FC = () => {
 	const navigate = useNavigate();
@@ -26,12 +28,17 @@ const ProductDetail: React.FC = () => {
 	const currentPrice = selectedProduct
 		? selectedProduct.price - (selectedProduct.price * discountPer) / 100
 		: 0;
+
 	const reviewNum = selectedProduct ? selectedProduct.rating : 0;
+
+	const [selectedQuantity, setSelectedQuantity] = useState<number>(1); // Producount에서 선택된 수량 전달받기
 
 	const gotoMyBag = () => {
 		setShowPopup(false); // 팝업을 닫는 로직 추가 (김혜린)
 		navigate('/mybag');
 	};
+
+	// putCart 영역 선택된 값만 받아올 수 있도록 addTocart 따로 추가했습니다. (김혜린)
 	const putCart = () => {
 		if (selectedProduct) {
 			const updatedProduct = {
@@ -130,20 +137,14 @@ const ProductDetail: React.FC = () => {
 					</ProductDetailInfoCon>
 				)}
 				<ProductDesc selectedProduct={selectedProduct} />
+				<ProductReview />
 			</div>
 		</ProductDetailWrapper>
 	);
 };
 //Styled Component
 const ProductDetailWrapper = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	margin-top: 120px;
-	> div {
-		width: 80%;
-	}
+	margin-top: 70px;
 `;
 
 const ProductBrand = styled.div`
@@ -182,6 +183,7 @@ const DetailInfoCon = styled.div`
 const InfoConTextBox = styled.div`
 	width: 100%;
 `;
+
 const TextBoxText = styled.div`
 	width: 100%;
 	display: flex;

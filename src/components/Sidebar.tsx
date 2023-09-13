@@ -4,8 +4,9 @@ import { devices } from '../assets/styles/constants';
 import { useNavigate } from 'react-router';
 const Sidebar = () => {
 	const navigate = useNavigate();
-	const [categorySelected, setCategorySelected] = useState<string>('women');
+	const [categorySelected, setCategorySelected] = useState<string>('');
 	const OPTIONS = [
+		{ value: '', name: '선택' },
 		{ value: 'women', name: 'WOMEN' },
 		{ value: 'men', name: 'MEN' },
 		{ value: 'digital', name: 'DIGITAL' },
@@ -23,7 +24,7 @@ const Sidebar = () => {
 	const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		setCategorySelected(event.target.value);
 		console.log(event.target.value);
-		if (event.target.value === 'main') {
+		if (event.target.value === '') {
 			navigate(`/`);
 		} else {
 			navigate(`/category/${event.target.value}?code=1`);

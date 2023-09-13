@@ -5,7 +5,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ProductCount from '../../components/ProductCount/ProductCount';
 import { fetchProducts, selectProductData } from '../../store/productsSlice';
 import ProductDesc from '../../components/ProductDesc/ProductDesc';
-import ProductReview from '../../components/ProductReview/ProductReview';
 import ProductOption from '../../components/ProductOption/ProductOption';
 import { addToCart } from '../../store/cartSlice'; //CartSlice 작업 추가(김혜린)
 

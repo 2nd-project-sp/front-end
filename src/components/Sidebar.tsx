@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { devices } from '../assets/styles/constants';
 import { useNavigate } from 'react-router';
+import { useParams } from 'react-router-dom';
 const Sidebar = () => {
 	const navigate = useNavigate();
+	const { category } = useParams();
 	const [categorySelected, setCategorySelected] = useState<string>('');
 	const OPTIONS = [
 		{ value: '', name: '선택' },
@@ -19,8 +21,10 @@ const Sidebar = () => {
 		{ value: 4, name: '악세사리' },
 	];
 	const categoryHandler = value => {
-		navigate(`/category/${categorySelected}?code=${value}`);
+		navigate(`/category/${category}?code=${value}`);
 	};
+	console.log(category);
+
 	const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		setCategorySelected(event.target.value);
 		console.log(event.target.value);
@@ -41,13 +45,15 @@ const Sidebar = () => {
 					))}
 				</select>
 			</SidebarTitle>
-			<SidebarContent>
-				{types.map((type, index) => (
-					<Type key={`type-${index}`}>
-						<button onClick={() => categoryHandler(type.value)}>{type.name}</button>
-					</Type>
-				))}
-			</SidebarContent>
+			{category && (
+				<SidebarContent>
+					{types.map((type, index) => (
+						<Type key={`type-${index}`}>
+							<button onClick={() => categoryHandler(type.value)}>{type.name}</button>
+						</Type>
+					))}
+				</SidebarContent>
+			)}
 		</>
 	);
 };
@@ -76,7 +82,7 @@ const SidebarTitle = styled.h2`
 			font-size: 1rem;
 		}
 		border: none;
-		margin-bottom: 0px;
+		// margin-bottom: 20px;
 		padding-bottom: 0px;
 	}
 `;

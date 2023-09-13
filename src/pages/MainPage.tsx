@@ -126,7 +126,7 @@ const BannerContainer = styled.div`
 	display: none; /* 기본적으로 숨김 */
 	@media screen and (${devices.md}) {
 		display: block; /* 모바일 화면일 때 보이도록 변경 */
-		margin-top: 2rem;
+		margin-top: 3rem;
 		background-color: #f2f2f2;
 		width: auto;
 		height: auto;

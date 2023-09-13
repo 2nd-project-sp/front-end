@@ -1,17 +1,22 @@
 export interface ProductInterface {
 	product: {
-		id: number;
-		name: string;
-		price: number;
-		description: string;
-		discountRate: number;
-		isDiscount: boolean;
 		isNew: boolean;
-		deliveryPrice: string;
-		saleStartDate: string;
-		saleEndDate: string;
-		imageUrl: string;
-		imageType: string;
+		id: number;
+		title: string;
+		price: number;
+		image: string;
+		description: string;
+		category: string;
+		subCategoryId: string;
+		categoryId: string;
+		thumbnail: string;
+		rating: number;
+		quantity: number;
+		option: string;
+		name: string;
+		brandId: string;
+		discountRate: number;
+		delivaryPrice: number;
 	};
 }
 

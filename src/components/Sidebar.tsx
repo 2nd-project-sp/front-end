@@ -18,10 +18,11 @@ const Sidebar = () => {
 	};
 	const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		setCategorySelected(event.target.value);
-		if (event.target.value !== 'main') {
-			navigate(`/category/${categorySelected}?code=1`)
+		console.log(event.target.value);
+		if (event.target.value === 'main') {
+			navigate(`/`);
 		} else {
-			navigate(`/`)
+			navigate(`/category/${event.target.value}?code=1`);
 		}
 	};
 	return (

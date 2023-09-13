@@ -1,5 +1,4 @@
 import React from 'react';
-import { useParams, useLocation } from 'react-router-dom';
 // import { useDispatch, useSelector } from 'react-redux';
 import ProductList from '../components/ProductList/ProductList';
 import Sidebar from '../components/Sidebar';
@@ -24,12 +23,6 @@ const MainPage: React.FC = () => {
 	// 	// 	}
 	// 	// },
 	// });
-	const { category } = useParams();
-	const location = useLocation();
-	const queryParams = new URLSearchParams(location.search);
-	const code = queryParams.get('code');
-	console.log(category, code);
-
 	const response = {
 		status: 'success',
 		message: '상품목록 조회가 완료되었습니다.',

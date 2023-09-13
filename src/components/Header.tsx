@@ -53,10 +53,10 @@ const Header: React.FC = () => {
 		navigate('/');
 	};
 
-	const categoryHandler = (event) =>  {
-    const value = event.target.getAttribute('data-value');
+	const categoryHandler = event => {
+		const value = event.target.getAttribute('data-value');
 		navigate(`/category/${value}?code=1`);
-	}
+	};
 	useEffect(() => {}, [isLogin]);
 	//console.log(isLogin);
 	return (
@@ -75,11 +75,19 @@ const Header: React.FC = () => {
 					</div>
 				</div>
 				<div className='category'>
-    <button data-value="women" onClick={categoryHandler}>WOMEN</button>
-    <button data-value="men" onClick={categoryHandler}>MEN</button>
-    <button data-value="digital" onClick={categoryHandler}>DIGITAL</button>
-    <button data-value="interior" onClick={categoryHandler}>INTERIOR</button>
-</div>
+					<button data-value='women' onClick={categoryHandler}>
+						WOMEN
+					</button>
+					<button data-value='men' onClick={categoryHandler}>
+						MEN
+					</button>
+					<button data-value='digital' onClick={categoryHandler}>
+						DIGITAL
+					</button>
+					<button data-value='interior' onClick={categoryHandler}>
+						INTERIOR
+					</button>
+				</div>
 				<div className='header-menu'>
 					<div className='menu-container'>
 						<div className='mypage' onClick={myHandler}>

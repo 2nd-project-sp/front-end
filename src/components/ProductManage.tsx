@@ -1,0 +1,184 @@
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
+import { ProductInterface } from '../models/product';
+import { updateQuantity } from '../store/manageSlice';
+
+const ProductManage: React.FC = () => {
+	const dispatch = useDispatch();
+	const productInfo = useSelector(state => state.manage.products);
+
+	const [editedProducts, setEditedProducts] = useState<{ [key: number]: boolean }>({});
+	const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});
+
+	const editClickedHandler = (productId: number) => {
+		setEditedProducts(prevEditedProducts => ({
+			...prevEditedProducts,
+			[productId]: true,
+		}));
+		//현재 값으로 수정된 수량을 초기화
+		const currentQuantity = productInfo.find(product => product.id === productId)?.quantity || 0;
+		setEditedQuantities(prevValue => ({
+			...prevValue,
+			[productId]: currentQuantity,
+		}));
+	};
+
+	const handleEditedQuantityChange = (
+		productId: number,
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const value = event.target.value;
+		const parsedValue = value.trim() === '' ? undefined : parseInt(value, 10);
+
+		setEditedQuantities(prevValue => {
+			return {
+				...prevValue,
+				[productId]: parsedValue !== undefined ? parsedValue : 0,
+			};
+		});
+	};
+
+	const submitHandler = (productId: number) => {
+		if (editedQuantities[productId] !== undefined) {
+			dispatch(updateQuantity({ productId, newQuantity: editedQuantities[productId] }));
+
+			// 클리어
+			setEditedProducts(prevValue => ({
+				...prevValue,
+				[productId]: false,
+			}));
+		}
+	};
+
+	return (
+		<>
+			<ProductManageWrapper>
+				<ProductManageTitle>판매 관리</ProductManageTitle>
+				<ProductInfoCon>
+					{productInfo &&
+						productInfo.map((product: ProductInterface, index: number) => (
+							<Products key={product.id}>
+								<ProductManageImg>
+									<img src={product.image} alt='판매 상품 이미지' />
+								</ProductManageImg>
+								<ProductText>
+									<ProductMangeInfoTitle>{product.title}</ProductMangeInfoTitle>
+									<ProductMangeInfo>{product.category}</ProductMangeInfo>
+									<ProductMangeInfo>브랜드: {product.brand}</ProductMangeInfo>
+									<ProductMangeInfo>
+										가격: {Number(product.price).toLocaleString()}원
+									</ProductMangeInfo>
+									<ProductMangeInfo>설명: {product.description}</ProductMangeInfo>
+									<ProductQuantity>
+										{!editedProducts[product.id] ? (
+											<>
+												수량:{Number(product.quantity).toLocaleString()}
+												<Edit onClick={() => editClickedHandler(product.id)}>수정</Edit>
+											</>
+										) : (
+											<>
+												수량:
+												<input
+													type='number'
+													value={editedQuantities[product.id] || ''}
+													onChange={e => handleEditedQuantityChange(product.id, e)}
+												/>
+												<Edit onClick={() => submitHandler(product.id)}>완료</Edit>
+											</>
+										)}
+									</ProductQuantity>
+								</ProductText>
+							</Products>
+						))}
+				</ProductInfoCon>
+			</ProductManageWrapper>
+		</>
+	);
+};
+
+export default ProductManage;
+
+const ProductManageWrapper = styled.div`
+	margin-top: 30px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`;
+const ProductManageTitle = styled.div`
+	width: 50%;
+	font-weight: 700;
+	margin-bottom: 30px;
+	font-size: 20px;
+	border-bottom: 2px solid rgb(0, 0, 0);
+`;
+
+const ProductInfoCon = styled.div`
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+`;
+const Products = styled.div`
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #f4f4f4;
+`;
+
+const ProductManageImg = styled.div`
+	margin-right: 30px;
+	> img {
+		width: 100px;
+	}
+`;
+
+const ProductText = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+`;
+
+const ProductMangeInfoTitle = styled.div`
+	width: 100%;
+	display: flex;
+	font-weight: 700;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	margin-bottom: 10px;
+`;
+const ProductMangeInfo = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	margin-bottom: 10px;
+`;
+const ProductQuantity = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	margin-bottom: 10px;
+`;
+
+const Edit = styled.button`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 40px;
+	height: 20px;
+	background-color: #f0f0f0;
+	border: none;
+	padding: 5px 10px;
+	font-size: 10px;
+	cursor: pointer;
+	border-radius: 30px;
+	margin-left: 10px;
+`;

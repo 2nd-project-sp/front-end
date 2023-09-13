@@ -5,7 +5,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ProductCount from '../../components/ProductCount/ProductCount';
 import { fetchProducts, selectProductData } from '../../store/productsSlice';
 import ProductDesc from '../../components/ProductDesc/ProductDesc';
-import ProductReview from '../../components/ProductReview/ProductReview';
 import ProductOption from '../../components/ProductOption/ProductOption';
 
 const ProductDetail: React.FC = () => {
@@ -20,12 +19,8 @@ const ProductDetail: React.FC = () => {
 	const [showPopup, setShowPopup] = useState(false);
 
 	const productsArray = productData.products;
-<<<<<<< Updated upstream
-	const selectedProduct = productsArray && productsArray.find(it => it.id === idAsNumber);
-=======
 	const selectedProduct =
 		productsArray && productsArray.find((it: { id: number }) => it.id === idAsNumber); // 상품정보 id값으로 받아올 변수선언(김혜린)
->>>>>>> Stashed changes
 
 	const discountPer = 50;
 	const currentPrice = selectedProduct
@@ -34,15 +29,10 @@ const ProductDetail: React.FC = () => {
 	const reviewNum = selectedProduct ? selectedProduct.rating : 0;
 
 	const gotoMyBag = () => {
-<<<<<<< Updated upstream
-=======
 		setShowPopup(false); // 팝업을 닫는 로직 추가 (김혜린)
->>>>>>> Stashed changes
 		navigate('/mybag');
 	};
 	const putCart = () => {
-<<<<<<< Updated upstream
-=======
 		if (selectedProduct) {
 			const updatedProduct = {
 				...selectedProduct,
@@ -56,7 +46,6 @@ const ProductDetail: React.FC = () => {
 				})
 			);
 		}
->>>>>>> Stashed changes
 		setShowPopup(true);
 	};
 
@@ -112,12 +101,6 @@ const ProductDetail: React.FC = () => {
 									</ShippingInfo>
 								</TextBoxShipping>
 							</InfoConTextBox>
-<<<<<<< Updated upstream
-							{/* 수량 */}
-							<ProductCount />
-							{/* 옵션 */}
-							<ProductOption />
-=======
 							{/* 카운트 함수가 동작할떄, 상태 업데이트 되도록 수정(김혜린) */}
 							<ProductCount
 								onQuantityChange={(quantity: number) => setSelectedQuantity(quantity)}
@@ -128,7 +111,6 @@ const ProductDetail: React.FC = () => {
 									throw new Error('Function not implemented.');
 								}}
 							/>
->>>>>>> Stashed changes
 							<DetailButtonCon>
 								<ButtonConCart onClick={putCart}>장바구니 담기</ButtonConCart>
 								<ButtonConPurchase onClick={gotoMyBag}>바로 구매하기</ButtonConPurchase>

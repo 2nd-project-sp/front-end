@@ -3,7 +3,9 @@ import MyBagPage from './MyBagPage';
 import MyPage from './MyPage';
 import MainPage from './MainPage';
 import SignUpPage from './SignUpPage';
-import ProductInput from './ProductInput';
+
+import ProductMarket from './ProductMarket';
+
 import PaymentPage from './PaymentPage';
 import ProductDetail from './DetailPage/ProductDetail';
 export {
@@ -11,7 +13,7 @@ export {
 	MyBagPage,
 	MyPage,
 	MainPage,
-	ProductInput,
+	ProductMarket,
 	PaymentPage,
 	SignUpPage,
 	ProductDetail,

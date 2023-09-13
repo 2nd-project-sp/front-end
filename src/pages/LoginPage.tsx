@@ -1,14 +1,22 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import kakao from '../assets/kakao_login_medium_narrow.png';
 import naver from '../assets/btnG_완성형.png';
 import { login } from '../store/loginSlice';
+import { RootState } from '../store/store';
+import { setTokenResetTimer } from '../util/util';
 
 // interface form 설정 필요
+axios.defaults.withCredentials = true;
 
 const LoginPage: React.FC = () => {
+	let JWT_EXPIRY_TIME = 3600 * 1000;
+	const count = useRef(0);
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const [form, setForm] = useState({
 		email: '',
 		password: '',
@@ -21,38 +29,127 @@ const LoginPage: React.FC = () => {
 		email: false,
 		password: false,
 	});
-	const count = useRef(0);
+	const [status, setStatus] = useState<string>('');
 	const emailInputInValid = !valid.isEmail && touched.email;
 	const passwordInputInValid = !valid.isPassword && touched.password;
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const checkLogout = useSelector((state: RootState) => state.login.isLogin);
 	const signupHandler = () => {
 		navigate('/signup');
 	};
-	const formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+
+	// 토큰이 만료되었을 때
+	const resetToken = async () => {
+		const token = localStorage.getItem('ACCESS-TOKEN');
+		const res = await fetch('http://15.164.128.162:8080/api/v1/user/logout', {
+			method: 'POST',
+			headers: {
+				'ACCESS-TOKEN': `${token}`,
+			},
+			body: {} as any,
+		});
+		const json = await res.json();
+		console.log(json);
+		localStorage.setItem('ACCESS-TOKEN', '');
+		//localStorage.setItem('userId', )
+		alert('인증이 만료되어 재 로그인이 필요합니다.');
+		dispatch(login(false));
+		navigate('/login');
+	};
+	const formSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const emailRegex =
 			/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 		const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-		console.log('success');
 		isTouched({ email: true, password: true });
 		isValid({ isEmail: true, isPassword: true });
 		if (form.email.trim() === '' || !emailRegex.test(form.email)) {
 			console.log('email fail');
 			isValid({ ...valid, isEmail: false });
 			count.current = count.current + 1;
-		}
-		if (!passwordRegex.test(form.password)) {
+		} else if (!passwordRegex.test(form.password)) {
 			console.log('password fail');
 			isValid({ ...valid, isPassword: false });
 			count.current = count.current + 1;
 		} else {
-			navigate('/');
-			localStorage.setItem('login', form.email);
-			dispatch(login(true));
+			const data = {
+				email: form.email,
+				password: form.password,
+			};
+
+			try {
+				const response = await axios.post('http://15.164.128.162:8080/api/v1/user/login', data, {
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
+				console.log(response);
+				console.log(response.data.data.userId);
+				const userId = response.data.data.userId;
+				const token = response.headers['access-token'];
+				localStorage.setItem('ACCESS-TOKEN', token);
+				localStorage.setItem('userId', userId);
+				dispatch(login(true));
+				setStatus('success');
+				setTokenResetTimer(setTimeout(resetToken, JWT_EXPIRY_TIME));
+				navigate('/');
+			} catch (error) {
+				dispatch(login(false));
+				setStatus('fail');
+				console.log(error);
+			}
 		}
 		setForm({ email: '', password: '' });
 	};
+
+	// Refresh-token 재발급 테스트
+	// Refresh-token 만료가 되었거나 값이 없거나 이럴 때, 로그인 필요
+	/*const testReissue = async () => {
+		const res = await fetch(
+			'http://ec2-43-200-191-31.ap-northeast-2.compute.amazonaws.com:8080/api/v1/user/validate',
+			{
+				method: 'POST',
+				headers: {
+					'ACCESS-TOKEN': `${checkLogout.token}`,
+				},
+				body: {} as any,
+			}
+		);
+		//console.log(res);
+		const json = await res.json();
+		console.log(json);
+	};*/
+
+	// Access-token 유효한지 확인
+	const testValidate = async () => {
+		const token = localStorage.getItem('ACCESS-TOKEN');
+		// console.log(token);
+		// try {
+		// 	const response = await axios.post('http://15.164.128.162:8080/api/v1/user/validate', null, {
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 			'ACCESS-TOKEN': `${token}`,
+		// 		},
+		// 	});
+		// 	console.log(response);
+		// } catch (error) {
+		// 	console.log(error);
+		// }
+		const res = await fetch('http://15.164.128.162:8080/api/v1/user/validate', {
+			method: 'POST',
+			headers: {
+				'ACCESS-TOKEN': `${token}`,
+			},
+			body: {} as any,
+		});
+		//console.log(res);
+		const json = await res.json();
+		console.log(json);
+	};
+
+	useEffect(() => {}, [checkLogout]);
+	// 로그아웃을 하면
+	// 전에 쓰던 토큰은 지우고, 재발급받을 때도 지우고
+	// console.log(checkLogout);
 	return (
 		<SLogin>
 			<div className='wrapper'>
@@ -90,6 +187,7 @@ const LoginPage: React.FC = () => {
 								5회 로그인 실패 시, 로그인이 10분 동안 제한됩니다.({count.current}/5)
 							</p>
 						)}
+						{status === 'fail' && <p className='login-fail'>아이디나 비밀번호가 틀렸습니다.</p>}
 						<button className='btn-login' type='submit'>
 							로그인하기
 						</button>
@@ -98,7 +196,7 @@ const LoginPage: React.FC = () => {
 						<h3 className='title-sns'>SNS 계정으로 로그인하기</h3>
 						<div className='container-sns'>
 							<div className='sns'>
-								<div className='btn-sns_kakao'>
+								<div className='btn-sns_kakao' onClick={testValidate}>
 									<img src={kakao} alt='카카오 로그인' />
 								</div>
 							</div>

@@ -124,7 +124,16 @@ const Profile: React.FC = () => {
 						<li>
 							<div>
 								<span>주소정보</span>
-								<p>{userData.mainAddress}</p>
+								<p>
+									{userData.mainAddress}
+									{userData.detailAddress}
+								</p>
+							</div>
+						</li>
+						<li>
+							<div>
+								<span>자기소개</span>
+								<p>{userData.introduce}</p>
 							</div>
 						</li>
 					</ul>

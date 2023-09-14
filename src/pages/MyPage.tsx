@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import CategoryMenu from '../components/MyPage/CategoryMenu';
 import Profile from '../components/MyPage/Profile';
 import Purchase from '../components/MyPage/Purchase';
+import Sale from '../components/MyPage/Sale';
 
 const MyPage = () => {
 	const location = useLocation();
@@ -19,6 +20,10 @@ const MyPage = () => {
 		if (pathname === '/my/purchase') {
 			return 'purchase';
 		}
+
+		if (pathname === '/my/sale') {
+			return 'sale';
+		}
 	}, [location]);
 
 	return (
@@ -30,6 +35,7 @@ const MyPage = () => {
 			<MyPageRight>
 				{category === 'profile' && <Profile />}
 				{category === 'purchase' && <Purchase />}
+				{category === 'sale' && <Sale />}
 			</MyPageRight>
 		</MyPageContainer>
 	);

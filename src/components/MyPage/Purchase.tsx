@@ -49,7 +49,8 @@ const Purchase = () => {
 
 	if (!purchaseData || isError) return <p>유저정보를 불러올 수 없습니다.</p>;
 
-	if (purchaseData.orderList.length === 0) return <p>주문내역이 없습니다.</p>;
+	if (purchaseData.orderList.length === 0)
+		return <NoPurchaseList>주문내역이 없습니다.</NoPurchaseList>;
 
 	return (
 		<PurchaseWrapper>
@@ -64,7 +65,7 @@ const Purchase = () => {
 					return (
 						<>
 							<div>
-								<span>주문일자 {item.orderDate}</span> <span>주문번호 abcdefghijkilnop</span>
+								<span>주문일자 {moment(item.orderDate).format('YYYY-MM-DD')}</span>
 							</div>
 							<PurchaseBody>
 								<li>
@@ -98,6 +99,10 @@ const Purchase = () => {
 		</PurchaseWrapper>
 	);
 };
+
+const NoPurchaseList = styled.p`
+	margin-top: 50px;
+`;
 
 const PurchaseWrapper = styled.div`
 	h3 {

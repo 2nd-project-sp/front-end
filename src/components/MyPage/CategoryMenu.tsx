@@ -14,6 +14,10 @@ const CategoryMenu = ({ category }) => {
 		navigate('/my/purchase');
 	}, []);
 
+	const goToSalePage = useCallback(() => {
+		navigate('/my/sale');
+	}, []);
+
 	return (
 		<CategoryWrapper>
 			<h3>이름</h3>
@@ -25,6 +29,10 @@ const CategoryMenu = ({ category }) => {
 
 				<Category active={category === 'purchase' ? 'active' : ''}>
 					<button onClick={goToPurchasePage}>주문내역 조회</button>
+				</Category>
+
+				<Category active={category === 'sale' ? 'active' : ''}>
+					<button onClick={goToSalePage}>상품 등록</button>
 				</Category>
 			</ul>
 		</CategoryWrapper>

@@ -19,7 +19,7 @@ const Sidebar = () => {
 			console.log(categorySelected, category, 'log');
 			setCategorySelected(category || '');
 		}
-	}, []);
+	});
 
 	const types = {
 		women: [

@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import ProductCount from '../../components/ProductCount/ProductCount';
-import { fetchProducts, selectProductData } from '../../store/productsSlice';
 import ProductDesc from '../../components/ProductDesc/ProductDesc';
 import ProductOption from '../../components/ProductOption/ProductOption';
 import { addToCart } from '../../store/cartSlice'; //CartSlice 작업 추가(김혜린)
+import { setProductsData, fetchProducts } from '../../store/productsSlice';
 
 const ProductDetail: React.FC = () => {
 	const navigate = useNavigate();
@@ -15,13 +15,16 @@ const ProductDetail: React.FC = () => {
 	const { id } = useParams<{ id?: string }>();
 	const idAsNumber = parseInt(id, 10);
 
-	const productData = useSelector(selectProductData);
+	const productData = useSelector(state => state.products.data);
+	const selectedProduct = productData.data; //상품 리스트 나오면 삭제
+	console.log(selectedProduct);
+	const optionList = selectedProduct && selectedProduct.optionList;
 
 	const [showPopup, setShowPopup] = useState(false);
 
-	const productsArray = productData.products;
-	const selectedProduct =
-		productsArray && productsArray.find((it: { id: number }) => it.id === idAsNumber); // 상품정보 id값으로 받아올 변수선언(김혜린)
+	// const productsArray = productData.products;  //나중에 상품리스트 나오면 이걸로 바꾸기
+	// const selectedProduct =
+	// 	productsArray && productsArray.find((it: { id: number }) => it.id === idAsNumber); // 상품정보 id값으로 받아올 변수선언(김혜린)
 
 	const discountPer = 50;
 	const currentPrice = selectedProduct
@@ -69,21 +72,20 @@ const ProductDetail: React.FC = () => {
 		<ProductDetailWrapper>
 			<div className='product-detail'>
 				{selectedProduct && (
-					<ProductBrand>
-						<BrandInfoCon>Brand {selectedProduct.brand}</BrandInfoCon>
-					</ProductBrand>
-				)}
-				{selectedProduct && (
 					<ProductDetailInfoCon>
 						<DetailInfoConImg
-							src={selectedProduct.thumbnail}
+							// src={selectedProduct.thumbnail}
+							src='https://img.29cm.co.kr/next-product/2023/05/03/03eafb89a29045bd818b3600b2bcae18_20230503165832.jpg?width=700'
 							alt={selectedProduct.title}
 						></DetailInfoConImg>
 						<DetailInfoCon>
+							<ProductBrand>
+								<BrandInfoCon>{selectedProduct.brand}</BrandInfoCon>
+							</ProductBrand>
 							<InfoConTextBox>
 								<TextBoxText>
 									<InfoTextBox>
-										<InfoTextBoxTitle>{selectedProduct.title}</InfoTextBoxTitle>
+										<InfoTextBoxTitle>{selectedProduct.name}</InfoTextBoxTitle>
 										<InfoTextBoxHeart></InfoTextBoxHeart>
 										<InfoTextReviewCon>
 											<ReviewConStars></ReviewConStars>
@@ -102,8 +104,8 @@ const ProductDetail: React.FC = () => {
 								<TextBoxShipping>
 									<ShippingTitle>배송정보</ShippingTitle>
 									<ShippingInfo>
-										<div>배송비</div>
-										<div>배송기간</div>
+										<div>배송비 {selectedProduct.deliveryPrice}원</div>
+										{/* <div>배송기간</div> */}
 									</ShippingInfo>
 								</TextBoxShipping>
 							</InfoConTextBox>
@@ -112,11 +114,12 @@ const ProductDetail: React.FC = () => {
 								onQuantityChange={(quantity: number) => setSelectedQuantity(quantity)}
 							/>
 							{/* 옵션 함수가 동작할때, 상태 업데이트 되도록 수정(김혜린)*/}
-							<ProductOption
+							{/* <ProductOption
 								onOptionChange={function (_option: string): void {
 									throw new Error('Function not implemented.');
 								}}
-							/>
+							/> */}
+							<ProductOption optionList={optionList} />
 							<DetailButtonCon>
 								<ButtonConCart onClick={putCart}>장바구니 담기</ButtonConCart>
 								<ButtonConPurchase onClick={gotoMyBag}>바로 구매하기</ButtonConPurchase>
@@ -155,14 +158,14 @@ const ProductDetailWrapper = styled.div`
 
 const ProductBrand = styled.div`
 	display: flex;
-	margin-bottom: 16px;
+	margin-bottom: 10px;
 `;
 
 const BrandInfoCon = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	margin-left: 14px;
+	font-weight: 700;
 `;
 
 const ProductDetailInfoCon = styled.div`
@@ -213,6 +216,7 @@ const InfoTextBoxTitle = styled.h2`
 	width: 80%;
 	font-weight: 600;
 	margin-top: 10px;
+	margin-bottom: 5px;
 	text-align: left;
 `;
 
@@ -273,14 +277,15 @@ const CurrentPrice = styled.div`
 
 const TextBoxShipping = styled.div`
 	width: 100%;
-	height: 50%;
+	height: 40%;
 	font-size: 13px;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	align-items: flex-start;
 	padding: 16px 0;
 	border-bottom: 1px solid #f4f4f4;
+	margin-bottom: 20px;
 `;
 
 const ShippingTitle = styled.div`

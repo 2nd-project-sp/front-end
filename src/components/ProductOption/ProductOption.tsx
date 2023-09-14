@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-interface ProductOptionProps {
-    onOptionChange: (option: string) => void;
-}
+// interface ProductOptionProps {
+// 	onOptionChange: (option: string) => void;
+// }
 
-const ProductOption: React.FC<ProductOptionProps>= () => {
+const ProductOption = ({ optionList }) => {
+	console.log(optionList);
+	const option = optionList[0];
 	const [optionSelected, setOptionSelected] = useState<string>('');
 
 	const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -15,11 +17,8 @@ const ProductOption: React.FC<ProductOptionProps>= () => {
 	return (
 		<ProductOptionContainer>
 			<ProductOptionSelect value={optionSelected} onChange={handleOptionChange}>
-				<option value=''>옵션 선택</option>
-				<option value='mall1'>S</option>
-				<option value='mall2'>M</option>
-				<option value='mall3'>L</option>
-				<option value='mall3'>XL</option>
+				<option value=''>{option.category} 선택</option>
+				<option value='mall1'>{option.name}</option>
 			</ProductOptionSelect>
 		</ProductOptionContainer>
 	);

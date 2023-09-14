@@ -13,11 +13,10 @@ const ProductDetail: React.FC = () => {
 	const dispatch = useDispatch();
 
 	const { id } = useParams<{ id?: string }>();
-	const idAsNumber = parseInt(id, 10);
+	// const idAsNumber = parseInt(id, 10);
 
 	const productData = useSelector(state => state.products.data);
 	const selectedProduct = productData.data; //상품 리스트 나오면 삭제
-	console.log(selectedProduct);
 	const optionList = selectedProduct && selectedProduct.optionList;
 
 	const [showPopup, setShowPopup] = useState(false);
@@ -40,6 +39,10 @@ const ProductDetail: React.FC = () => {
 		navigate('/mybag');
 	};
 
+	const gotoShipping = () => {
+		navigate('/ShippingPage');
+	};
+
 	// putCart 영역 선택된 값만 받아올 수 있도록 addTocart 따로 추가했습니다. (김혜린)
 	const putCart = () => {
 		if (selectedProduct) {
@@ -47,6 +50,36 @@ const ProductDetail: React.FC = () => {
 				...selectedProduct,
 				price: currentPrice,
 			};
+
+			const requestData = {
+				productID: 1,
+				quantity: selectedQuantity,
+			};
+
+			fetch('http://15.164.128.162:8080/api/v1/cart/1', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(requestData),
+			})
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('Network response was not ok');
+					}
+					return response.json();
+				})
+				.then(data => {
+					// Handle the success response from the server
+					console.log('Item added to cart:', data);
+					// You can update your frontend UI here as needed
+					setShowPopup(true); // Show the success popup
+				})
+				.catch(error => {
+					// Handle errors, such as network issues or API errors
+					console.error('Error adding item to cart:', error);
+				});
+
 			dispatch(
 				addToCart({
 					product: updatedProduct,
@@ -122,7 +155,7 @@ const ProductDetail: React.FC = () => {
 							<ProductOption optionList={optionList} />
 							<DetailButtonCon>
 								<ButtonConCart onClick={putCart}>장바구니 담기</ButtonConCart>
-								<ButtonConPurchase onClick={gotoMyBag}>바로 구매하기</ButtonConPurchase>
+								<ButtonConPurchase onClick={gotoShipping}>바로 구매하기</ButtonConPurchase>
 							</DetailButtonCon>
 						</DetailInfoCon>
 						{showPopup && (

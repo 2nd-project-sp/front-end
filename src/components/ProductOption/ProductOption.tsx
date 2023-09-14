@@ -6,7 +6,6 @@ import styled from 'styled-components';
 // }
 
 const ProductOption = ({ optionList }: { optionList: { category: string; name: string }[] }) => {
-	console.log(optionList);
 	const option = optionList[0];
 	const [optionSelected, setOptionSelected] = useState<string>('');
 

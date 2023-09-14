@@ -21,7 +21,8 @@ const ProductDetail: React.FC = () => {
 	const [showPopup, setShowPopup] = useState(false);
 
 	const productsArray = productData.products;
-	const selectedProduct = productsArray && productsArray.find((it: { id: number; }) => it.id === idAsNumber);// 상품정보 id값으로 받아올 변수선언(김혜린)
+	const selectedProduct =
+		productsArray && productsArray.find((it: { id: number }) => it.id === idAsNumber); // 상품정보 id값으로 받아올 변수선언(김혜린)
 
 	const discountPer = 50;
 	const currentPrice = selectedProduct
@@ -33,24 +34,27 @@ const ProductDetail: React.FC = () => {
 	const [selectedQuantity, setSelectedQuantity] = useState<number>(1); // Producount에서 선택된 수량 전달받기
 
 	const gotoMyBag = () => {
-		setShowPopup(false);  // 팝업을 닫는 로직 추가 (김혜린)
+		setShowPopup(false); // 팝업을 닫는 로직 추가 (김혜린)
 		navigate('/mybag');
 	};
 
 	// putCart 영역 선택된 값만 받아올 수 있도록 addTocart 따로 추가했습니다. (김혜린)
 	const putCart = () => {
-    if (selectedProduct) {
-        const updatedProduct = {
-            ...selectedProduct,
-            price: currentPrice
-        };
-        dispatch(addToCart({
-			product: updatedProduct, quantity: selectedQuantity,
-			option: ''
-		}));
-    }
-    setShowPopup(true);
-};
+		if (selectedProduct) {
+			const updatedProduct = {
+				...selectedProduct,
+				price: currentPrice,
+			};
+			dispatch(
+				addToCart({
+					product: updatedProduct,
+					quantity: selectedQuantity,
+					option: '',
+				})
+			);
+		}
+		setShowPopup(true);
+	};
 
 	const xbutton = () => {
 		setShowPopup(false);
@@ -61,7 +65,6 @@ const ProductDetail: React.FC = () => {
 			dispatch(fetchProducts());
 		}
 	}, [dispatch, id]);
-
 
 	return (
 		<ProductDetailWrapper>
@@ -105,12 +108,16 @@ const ProductDetail: React.FC = () => {
 									</ShippingInfo>
 								</TextBoxShipping>
 							</InfoConTextBox>
-						    {/* 카운트 함수가 동작할떄, 상태 업데이트 되도록 수정(김혜린) */}
-							<ProductCount onQuantityChange={(quantity: number) => setSelectedQuantity(quantity)} />
+							{/* 카운트 함수가 동작할떄, 상태 업데이트 되도록 수정(김혜린) */}
+							<ProductCount
+								onQuantityChange={(quantity: number) => setSelectedQuantity(quantity)}
+							/>
 							{/* 옵션 함수가 동작할때, 상태 업데이트 되도록 수정(김혜린)*/}
-							<ProductOption onOptionChange={function (_option: string): void {
-								throw new Error('Function not implemented.');
-							} } />
+							<ProductOption
+								onOptionChange={function (_option: string): void {
+									throw new Error('Function not implemented.');
+								}}
+							/>
 							<DetailButtonCon>
 								<ButtonConCart onClick={putCart}>장바구니 담기</ButtonConCart>
 								<ButtonConPurchase onClick={gotoMyBag}>바로 구매하기</ButtonConPurchase>

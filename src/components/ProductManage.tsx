@@ -7,10 +7,19 @@ import { updateQuantity } from '../store/manageSlice';
 const ProductManage: React.FC = () => {
 	const dispatch = useDispatch();
 	const productInfo = useSelector(state => state.manage.products);
+	console.log(productInfo);
 
 	const [editedProducts, setEditedProducts] = useState<{ [key: number]: boolean }>({});
 	const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});
+	//할인가격 코드
+	const calculateDiscountedPrice = (originalPrice: number, discountRate: number) => {
+		const price = Number(originalPrice);
+		const rate = Number(discountRate);
+		const discountedPrice = price - price * (rate / 100);
+		return discountedPrice;
+	};
 
+	//수량 수정
 	const editClickedHandler = (productId: number) => {
 		setEditedProducts(prevEditedProducts => ({
 			...prevEditedProducts,
@@ -23,14 +32,12 @@ const ProductManage: React.FC = () => {
 			[productId]: currentQuantity,
 		}));
 	};
-
 	const handleEditedQuantityChange = (
 		productId: number,
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
 		const value = event.target.value;
 		const parsedValue = value.trim() === '' ? undefined : parseInt(value, 10);
-
 		setEditedQuantities(prevValue => {
 			return {
 				...prevValue,
@@ -38,11 +45,9 @@ const ProductManage: React.FC = () => {
 			};
 		});
 	};
-
 	const submitHandler = (productId: number) => {
 		if (editedQuantities[productId] !== undefined) {
 			dispatch(updateQuantity({ productId, newQuantity: editedQuantities[productId] }));
-
 			// 클리어
 			setEditedProducts(prevValue => ({
 				...prevValue,
@@ -54,22 +59,49 @@ const ProductManage: React.FC = () => {
 	return (
 		<>
 			<ProductManageWrapper>
-				<ProductManageTitle>판매 관리</ProductManageTitle>
+				<ProductManageTitle>
+					<div>판매 관리</div>
+				</ProductManageTitle>
 				<ProductInfoCon>
 					{productInfo &&
-						productInfo.map((product: ProductInterface, index: number) => (
+						productInfo.map((product: ProductInterface) => (
 							<Products key={product.id}>
 								<ProductManageImg>
 									<img src={product.image} alt='판매 상품 이미지' />
 								</ProductManageImg>
 								<ProductText>
-									<ProductMangeInfoTitle>{product.title}</ProductMangeInfoTitle>
-									<ProductMangeInfo>{product.category}</ProductMangeInfo>
-									<ProductMangeInfo>브랜드: {product.brand}</ProductMangeInfo>
-									<ProductMangeInfo>
-										가격: {Number(product.price).toLocaleString()}원
-									</ProductMangeInfo>
-									<ProductMangeInfo>설명: {product.description}</ProductMangeInfo>
+									<ProductManageInfoTitle>
+										{product.isNew ? (
+											<NewItem>
+												<div>new</div>
+												{product.title}
+											</NewItem>
+										) : (
+											''
+										)}
+									</ProductManageInfoTitle>
+									<ProductManageInfo>
+										{product.categoryId} {product.subCategoryId}
+									</ProductManageInfo>
+									<ProductManageInfo>브랜드: {product.brandId}</ProductManageInfo>
+									{product.discountRate ? (
+										<DiscountPrice>
+											가격:
+											<BeforeDiscount>{Number(product.price).toLocaleString()}</BeforeDiscount>
+											➡️
+											{calculateDiscountedPrice(
+												product.price,
+												product.discountRate
+											).toLocaleString()}
+											원 {Number(product.discountRate)}%
+										</DiscountPrice>
+									) : (
+										<ProductManageInfo>가격:{product.price.toLocaleString()}원</ProductManageInfo>
+									)}
+									<ProductManageInfo>
+										배송비:{product.delivaryPrice.toLocaleString()}원
+									</ProductManageInfo>
+									<ProductManageInfo>설명: {product.description}</ProductManageInfo>
 									<ProductQuantity>
 										{!editedProducts[product.id] ? (
 											<>
@@ -99,6 +131,24 @@ const ProductManage: React.FC = () => {
 
 export default ProductManage;
 
+const NewItem = styled.div`
+	font-weight: 700;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	> div {
+		color: #ffff;
+		display: flex;
+		width: 40px;
+		height: 20px;
+		background-color: #000000;
+		justify-content: center;
+		align-items: center;
+		border-radius: 50px;
+		margin-right: 5px;
+	}
+`;
+
 const ProductManageWrapper = styled.div`
 	margin-top: 30px;
 	display: flex;
@@ -107,9 +157,11 @@ const ProductManageWrapper = styled.div`
 	align-items: center;
 `;
 const ProductManageTitle = styled.div`
+	display: flex;
+	justify-content: flex-start;
 	width: 50%;
 	font-weight: 700;
-	margin-bottom: 30px;
+	margin-bottom: 20px;
 	font-size: 20px;
 	border-bottom: 2px solid rgb(0, 0, 0);
 `;
@@ -143,7 +195,7 @@ const ProductText = styled.div`
 	flex-direction: column;
 `;
 
-const ProductMangeInfoTitle = styled.div`
+const ProductManageInfoTitle = styled.div`
 	width: 100%;
 	display: flex;
 	font-weight: 700;
@@ -152,13 +204,24 @@ const ProductMangeInfoTitle = styled.div`
 	align-items: flex-start;
 	margin-bottom: 10px;
 `;
-const ProductMangeInfo = styled.div`
+const ProductManageInfo = styled.div`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: flex-start;
 	margin-bottom: 10px;
+`;
+const DiscountPrice = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	margin-bottom: 10px;
+`;
+
+const BeforeDiscount = styled.div`
+	color: #aeaeae;
 `;
 const ProductQuantity = styled.div`
 	width: 100%;

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-interface ProductCountProps {//카운트 증감소를 Props로 전달받기 위해 선언(김혜린)
+interface ProductCountProps {
+	//카운트 증감소를 Props로 전달받기 위해 선언(김혜린)
 	onQuantityChange: (quantity: number) => void;
 }
 
@@ -35,7 +36,7 @@ const ProductCount: React.FC<ProductCountProps> = ({ onQuantityChange }) => {
 const ProductCountContainer = styled.div`
 	display: flex;
 	align-items: center;
-	margin-top: 20px;
+	margin-top: 10px;
 `;
 
 const QuantityButton = styled.button`

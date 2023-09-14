@@ -5,7 +5,7 @@ import styled from 'styled-components';
 // 	onOptionChange: (option: string) => void;
 // }
 
-const ProductOption = ({ optionList }) => {
+const ProductOption = ({ optionList }: { optionList: { category: string; name: string }[] }) => {
 	console.log(optionList);
 	const option = optionList[0];
 	const [optionSelected, setOptionSelected] = useState<string>('');

@@ -6,7 +6,7 @@ const Sale: React.FC = () => {
 	const navigate = useNavigate();
 
 	const goToMyProductPage = useCallback(() => {
-		navigate('/my/myproduct');
+		navigate('/myproduct');
 	}, []);
 
 	return (

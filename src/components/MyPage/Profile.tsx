@@ -1,6 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 import styled from 'styled-components';
 import axiosClient from '../../util/axiosInstance';
+
+import { clearTokenResetTimer } from '../../util/util';
+
+import { login } from '../../store/loginSlice';
 
 interface User {
 	email: string;
@@ -16,14 +23,31 @@ interface User {
 const Profile: React.FC = () => {
 	const userId = localStorage.getItem('userId');
 
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	const [userData, setUserData] = useState<User | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 
-	const withdraw = useCallback(async () => {
+	const handleLogout = async () => {
+		await axiosClient('/api/v1/user/logout', {
+			method: 'POST',
+		});
+
+		clearTokenResetTimer();
+
+		localStorage.setItem('ACCESS-TOKEN', '');
+
+		dispatch(login(false));
+
+		navigate('/');
+	};
+
+	const cancelMembership = useCallback(async () => {
 		if (confirm('탈퇴하시겠습니까?')) {
 			try {
-				const res = await axiosClient({
+				await axiosClient({
 					method: 'patch',
 					url: `/api/v1/user/${userId}/withdrawal`,
 					data: {
@@ -31,8 +55,9 @@ const Profile: React.FC = () => {
 					},
 				});
 
-				console.log(res);
 				alert('탈퇴가 완료되었습니다.');
+
+				handleLogout();
 			} catch (err) {
 				console.log('탈퇴 오류가 발생했습니다.');
 			}
@@ -84,7 +109,7 @@ const Profile: React.FC = () => {
 						<li>
 							<div>
 								<span>회원탈퇴</span>
-								<button onClick={withdraw}>회원 탈퇴하기</button>
+								<button onClick={cancelMembership}>회원 탈퇴하기</button>
 							</div>
 							{/* <div>
 								<span>비밀번호</span>

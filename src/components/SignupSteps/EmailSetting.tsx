@@ -38,8 +38,10 @@ const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 		const emailRegex =
 			/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 		const emailCurrent = e.target.value;
+		setIsClicked(false);
 		setEmail(emailCurrent);
 		setIsTouched(true);
+		setIsValidEmail({ ...isValidEmail, validEmail: false });
 		if (emailCurrent.trim() === '' || !emailRegex.test(emailCurrent)) {
 			setIsEmail(false);
 		} else {
@@ -50,15 +52,22 @@ const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 
 	// 이메일 중복검사버튼 클릭
 	const onClickCheck = async () => {
-		const res = await axios(`/api/v1/user/sign/${email}/exists`);
-		setIsClicked(true);
-		setIsValidEmail({ ...isValidEmail, validMessage: res.data.message });
-		if (res.data.status === 'success') {
-			setIsValidEmail({ validMessage: res.data.message, validEmail: true });
-		} else {
-			setIsValidEmail({ validMessage: res.data.message, validEmail: false });
+		try {
+			const res = await axios(`/api/v1/user/sign/${email}/exists`);
+			setIsClicked(true);
+			setIsValidEmail({ ...isValidEmail, validMessage: res.data.message });
+			if (res.data.status === 'success') {
+				setIsValidEmail({ validMessage: res.data.message, validEmail: true });
+			}
+		} catch (error) {
+			setIsClicked(true);
+			setIsValidEmail({ validEmail: false, validMessage: '중복된 이메일입니다.' });
+			console.log(error);
 		}
 	};
+	console.log(isValidEmail.validMessage);
+	console.log(isValidEmail.validEmail);
+	console.log();
 	return (
 		<SEmailSetting>
 			<h3 className='email-title'>

@@ -123,16 +123,29 @@ const SidebarContent = styled.div`
 	}
 `;
 const Type = styled.div`
-	text-align: left;
-	font-weight: 500;
-	font-size: 1.3rem;
-	padding: 0 2rem 0.5rem 0;
-	color: #5d5d5d;
+	button {
+		width: 100%;
+		margin-bottom: 1rem;
+		text-align: left;
+		font-weight: 500;
+		font-size: 1.3rem;
+		height: 2rem;
+		line-height: 2rem;
+		padding: 0 2rem 1rem 0;
+		color: #5d5d5d;
+		&:hover {
+			background-color: rgba(155, 155, 155, 0.3);
+		}
+	}
 	@media screen and (${devices.md}) {
-		background-color: #ffffff;
-		padding: 0.5rem;
-		font-size: 0.5rem;
-		font-weight: 600;
-		line-height: 24px;
+		button {
+			background-color: #ffffff;
+			padding-left: 0.5rem;
+			margin-bottom: 0;
+			font-size: 0.5rem;
+			font-weight: 600;
+			height: 30px;
+			line-height: 30px;
+		}
 	}
 `;

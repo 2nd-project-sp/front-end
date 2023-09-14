@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { devices } from '../assets/styles/constants';
 import { useNavigate } from 'react-router';
@@ -14,9 +14,13 @@ const Sidebar = () => {
 		{ value: 'digital', name: 'DIGITAL' },
 		{ value: 'interior', name: 'INTERIOR' },
 	];
-	if (categorySelected !== category) {
-		setCategorySelected(category);
-	}
+	useEffect(() => {
+		if (categorySelected !== category) {
+			console.log(categorySelected, category, 'log');
+			setCategorySelected(category || '');
+		}
+	}, []);
+
 	const types = {
 		women: [
 			{ value: 1, name: '의류' },
@@ -46,7 +50,6 @@ const Sidebar = () => {
 	const categoryHandler = value => {
 		navigate(`/category/${category}?code=${value}`);
 	};
-	console.log(category);
 
 	const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		setCategorySelected(event.target.value);
@@ -69,7 +72,8 @@ const Sidebar = () => {
 					))}
 				</select>
 			</SidebarTitle>
-			{category && (
+
+			{(category || categorySelected !== '') && (
 				<SidebarContent>
 					{selectedCategoryTypes.map((type, index) => (
 						<Type key={`type-${index}`}>
@@ -106,7 +110,6 @@ const SidebarTitle = styled.h2`
 			font-size: 1rem;
 		}
 		border: none;
-		// margin-bottom: 20px;
 		padding-bottom: 0px;
 	}
 `;

@@ -6,7 +6,7 @@ import { RootState, updateQuantity } from '../store/manageSlice';
 
 const ProductManage: React.FC = () => {
 	const dispatch = useDispatch();
-	const productInfo = useSelector((state: RootState) => state.manage.products);
+	const productInfo = useSelector((state: RootState) => state.manage);
 
 	const [editedProducts, setEditedProducts] = useState<{ [key: number]: boolean }>({});
 	const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});
@@ -25,7 +25,8 @@ const ProductManage: React.FC = () => {
 			[productId]: true,
 		}));
 		//현재 값으로 수정된 수량을 초기화
-		const currentQuantity = productInfo.find(product => product.id === productId)?.quantity || 0;
+		const currentQuantity =
+			productInfo.find((product: { id: number }) => product.id === productId)?.quantity || 0;
 		setEditedQuantities(prevValue => ({
 			...prevValue,
 			[productId]: currentQuantity,

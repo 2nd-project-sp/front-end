@@ -1,13 +1,12 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { devices } from '../../assets/styles/constants';
-import { ProductInterface } from '../../models/product';
+
 interface ProductCardProps {
 	isSale?: boolean;
 	'data-is-sale'?: string | boolean;
 }
-const Product: React.FC<ProductInterface> = ({ product }: any) => {
+const Product = ({ product }: any) => {
 	const now: Date = new Date();
 	const nowMilliseconds: number = now.getTime();
 	const endDate: Date = new Date(product.saleEndDate);

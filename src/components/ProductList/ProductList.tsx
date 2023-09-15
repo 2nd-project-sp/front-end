@@ -1,10 +1,9 @@
-import React from 'react';
 import Product from './Product';
 import styled from 'styled-components';
 import { devices } from '../../assets/styles/constants';
-import { ProductLists, ProductInterface } from '../../models/product';
+import { ProductInterface } from '../../models/product';
 
-const ProductList: React.FC<ProductLists> = ({ products }: ProductLists) => {
+const ProductList = ({ products }: any) => {
 	return (
 		<Grid>
 			{products?.map((product: ProductInterface, index: number) => (

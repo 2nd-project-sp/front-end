@@ -158,7 +158,7 @@ const ProductMarket: React.FC = () => {
 			quantity: quantity + 1,
 		}));
 	};
-
+	console.log(saleStartDate, saleEndDate);
 	return (
 		<>
 			<ProductMarketWrapper>
@@ -313,7 +313,11 @@ const ProductMarket: React.FC = () => {
 						<ProductAddCount>
 							<ProductAddButton onClick={handleDecreaseQuantity}>-</ProductAddButton>
 							<Quantity>
-								<input type='number' value={quantity} onChange={e => setQuantity(e.target.value)} />
+								<input
+									type='number'
+									value={quantity}
+									onChange={e => setQuantity(e.target.value as any)}
+								/>
 							</Quantity>
 							<ProductAddButton onClick={handleIncreaseQuantity}>+</ProductAddButton>
 						</ProductAddCount>

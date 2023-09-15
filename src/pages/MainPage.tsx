@@ -1,29 +1,12 @@
 import React from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
+import { devices } from '../assets/styles/constants';
 import ProductList from '../components/ProductList/ProductList';
 import Sidebar from '../components/Sidebar';
 import Banner from '../components/Banner/Banner';
 import styled from 'styled-components';
-import { devices } from '../assets/styles/constants';
-// import { setProducts, selectProducts } from '../store/testProductSlice';
-// import { useQuery } from '@tanstack/react-query';
-// import { fetchProducts } from '../api/index';
 
 const MainPage: React.FC = () => {
-	// const dispatch = useDispatch();
-	// const selectedProducts = useSelector(selectProducts);
-	// const { isLoading, data } = useQuery({
-	// 	queryKey: ['testProducts'],
-	// 	queryFn: fetchProducts,
-	// 	staleTime: 3000,
-	// 	cacheTime: 60 * 1000,
-	// 	// onSuccess: fetchedData => {
-	// 	// 	if (!isError) {
-	// 	// 		dispatch(setProducts(fetchedData.products));
-	// 	// 	}
-	// 	// },
-	// });
 	const { category } = useParams();
 	const location = useLocation();
 	const queryParams = new URLSearchParams(location.search);

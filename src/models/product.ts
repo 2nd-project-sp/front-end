@@ -18,6 +18,7 @@ export interface ProductInterface {
 	delivaryPrice: number;
 	saleStartDate: Date | null; // Use Date | null if it can be null
 	saleEndDate: Date | null; // Use Date | null if it can be null
+	item?: {};
 }
 
 export interface ProductLists {

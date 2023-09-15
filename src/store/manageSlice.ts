@@ -8,10 +8,7 @@ const initialState: ProductLists = {
 export interface RootState {
 	manage: ProductLists;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> c50928afbd2ca8b1554daff5b2b20da2c0db7bd3
 const manageSlice = createSlice({
 	name: 'manage',
 	initialState,

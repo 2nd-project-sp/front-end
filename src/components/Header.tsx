@@ -65,7 +65,7 @@ const Header: React.FC = () => {
 				<div className='header-navigation'>
 					<div>
 						<div className='temp-logo' onClick={homeHandler}>
-							29CM
+							GD Mall
 						</div>
 					</div>
 					<div className='navigation'>

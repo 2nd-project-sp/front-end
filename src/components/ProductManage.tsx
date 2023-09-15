@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { ProductInterface } from '../models/product';
-import { updateQuantity } from '../store/manageSlice';
+import { RootState, updateQuantity } from '../store/manageSlice';
 
 const ProductManage: React.FC = () => {
 	const dispatch = useDispatch();
-	const productInfo = useSelector(state => state.manage.products);
+	const productInfo = useSelector((state: RootState) => state.manage.products);
 
 	const [editedProducts, setEditedProducts] = useState<{ [key: number]: boolean }>({});
 	const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});

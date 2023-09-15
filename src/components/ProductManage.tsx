@@ -6,7 +6,11 @@ import { updateQuantity } from '../store/manageSlice';
 
 const ProductManage: React.FC = () => {
 	const dispatch = useDispatch();
+<<<<<<< Updated upstream
 	const productInfo = useSelector(state => state.manage.products);
+=======
+	const productInfo = useSelector((state: RootState) => state.manage.products);
+>>>>>>> Stashed changes
 
 	const [editedProducts, setEditedProducts] = useState<{ [key: number]: boolean }>({});
 	const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});

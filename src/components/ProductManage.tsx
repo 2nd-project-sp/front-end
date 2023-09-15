@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { ProductInterface } from '../models/product';
+import { CustomProductInterface } from '../pages/ProductMarket';
 import { RootState, updateQuantity } from '../store/manageSlice';
 
 const ProductManage: React.FC = () => {
@@ -63,7 +63,7 @@ const ProductManage: React.FC = () => {
 				</ProductManageTitle>
 				<ProductInfoCon>
 					{productInfo &&
-						productInfo.map((product: ProductInterface) => (
+						productInfo.map((product: CustomProductInterface) => (
 							<Products key={product.id}>
 								<ProductManageImg>
 									<img src={product.image} alt='판매 상품 이미지' />

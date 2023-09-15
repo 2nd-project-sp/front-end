@@ -5,7 +5,29 @@ import ProductManage from '../components/ProductManage';
 import { addToManage } from '../store/manageSlice';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { ProductInterface } from '../models/product';
+
+export interface CustomProductInterface {
+	id: number;
+	title: string;
+	category?: string;
+	categoryId: string;
+	subCategoryId: string;
+	price: number;
+	brandId: string;
+	description: string;
+	image: string;
+	quantity: number;
+	thumbnail?: string;
+	showDiscount: boolean;
+	discountRate: number;
+	delivaryPrice: number;
+	isNew: boolean;
+	option?: string;
+	name?: string;
+	rating?: Number;
+	saleStartDate: Date | null;
+	saleEndDate: Date | null;
+}
 
 const ProductMarket: React.FC = () => {
 	const dispatch = useDispatch();
@@ -73,7 +95,7 @@ const ProductMarket: React.FC = () => {
 			saleEndDate,
 		} = productInfo;
 
-		const updatedProductInfo: ProductInterface = {
+		const updatedProductInfo: CustomProductInterface = {
 			id,
 			categoryId,
 			subCategoryId,

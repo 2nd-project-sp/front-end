@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { PiHandbagBold } from 'react-icons/pi';
 import { RiLoginBoxLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, login } from '../store/loginSlice';
+import { login } from '../store/loginSlice';
 import { RootState } from '../store/store';
 import { devices } from '../assets/styles/constants';
 import { clearTokenResetTimer } from '../util/util';
@@ -53,12 +53,18 @@ const Header: React.FC = () => {
 		navigate('/');
 	};
 
-	const categoryHandler = event => {
+	const categoryHandler = (event: any) => {
 		const value = event.target.getAttribute('data-value');
 		navigate(`/category/${value}?code=1`);
 	};
 	useEffect(() => {}, [isLogin]);
 	//console.log(isLogin);
+	const category = [
+		{ value: 'women', name: 'WOMEN' },
+		{ value: 'men', name: 'MEN' },
+		{ value: 'digital', name: 'DIGITAL' },
+		{ value: 'interior', name: 'INTERIOR' },
+	];
 	return (
 		<SHeader>
 			<div className='header-wrapper'>
@@ -75,18 +81,11 @@ const Header: React.FC = () => {
 					</div>
 				</div>
 				<div className='category'>
-					<button data-value='women' onClick={categoryHandler}>
-						WOMEN
-					</button>
-					<button data-value='men' onClick={categoryHandler}>
-						MEN
-					</button>
-					<button data-value='digital' onClick={categoryHandler}>
-						DIGITAL
-					</button>
-					<button data-value='interior' onClick={categoryHandler}>
-						INTERIOR
-					</button>
+					{category?.map((item, index) => (
+						<button data-value={item.value} onClick={categoryHandler} key={`button-${index}`}>
+							{item.name}
+						</button>
+					))}
 				</div>
 				<div className='header-menu'>
 					<div className='menu-container'>

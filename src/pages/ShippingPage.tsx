@@ -23,7 +23,7 @@ const ShippingPage: React.FC = () => {
             return;
         }
         if (!isDirectPaymentSelected) {
-            setPaymentError('무통장입금을 선택해주세요.');
+            setPaymentError('결제수단을 선택해 주세요.');
             return;
         }
 
@@ -78,7 +78,7 @@ const ShippingPage: React.FC = () => {
                                 name="email"
                                 placeholder="이메일을 입력하세요"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setEmail(e.target.value)}
                             />
                         </StyledLabel>
                         <ErrorContainer>
@@ -101,7 +101,7 @@ const ShippingPage: React.FC = () => {
                         {products.map((product, index) => (
                             <CartItem key={index}>
                                 <ProductImage
-                                    src={product.thumbnail}
+                                    src='https://img.29cm.co.kr/next-product/2023/05/03/03eafb89a29045bd818b3600b2bcae18_20230503165832.jpg?width=700'
                                     alt={product.title}
                                 />
                                 <span>{product.title}</span>
@@ -117,13 +117,15 @@ const ShippingPage: React.FC = () => {
                     </CartContainer>
                 </CartSection>
             </ContentContainer>
-            <h2>결제수단</h2>
-            <DirectPaymentButton
-                selected={isDirectPaymentSelected}
-                onClick={() => setDirectPaymentSelected(!isDirectPaymentSelected)}>
-                무통장입금
-            </DirectPaymentButton>
-            <ErrorPopup>{paymentError}</ErrorPopup>
+            <PaySection>
+                <h2>결제수단</h2>
+                <DirectPaymentButton
+                    selected={isDirectPaymentSelected}
+                    onClick={() => setDirectPaymentSelected(!isDirectPaymentSelected)}>
+                    무통장입금
+                </DirectPaymentButton>
+                <ErrorPopup>{paymentError}</ErrorPopup>
+            </PaySection>
         </ShippingContainer>
     );
 }
@@ -219,7 +221,7 @@ const ShippingContainer = styled.div`
     padding: 90px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
 `;
 
 const Title = styled.h1`
@@ -229,6 +231,8 @@ const Title = styled.h1`
     color: #333;
     border-bottom: 2px solid #333;
     padding-bottom: 10px;
+    text-align: center;
+    
 `;
 
 
@@ -266,6 +270,20 @@ const SaveButton = styled.button`
     align-self: center;
 `;
 
+const PaySection = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 760px;
+    gap: 50px; 
+    border: 1px solid #e0e0e0; 
+    border-radius: 15px; 
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
+    padding: 15px;
+    margin-top: 50px;  // 상단 여백을 auto로 설정하여 하단으로 이동
+    background-color: white; 
+`;
+
 const ErrorPopup = styled.div`
     color: red;
     padding: 5px 10px;
@@ -281,15 +299,18 @@ const ErrorContainer = styled.div`
     align-items: flex-start;  // 왼쪽 정렬
 `;
 
+//무통장 입금 버튼
 const DirectPaymentButton = styled.button<{ selected: boolean }>`
+  display: block; // changed from flex to block for full width
+  text-align: left; // added to align the text left
   padding: 10px 20px;
-  background-color: ${props => props.selected ? '#333' : '#ccc'};
+  background-color: ${(props: { selected: any; }) => props.selected ? '#333' : '#ccc'};
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1.2em;
-  margin-top: 20px;
+  margin-top: 10px;
 `;
 
 

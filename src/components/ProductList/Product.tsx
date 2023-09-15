@@ -1,12 +1,12 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { devices } from '../../assets/styles/constants';
-import { ProductInterface } from '../../models/product';
+
 interface ProductCardProps {
-	isSale: boolean;
+	isSale?: boolean;
+	'data-is-sale'?: string | boolean;
 }
-const Product: React.FC<ProductInterface> = ({ product }: ProductInterface) => {
+const Product = ({ product }: any) => {
 	const now: Date = new Date();
 	const nowMilliseconds: number = now.getTime();
 	const endDate: Date = new Date(product.saleEndDate);
@@ -19,12 +19,19 @@ const Product: React.FC<ProductInterface> = ({ product }: ProductInterface) => {
 			<Link to={`/product/${product.id}`}>
 				<ProductImage data-is-sale={isSale}>
 					{/* <img src={product.imageUrl} alt={product.name} /> */}
-					<img
-						src={
-							'https://img.29cm.co.kr/item/202308/11ee35923504abf7aa4f312e96f92cf3.jpg?width=400'
-						}
-						alt={product.name}
-					/>
+					<div>
+						<img
+							src={
+								'https://img.29cm.co.kr/item/202308/11ee35923504abf7aa4f312e96f92cf3.jpg?width=400'
+							}
+							alt={product.name}
+						/>
+					</div>
+					{!isSale && (
+						<div className='sale-text'>
+							<p>판매 기간이 종료되었습니다.</p>
+						</div>
+					)}
 				</ProductImage>
 				<ProductTitle>
 					{/* <p>{product.category}</p> */}
@@ -42,7 +49,7 @@ const Product: React.FC<ProductInterface> = ({ product }: ProductInterface) => {
 				</ProductInfo>
 				<ProductInfo2>
 					<ul>
-						<li color='#1d1d1d'>쿠폰</li>
+						{/* <li color='#1d1d1d'>쿠폰</li> */}
 						{product.isNew && <li color='#1d1d1d'>신상품</li>}
 					</ul>
 				</ProductInfo2>
@@ -61,8 +68,9 @@ const ProductCard = styled.div<ProductCardProps>`
 		'맑은 고딕', dotum, sans-serif;
 	background-color: ${props => (props['data-is-sale'] ? '' : 'rgba(157, 158, 157, 0.7)')};
 	pointer-events: ${props => (props['data-is-sale'] ? '' : 'none')};
-	opacity: ${props => (props['data-is-sale'] ? '' : 50)};
+	opacity: ${props => (props['data-is-sale'] ? 1 : 0.6)};
 `;
+
 const ProductTitle = styled.div`
 	margin-bottom: 0.8rem;
 	h5 {
@@ -76,7 +84,7 @@ const ProductTitle = styled.div`
 		font-weight: normal;
 		line-height: 1.4;
 	}
-	@media screen and ${devices.md} {
+	@media screen and (${devices.md}) {
 		h5 {
 			text-decoration: underline;
 		}
@@ -135,6 +143,15 @@ const ProductImage = styled.div<ProductCardProps>`
 		top: 50%;
 		transform: translate(-50%, -50%);
 		z-index: ${props => (props['data-is-sale'] ? '' : '-50')};
+	}
+	.sale-text {
+		text-align: center;
+		position: absolute;
+		font-weight: bold;
+		width: 100%;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 	}
 `;
 export default Product;

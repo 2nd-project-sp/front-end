@@ -2,7 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { ProductInterface } from '../../models/product';
 
-const ProductDesc: React.FC<ProductInterface> = ({ selectedProduct }) => {
+interface ProductDescProps {
+	selectedProduct: ProductInterface;
+}
+const ProductDesc: React.FC<ProductDescProps> = ({ selectedProduct }) => {
 	if (!selectedProduct) {
 		return null;
 	}

@@ -6,6 +6,7 @@ import ProductCount from '../../components/ProductCount/ProductCount';
 import ProductDesc from '../../components/ProductDesc/ProductDesc';
 import ProductOption from '../../components/ProductOption/ProductOption';
 import { addToCart } from '../../store/cartSlice'; //CartSlice 작업 추가(김혜린)
+import axios from 'axios';
 // import { setProductsData } from '../../store/productsSlice';
 import { fetchProducts, ProductsState } from '../../store/productsSlice';
 import { AppDispatch } from '../../store/store';
@@ -19,8 +20,8 @@ const ProductDetail: React.FC = () => {
 
 	const productData = useSelector((state: ProductsState) => state.products.data);
 	const selectedProduct = productData.data; //상품 리스트 나오면 삭제
-	console.log(productData);
 	const optionList = selectedProduct && selectedProduct.optionList;
+	const optionId = selectedProduct && selectedProduct.optionList[0].optionId;
 
 	const [showPopup, setShowPopup] = useState(false);
 
@@ -29,6 +30,7 @@ const ProductDetail: React.FC = () => {
 	// 	productsArray && productsArray.find((it: { id: number }) => it.id === idAsNumber); // 상품정보 id값으로 받아올 변수선언(김혜린)
 
 	const discountPer = 50;
+	//할인된 값
 	const currentPrice = selectedProduct
 		? selectedProduct.price - (selectedProduct.price * discountPer) / 100
 		: 0;
@@ -42,18 +44,44 @@ const ProductDetail: React.FC = () => {
 		navigate('/mybag');
 	};
 
+	const gotoShipping = () => {
+		navigate('/ShippingPage');
+	};
+
 	// putCart 영역 선택된 값만 받아올 수 있도록 addTocart 따로 추가했습니다. (김혜린)
-	const putCart = () => {
+	const putCart = async () => {
 		if (selectedProduct) {
 			const updatedProduct = {
 				...selectedProduct,
 				price: currentPrice,
 			};
+
+			const requestData = {
+				count: selectedQuantity,
+				optionId: optionId,
+			};
+
+			try {
+				const response = await axios.post('http://15.164.128.162:8080/api/v1/cart/1', requestData, {
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
+
+				if (response.status === 200) {
+					console.log('Item added to cart:', response.data);
+				} else {
+					console.error('Error adding item to cart:', response.data);
+				}
+			} catch (error) {
+				console.error('Error adding item to cart:', error);
+			}
+
 			dispatch(
 				addToCart({
 					product: updatedProduct,
 					quantity: selectedQuantity,
-					option: '',
+					option: optionId,
 				})
 			);
 		}
@@ -124,7 +152,7 @@ const ProductDetail: React.FC = () => {
 							<ProductOption optionList={optionList} />
 							<DetailButtonCon>
 								<ButtonConCart onClick={putCart}>장바구니 담기</ButtonConCart>
-								<ButtonConPurchase onClick={gotoMyBag}>바로 구매하기</ButtonConPurchase>
+								<ButtonConPurchase onClick={gotoShipping}>바로 구매하기</ButtonConPurchase>
 							</DetailButtonCon>
 						</DetailInfoCon>
 						{showPopup && (

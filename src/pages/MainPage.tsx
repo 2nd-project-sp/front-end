@@ -1,29 +1,12 @@
 import React from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
+import { devices } from '../assets/styles/constants';
 import ProductList from '../components/ProductList/ProductList';
 import Sidebar from '../components/Sidebar';
 import Banner from '../components/Banner/Banner';
 import styled from 'styled-components';
-import { devices } from '../assets/styles/constants';
-// import { setProducts, selectProducts } from '../store/testProductSlice';
-// import { useQuery } from '@tanstack/react-query';
-// import { fetchProducts } from '../api/index';
 
 const MainPage: React.FC = () => {
-	// const dispatch = useDispatch();
-	// const selectedProducts = useSelector(selectProducts);
-	// const { isLoading, data } = useQuery({
-	// 	queryKey: ['testProducts'],
-	// 	queryFn: fetchProducts,
-	// 	staleTime: 3000,
-	// 	cacheTime: 60 * 1000,
-	// 	// onSuccess: fetchedData => {
-	// 	// 	if (!isError) {
-	// 	// 		dispatch(setProducts(fetchedData.products));
-	// 	// 	}
-	// 	// },
-	// });
 	const { category } = useParams();
 	const location = useLocation();
 	const queryParams = new URLSearchParams(location.search);
@@ -73,6 +56,48 @@ const MainPage: React.FC = () => {
 				},
 				{
 					id: 3,
+					name: 'Luna Bag / BLACK',
+					price: 158000,
+					description: '외계인에서 디자인 영감을 받은 숄더백',
+					discountRate: 0,
+					isDiscount: true,
+					isNew: false,
+					deliveryPrice: '2500',
+					saleStartDate: '2023-09-08T11:58:20.551705',
+					saleEndDate: '2023-09-28T11:58:20.551705',
+					imageUrl: 'https://bag.jpg',
+					imageType: 'thumbnail',
+				},
+				{
+					id: 4,
+					name: 'LMJ Gold Button Wrap One-piece_black',
+					price: 21000,
+					description: '가니송 시그니처 랩 원피스입니다.',
+					discountRate: 10,
+					isDiscount: true,
+					isNew: true,
+					deliveryPrice: '2500',
+					saleStartDate: '2023-09-08T11:58:20.551705',
+					saleEndDate: '2023-09-01T11:58:20.551705',
+					imageUrl: 'https://women.jpg',
+					imageType: 'thumbnail',
+				},
+				{
+					id: 5,
+					name: 'XORE Bolero Knit - Pink',
+					price: 21000,
+					description: '볼레로 스타일의 니트 가디건입니다.',
+					discountRate: 10,
+					isDiscount: true,
+					isNew: false,
+					deliveryPrice: '2500',
+					saleStartDate: '2023-09-08T11:58:20.551705',
+					saleEndDate: '2023-09-28T11:58:20.551705',
+					imageUrl: 'https://clothes.jpg',
+					imageType: 'thumbnail',
+				},
+				{
+					id: 6,
 					name: 'Luna Bag / BLACK',
 					price: 158000,
 					description: '외계인에서 디자인 영감을 받은 숄더백',

@@ -101,7 +101,7 @@ const ShippingPage: React.FC = () => {
                         {products.map((product, index) => (
                             <CartItem key={index}>
                                 <ProductImage
-                                    src={product.thumbnail}
+                                    src='https://img.29cm.co.kr/next-product/2023/05/03/03eafb89a29045bd818b3600b2bcae18_20230503165832.jpg?width=700'
                                     alt={product.title}
                                 />
                                 <span>{product.title}</span>

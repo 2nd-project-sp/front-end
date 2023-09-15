@@ -17,8 +17,8 @@ export interface ProductInterface {
 	discountRate: number;
 	showDiscount: boolean;
 	delivaryPrice: number;
-	saleStartDate: Date | null; // Use Date | null if it can be null
-	saleEndDate: Date | null; // Use Date | null if it can be null
+	saleStartDate: Date | null;
+	saleEndDate: Date | null;
 	item?: {};
 }
 

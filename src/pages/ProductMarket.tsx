@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import ProductManage from '../components/ProductManage';
 import { addToManage } from '../store/manageSlice';
-import { v4 as uuidv4 } from 'uuid';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { ProductInterface } from '../models/product';
 
 const ProductMarket: React.FC = () => {
 	const dispatch = useDispatch();
@@ -15,12 +15,13 @@ const ProductMarket: React.FC = () => {
 	//할인기간
 	const [saleStartDate, setSaleStartDate] = useState(null);
 	const [saleEndDate, setSaleEndDate] = useState(null);
+	const [idCounter, setIdCounter] = useState(1);
 
 	const option = ['WOMEN', 'MEN', 'DIGITAL', 'BEAUTY', 'KIDS', 'INTERIOR'];
 	const subOption = ['의류', '가방', '신발', '악세사리'];
 
 	const [productInfo, setProductInfo] = useState({
-		id: uuidv4(),
+		id: idCounter,
 		title: '',
 		categoryId: '',
 		subCategoryId: '',
@@ -36,6 +37,7 @@ const ProductMarket: React.FC = () => {
 		saleStartDate: null as Date | null,
 		saleEndDate: null as Date | null,
 	});
+	console.log(productInfo.id);
 	//할인기간 핸들러
 	const handleSaleStartDateChange = (date: Date | null) => {
 		setProductInfo({
@@ -71,7 +73,7 @@ const ProductMarket: React.FC = () => {
 			saleEndDate,
 		} = productInfo;
 
-		const updatedProductInfo = {
+		const updatedProductInfo: ProductInterface = {
 			id,
 			categoryId,
 			subCategoryId,
@@ -87,11 +89,17 @@ const ProductMarket: React.FC = () => {
 			isNew,
 			saleStartDate,
 			saleEndDate,
+			category: '',
+			thumbnail: '',
+			rating: 0,
+			option: '',
+			name: '',
 		};
 		dispatch(addToManage(updatedProductInfo)); //디스패치하고
+		setIdCounter(idCounter + 1);
 		//비워
 		setProductInfo({
-			id: uuidv4(),
+			id: idCounter + 1,
 			categoryId: '',
 			subCategoryId: '',
 			title: '',
@@ -315,8 +323,8 @@ const ProductMarket: React.FC = () => {
 							<Quantity>
 								<input
 									type='number'
-									value={quantity}
-									onChange={e => setQuantity(e.target.value as any)}
+									value={quantity.toString()}
+									onChange={e => setQuantity(parseInt(e.target.value, 10) || 0)}
 								/>
 							</Quantity>
 							<ProductAddButton onClick={handleIncreaseQuantity}>+</ProductAddButton>

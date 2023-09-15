@@ -15,6 +15,7 @@ export interface ProductInterface {
 	name: string;
 	brandId: string;
 	discountRate: number;
+	showDiscount: boolean;
 	delivaryPrice: number;
 	saleStartDate: Date | null; // Use Date | null if it can be null
 	saleEndDate: Date | null; // Use Date | null if it can be null

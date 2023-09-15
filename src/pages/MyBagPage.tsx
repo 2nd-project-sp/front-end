@@ -1,57 +1,65 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
-import { setProducts, increaseQuantity, decreaseQuantity, removeProduct } from '../store/cartSlice';
-import { ProductInterface } from '../models/product';
-import { PayloadAction, createAction } from '@reduxjs/toolkit';
-// import ProductOption from '../components/ProductOption/ProductOption';
+import { decreaseQuantity, increaseQuantity, removeProduct, fetchCartProducts } from '../store/cartSlice';
 
+// import { ProductInterface } from '../models/product';
 // 장바구니에 상품 추가 액션 생성
-export const addToCart = createAction<ProductInterface>('cart/add');
+// export const addToCart = createAction<fetchCartProducts>('cart/add');
 
 // 나의 장바구니 페이지 컴포넌트
 const MyBagPage: React.FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const products = useSelector((state: RootState) => state.cart.products);
+  	const products = useSelector((state: RootState) => state.cart.products);
+  	const cartStatus = useSelector((state: RootState) => state.cart.status);
+ 	// const cartError = useSelector((state: RootState) => state.cart.error);
 
-	// 감소 함수
-	const handleDecreaseQuantity = useCallback(
-		(index: number) => {
-			dispatch(decreaseQuantity(index));
+
+	useEffect(() => {
+        if (cartStatus === 'idle') {
+            dispatch(fetchCartProducts());
+        }
+    }, [dispatch, cartStatus]);
+
+
+    const handleDecreaseQuantity = useCallback(
+		(index: React.Key | null | undefined) => {
+		   if (typeof index === "number") {
+			  dispatch(decreaseQuantity(index));
+		   }
 		},
 		[dispatch]
-	);
+	 );
 
-	// 증가 함수
-	const handleIncreaseQuantity = useCallback(
-		(index: number) => {
-			dispatch(increaseQuantity(index));
-		},
-		[dispatch]
-	);
+    const handleIncreaseQuantity = useCallback(
+        (index: number) => {
+            dispatch(increaseQuantity(index));
+        },
+        [dispatch]
+    );
 
-	// 삭제 함수
-	const handleRemoveProduct = useCallback(
-		(index: number) => {
-			dispatch(removeProduct(index));
-		},
-		[dispatch]
-	);
+    const handleRemoveProduct = useCallback(
+        (index: number) => {
+            dispatch(removeProduct(index));
+        },
+        [dispatch]
+    );
 
-	// 총 가격 계산
-	const totalPrice = useMemo(() => {
-		return products.reduce((total: number, product: { price: any; quantity: any }) => {
-			return total + (Number(product.price) || 1) * (Number(product.quantity) || 1);
-		}, 0);
-	}, [products]);
+    const totalPrice = useMemo(() => {
+        return products.reduce((total: number, product: { price: any; quantity: any; }) => {
+            return total + (Number(product.price) || 1) * (Number(product.quantity) || 1);
+        }, 0);
+    }, [products]);
 
-	// 이전 페이지로 돌아가는 함수
-	const goBackToPreviousPage = () => {
-		navigate(-2);
-	};
+    const goBackToPreviousPage = () => {
+        navigate(-2);
+    };
+
+	if (cartStatus === 'loading') return <div>Loading...</div>;
+    if (cartStatus === 'failed') return <div>Error loading cart items.</div>;
 
 	return (
 		<MyBagPageContainer>
@@ -60,21 +68,20 @@ const MyBagPage: React.FC = () => {
 			{products.length === 0 ? (
 				<EmptyMessage>장바구니에 담긴 물품이 없습니다.</EmptyMessage>
 			) : (
-				products.map((product, index) => (
+				products.map((cartItem, index) => (
 					<ProductCard key={index}>
 						<ProductImage
-							src='https://img.29cm.co.kr/next-product/2023/05/03/03eafb89a29045bd818b3600b2bcae18_20230503165832.jpg?width=700'
-							// src={product.thumbnail} 이미지 url이 제대로 안나와서 제가 다른걸로 일단 넣어놓겠습니다 ㅠㅠ
-							alt={product.title}
+							src='https://img.29cm.co.kr/next-product/2023/05/03/03eafb89a29045bd818b3600b2bcae18_20230503165832.jpg'
+							alt={cartItem.productName || "Product"}
 						/>
 						<ProductDetails>
-							<ProductName>{product.title}</ProductName>
-							<ProductDescription>{product.description}</ProductDescription>
+							<ProductName>{cartItem.productName}</ProductName>
+							<ProductDescription>{cartItem.description}</ProductDescription>
 							<ProductPriceAndQuantity>
-								<ProductPrice>${Number(product.price).toFixed(1)}</ProductPrice>
+								<ProductPrice>${Number(cartItem.price).toFixed(1)}</ProductPrice>
 								<QuantityButtons>
 									<QuantityButton onClick={() => handleDecreaseQuantity(index)}>-</QuantityButton>
-									<Quantity>{Number(product.quantity) || 1}</Quantity>
+									<Quantity>{Number(cartItem.count) || 1}</Quantity>
 									<QuantityButton onClick={() => handleIncreaseQuantity(index)}>+</QuantityButton>
 								</QuantityButtons>
 							</ProductPriceAndQuantity>
@@ -83,7 +90,6 @@ const MyBagPage: React.FC = () => {
 					</ProductCard>
 				))
 			)}
-
 			<ButtonContainer>
 				<ContinueShoppingButton onClick={goBackToPreviousPage}>
 					쇼핑 계속하기

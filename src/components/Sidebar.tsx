@@ -20,7 +20,7 @@ const Sidebar = () => {
 		{ value: 3, name: '신발' },
 		{ value: 4, name: '악세사리' },
 	];
-	const categoryHandler = value => {
+	const categoryHandler = (value: any) => {
 		navigate(`/category/${category}?code=${value}`);
 	};
 	console.log(category);

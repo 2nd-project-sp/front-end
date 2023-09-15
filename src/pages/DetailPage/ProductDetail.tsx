@@ -6,14 +6,15 @@ import ProductCount from '../../components/ProductCount/ProductCount';
 import ProductDesc from '../../components/ProductDesc/ProductDesc';
 import ProductOption from '../../components/ProductOption/ProductOption';
 import { addToCart } from '../../store/cartSlice'; //CartSlice 작업 추가(김혜린)
-import { setProductsData, fetchProducts } from '../../store/productsSlice';
+// import { setProductsData } from '../../store/productsSlice';
+import { fetchProducts } from '../../store/productsSlice';
 
 const ProductDetail: React.FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	const { id } = useParams<{ id?: string }>();
-	const idAsNumber = parseInt(id, 10);
+	// const idAsNumber = parseInt(id, 10);
 
 	const productData = useSelector(state => state.products.data);
 	const selectedProduct = productData.data; //상품 리스트 나오면 삭제

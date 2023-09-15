@@ -3,6 +3,16 @@ import styled from 'styled-components';
 import { devices } from '../assets/styles/constants';
 import { useNavigate } from 'react-router';
 import { useParams } from 'react-router-dom';
+
+interface CategoryItem {
+	value: number;
+	name: string;
+}
+
+interface CategoryTypes {
+	[key: string]: CategoryItem[];
+}
+
 const Sidebar = () => {
 	const navigate = useNavigate();
 	const { category } = useParams();
@@ -21,7 +31,7 @@ const Sidebar = () => {
 		}
 	});
 
-	const types = {
+	const types: CategoryTypes = {
 		women: [
 			{ value: 1, name: '의류' },
 			{ value: 2, name: '가방' },
@@ -47,7 +57,7 @@ const Sidebar = () => {
 			{ value: 4, name: '아트디자인' },
 		],
 	};
-	const categoryHandler = value => {
+	const categoryHandler = (value: any) => {
 		navigate(`/category/${category}?code=${value}`);
 	};
 
@@ -60,7 +70,7 @@ const Sidebar = () => {
 			navigate(`/category/${event.target.value}?code=1`);
 		}
 	};
-	const selectedCategoryTypes = types[category] || [];
+	const selectedCategoryTypes = category !== undefined ? types[category] || [] : [];
 	return (
 		<>
 			<SidebarTitle>
@@ -75,7 +85,7 @@ const Sidebar = () => {
 
 			{(category || categorySelected !== '') && (
 				<SidebarContent>
-					{selectedCategoryTypes.map((type, index) => (
+					{selectedCategoryTypes.map((type: any, index: number) => (
 						<Type key={`type-${index}`}>
 							<button onClick={() => categoryHandler(type.value)}>{type.name}</button>
 						</Type>

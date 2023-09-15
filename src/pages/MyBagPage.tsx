@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import React, {useCallback,useMemo} from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
-import { setProducts, increaseQuantity, decreaseQuantity, removeProduct } from '../store/cartSlice';
+import { increaseQuantity, decreaseQuantity, removeProduct } from '../store/cartSlice';
 import { ProductInterface } from '../models/product';
-import { PayloadAction, createAction } from '@reduxjs/toolkit';
+import { createAction } from '@reduxjs/toolkit';
 // import ProductOption from '../components/ProductOption/ProductOption';
 
 // 장바구니에 상품 추가 액션 생성
@@ -25,7 +25,7 @@ const MyBagPage: React.FC = () => {
 		[dispatch]
 	);
 
-	// 증가 함수
+	// 증가 함수₩`
 	const handleIncreaseQuantity = useCallback(
 		(index: number) => {
 			dispatch(increaseQuantity(index));

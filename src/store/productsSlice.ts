@@ -1,10 +1,32 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 // 초기값
 const initialState = {
 	data: [],
 };
+interface Product {
+	brand: string;
+	deliveryPrice: number;
+	description: string;
+	discountRate: number;
+	imageType: string;
+	imageUrl: string;
+	isDiscount: boolean;
+	isNew: boolean;
+	name: string;
+	optionList: any[];
+	price: number;
+	saleEndDate: string;
+	saleStartDate: string;
+}
+
+interface ProductsState {
+	products: any;
+	data: Product | null;
+	message: string;
+	status: string;
+}
+
 interface Product {
 	brand: string;
 	deliveryPrice: number;
@@ -61,5 +83,4 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts', async ()
 });
 
 export const selectProductData = (state: { products: ProductsState }) => state.products.data;
-
 export default productsReducer;

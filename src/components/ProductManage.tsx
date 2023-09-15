@@ -7,6 +7,7 @@ import { RootState, updateQuantity } from '../store/manageSlice';
 const ProductManage: React.FC = () => {
 	const dispatch = useDispatch();
 	const productInfo = useSelector((state: RootState) => state.manage.products);
+	console.log(productInfo);
 
 	const [editedProducts, setEditedProducts] = useState<{ [key: number]: boolean }>({});
 	const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});

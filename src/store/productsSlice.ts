@@ -27,29 +27,6 @@ interface ProductsState {
 	status: string;
 }
 
-interface Product {
-	brand: string;
-	deliveryPrice: number;
-	description: string;
-	discountRate: number;
-	imageType: string;
-	imageUrl: string;
-	isDiscount: boolean;
-	isNew: boolean;
-	name: string;
-	optionList: any[];
-	price: number;
-	saleEndDate: string;
-	saleStartDate: string;
-}
-
-interface ProductsState {
-	products: any;
-	data: Product | null;
-	message: string;
-	status: string;
-}
-
 export type { ProductsState };
 
 const productsSlice = createSlice({

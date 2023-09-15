@@ -7,12 +7,14 @@ import ProductDesc from '../../components/ProductDesc/ProductDesc';
 import ProductOption from '../../components/ProductOption/ProductOption';
 import { addToCart } from '../../store/cartSlice'; //CartSlice 작업 추가(김혜린)
 import axios from 'axios';
+// import { setProductsData } from '../../store/productsSlice';
 import { fetchProducts, ProductsState } from '../../store/productsSlice';
 import { AppDispatch } from '../../store/store';
 
 const ProductDetail: React.FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch<AppDispatch>();
+
 	const { id } = useParams<{ id?: string }>();
 	// const idAsNumber = parseInt(id, 10);
 

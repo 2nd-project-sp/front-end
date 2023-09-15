@@ -1,6 +1,6 @@
 import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ProductInterface } from '../models/product';
-import { useState } from 'react';
+// import { useState } from 'react';
 
 export const addToCart = createAction<{
 	product: ProductInterface;

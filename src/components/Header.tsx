@@ -59,13 +59,19 @@ const Header: React.FC = () => {
 	};
 	useEffect(() => {}, [isLogin]);
 	//console.log(isLogin);
+	const category = [
+		{ value: 'women', name: 'WOMEN' },
+		{ value: 'men', name: 'MEN' },
+		{ value: 'digital', name: 'DIGITAL' },
+		{ value: 'interior', name: 'INTERIOR' },
+	];
 	return (
 		<SHeader>
 			<div className='header-wrapper'>
 				<div className='header-navigation'>
 					<div>
 						<div className='temp-logo' onClick={homeHandler}>
-							29CM
+							GD Mall
 						</div>
 					</div>
 					<div className='navigation'>
@@ -75,18 +81,11 @@ const Header: React.FC = () => {
 					</div>
 				</div>
 				<div className='category'>
-					<button data-value='women' onClick={categoryHandler}>
-						WOMEN
-					</button>
-					<button data-value='men' onClick={categoryHandler}>
-						MEN
-					</button>
-					<button data-value='digital' onClick={categoryHandler}>
-						DIGITAL
-					</button>
-					<button data-value='interior' onClick={categoryHandler}>
-						INTERIOR
-					</button>
+					{category?.map((item, index) => (
+						<button data-value={item.value} onClick={categoryHandler} key={`button-${index}`}>
+							{item.name}
+						</button>
+					))}
 				</div>
 				<div className='header-menu'>
 					<div className='menu-container'>

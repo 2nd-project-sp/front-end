@@ -4,6 +4,28 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 const initialState = {
 	data: [],
 };
+interface Product {
+	brand: string;
+	deliveryPrice: number;
+	description: string;
+	discountRate: number;
+	imageType: string;
+	imageUrl: string;
+	isDiscount: boolean;
+	isNew: boolean;
+	name: string;
+	optionList: any[];
+	price: number;
+	saleEndDate: string;
+	saleStartDate: string;
+}
+
+interface ProductsState {
+	products: any;
+	data: Product | null;
+	message: string;
+	status: string;
+}
 
 interface Product {
 	brand: string;
@@ -56,6 +78,7 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts', async ()
 		return data;
 	} catch (error) {
 		console.error('Error fetching products:', error);
+		throw error;
 	}
 });
 

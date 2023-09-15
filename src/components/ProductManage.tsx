@@ -84,16 +84,27 @@ const ProductManage: React.FC = () => {
 									</ProductManageInfo>
 									<ProductManageInfo>브랜드: {product.brandId}</ProductManageInfo>
 									{product.discountRate ? (
-										<DiscountPrice>
-											가격:
-											<BeforeDiscount>{Number(product.price).toLocaleString()}</BeforeDiscount>
-											➡️
-											{calculateDiscountedPrice(
-												product.price,
-												product.discountRate
-											).toLocaleString()}
-											원 {Number(product.discountRate)}%
-										</DiscountPrice>
+										<>
+											<DiscountPrice>
+												가격:
+												<BeforeDiscount>{Number(product.price).toLocaleString()}</BeforeDiscount>
+												➡️
+												{calculateDiscountedPrice(
+													product.price,
+													product.discountRate
+												).toLocaleString()}
+												원 {Number(product.discountRate)}%
+											</DiscountPrice>
+
+											<ProductManageInfo>
+												할인기간:{' '}
+												{product.saleStartDate && product.saleEndDate
+													? `${product.saleStartDate.toLocaleDateString(
+															'en-US'
+													  )} ~ ${product.saleEndDate.toLocaleDateString('en-US')}`
+													: 'N/A'}
+											</ProductManageInfo>
+										</>
 									) : (
 										<ProductManageInfo>가격:{product.price.toLocaleString()}원</ProductManageInfo>
 									)}

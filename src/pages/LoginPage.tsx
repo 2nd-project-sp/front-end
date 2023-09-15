@@ -64,11 +64,11 @@ const LoginPage: React.FC = () => {
 		isValid({ isEmail: true, isPassword: true });
 		if (form.email.trim() === '' || !emailRegex.test(form.email)) {
 			console.log('email fail');
-			isValid({ ...valid, isEmail: false });
+			isValid({ isEmail: false, isPassword: true });
 			count.current = count.current + 1;
 		} else if (!passwordRegex.test(form.password)) {
 			console.log('password fail');
-			isValid({ ...valid, isPassword: false });
+			isValid({ isEmail: true, isPassword: false });
 			count.current = count.current + 1;
 		} else {
 			const data = {
@@ -95,6 +95,7 @@ const LoginPage: React.FC = () => {
 			} catch (error) {
 				dispatch(login(false));
 				setStatus('fail');
+				count.current = count.current + 1;
 				console.log(error);
 			}
 		}

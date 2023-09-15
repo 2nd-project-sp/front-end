@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const CategoryMenu = ({ category }) => {
+interface Props {
+	category: string | undefined;
+}
+
+const CategoryMenu: React.FC<Props> = ({ category }) => {
 	const navigate = useNavigate();
 
 	const goToProfilePage = useCallback(() => {
@@ -20,20 +24,20 @@ const CategoryMenu = ({ category }) => {
 
 	return (
 		<CategoryWrapper>
-			<h3>이름</h3>
+			<h3>My</h3>
 			<span>나의 정보</span>
 			<ul>
-				<Category active={category === 'profile' ? 'active' : ''}>
+				<li className={category === 'profile' ? 'active' : ''}>
 					<button onClick={goToProfilePage}>프로필</button>
-				</Category>
+				</li>
 
-				<Category active={category === 'purchase' ? 'active' : ''}>
+				<li className={category === 'purchase' ? 'active' : ''}>
 					<button onClick={goToPurchasePage}>주문내역 조회</button>
-				</Category>
+				</li>
 
-				<Category active={category === 'sale' ? 'active' : ''}>
+				<li className={category === 'sale' ? 'active' : ''}>
 					<button onClick={goToSalePage}>상품 등록</button>
-				</Category>
+				</li>
 			</ul>
 		</CategoryWrapper>
 	);
@@ -60,19 +64,24 @@ const CategoryWrapper = styled.div`
 		display: flex;
 		flex-direction: column;
 		align-items: start;
-	}
-`;
 
-const Category = styled.li`
-	button {
-		padding: 10px 10px;
-		font-size: 15px;
-		font-weight: ${props => (props.active ? 400 : 200)};
-		color: ${props => (props.active ? '#000' : '#5d5d5d')};
-		cursor: pointer;
+		li {
+			button {
+				padding: 10px 10px;
+				font-size: 15px;
+				font-weight: 200;
+				color: '#5d5d5d';
+				cursor: pointer;
 
-		&:hover {
-			color: #000;
+				&:hover {
+					color: #000;
+				}
+			}
+
+			&.active button {
+				font-weight: 400;
+				color: #000;
+			}
 		}
 	}
 `;

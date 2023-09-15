@@ -10,8 +10,7 @@ const ProductMarket: React.FC = () => {
 	const [quantity, setQuantity] = useState(1);
 	const [showDiscount, setShowDiscount] = useState(false);
 	const [isNew, setIsNew] = useState(false);
-	// console.log(isNew);
-	const option = ['WOMEN', 'MEN', 'DIGITAL', 'INTERIOR', 'BEAUTY', 'KIDS'];
+	const option = ['WOMEN', 'MEN', 'DIGITAL', 'BEAUTY', 'KIDS', 'INTERIOR'];
 	const subOption = ['의류', '가방', '신발', '악세사리'];
 
 	const [productInfo, setProductInfo] = useState({

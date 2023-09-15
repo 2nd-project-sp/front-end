@@ -95,6 +95,7 @@ const LoginPage: React.FC = () => {
 			} catch (error) {
 				dispatch(login(false));
 				setStatus('fail');
+				count.current = count.current + 1;
 				console.log(error);
 			}
 		}

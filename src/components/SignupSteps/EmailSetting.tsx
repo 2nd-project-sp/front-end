@@ -95,11 +95,12 @@ const EmailSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 					이메일 중복 검사
 				</button>
 
-				{isClicked && (
+				{isClicked && email && (
 					<p className={isValidEmail.validEmail ? 'email-message_success' : 'email-message_fail'}>
 						{isValidEmail.validMessage}
 					</p>
 				)}
+				{isClicked && !email && <p className='email-message_fail'>이메일을 작성해주세요.</p>}
 
 				{emailInputInValid && <p className='err-message'>* 이메일 형식이 맞지 않습니다.</p>}
 			</div>

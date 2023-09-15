@@ -5,6 +5,10 @@ const initialState: ProductLists = {
 	products: [],
 };
 
+export interface RootState {
+	manage: ProductLists;
+}
+
 const manageSlice = createSlice({
 	name: 'manage',
 	initialState,

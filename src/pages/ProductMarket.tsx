@@ -166,7 +166,7 @@ const ProductMarket: React.FC = () => {
 			quantity: quantity + 1,
 		}));
 	};
-
+	console.log(saleStartDate, saleEndDate);
 	return (
 		<>
 			<ProductMarketWrapper>

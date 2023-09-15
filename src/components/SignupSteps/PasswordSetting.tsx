@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { ISteps, IValid } from '../../models/steps';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setting } from '../../store/signupSlice';
-import { RootState } from '../../store/store';
 
 const PasswordSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 	const dispatch = useDispatch();
@@ -21,7 +20,6 @@ const PasswordSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 		pw: false,
 		pwCheck: false,
 	});
-	const check = useSelector((state: RootState) => state.signup);
 	const alphaRegex = /(?=.*[a-zA-Z])/;
 	const characterRegex = /(?=.*[!@#$%^*+=-])/;
 	const numberRegex = /(?=.*[0-9])/;
@@ -61,6 +59,7 @@ const PasswordSetting: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 			} else {
 				setConfirm(false);
 			}
+			console.log(pwCheck);
 		},
 		[password]
 	);

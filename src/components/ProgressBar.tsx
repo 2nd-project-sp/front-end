@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 interface Istep {
 	width: number | string;
 }
 
-const ProgressBar = ({ step }) => {
+const ProgressBar = ({ step }: any) => {
 	const [progressBar, setProgressBar] = useState(0);
 
 	const getProgressWidth = (step: number) => {

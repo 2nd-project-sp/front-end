@@ -1,14 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ISteps } from '../../models/steps';
 
 const ProfilePic: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
-	const imgRef = useRef<HTMLInputElement | null>(null);
 	const [imgFile, setImgFile] = useState('');
 
 	const handlingNext = () => {
 		// 유효성 검사 후
 		setStep(step + 1);
+		setImgFile('');
 	};
 	// 기본 이미지
 	// https://i.stack.imgur.com/frlIf.png

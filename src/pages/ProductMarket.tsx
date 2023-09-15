@@ -85,7 +85,6 @@ const ProductMarket: React.FC = () => {
 		setShowDiscount(false);
 	};
 
-	console.log(productInfo.subCategoryId);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	//할인 유무 핸들러
 	const discountHandler = () => {

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { ProductInterface } from '../models/product';
+import { CustomProductInterface } from '../pages/ProductMarket';
 import { RootState, updateQuantity } from '../store/manageSlice';
 
 const ProductManage: React.FC = () => {
 	const dispatch = useDispatch();
-	const productInfo = useSelector((state: RootState) => state.manage.products);
+	const productInfo = useSelector((state: RootState) => state.manage);
 
 	const [editedProducts, setEditedProducts] = useState<{ [key: number]: boolean }>({});
 	const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});
@@ -25,7 +25,8 @@ const ProductManage: React.FC = () => {
 			[productId]: true,
 		}));
 		//현재 값으로 수정된 수량을 초기화
-		const currentQuantity = productInfo.find(product => product.id === productId)?.quantity || 0;
+		const currentQuantity =
+			productInfo.find((product: { id: number }) => product.id === productId)?.quantity || 0;
 		setEditedQuantities(prevValue => ({
 			...prevValue,
 			[productId]: currentQuantity,
@@ -63,7 +64,7 @@ const ProductManage: React.FC = () => {
 				</ProductManageTitle>
 				<ProductInfoCon>
 					{productInfo &&
-						productInfo.map((product: ProductInterface) => (
+						productInfo.map((product: CustomProductInterface) => (
 							<Products key={product.id}>
 								<ProductManageImg>
 									<img src={product.image} alt='판매 상품 이미지' />

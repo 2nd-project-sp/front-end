@@ -40,7 +40,7 @@ const LoginPage: React.FC = () => {
 	// 토큰이 만료되었을 때
 	const resetToken = async () => {
 		const token = localStorage.getItem('ACCESS-TOKEN');
-		const res = await fetch('http://15.164.128.162:8080/api/v1/user/logout', {
+		const res = await fetch('https://shoppingmall.o-r.kr/api/v1/user/logout', {
 			method: 'POST',
 			headers: {
 				'ACCESS-TOKEN': `${token}`,
@@ -77,7 +77,7 @@ const LoginPage: React.FC = () => {
 			};
 
 			try {
-				const response = await axios.post('http://15.164.128.162:8080/api/v1/user/login', data, {
+				const response = await axios.post('https://shoppingmall.o-r.kr/api/v1/user/login', data, {
 					headers: {
 						'Content-Type': 'application/json',
 					},
@@ -125,7 +125,7 @@ const LoginPage: React.FC = () => {
 		const token = localStorage.getItem('ACCESS-TOKEN');
 		// console.log(token);
 		// try {
-		// 	const response = await axios.post('http://15.164.128.162:8080/api/v1/user/validate', null, {
+		// 	const response = await axios.post('https://shoppingmall.o-r.kr/api/v1/user/validate', null, {
 		// 		headers: {
 		// 			'Content-Type': 'application/json',
 		// 			'ACCESS-TOKEN': `${token}`,
@@ -135,7 +135,7 @@ const LoginPage: React.FC = () => {
 		// } catch (error) {
 		// 	console.log(error);
 		// }
-		const res = await fetch('http://15.164.128.162:8080/api/v1/user/validate', {
+		const res = await fetch('https://shoppingmall.o-r.kr/api/v1/user/validate', {
 			method: 'POST',
 			headers: {
 				'ACCESS-TOKEN': `${token}`,

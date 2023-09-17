@@ -33,7 +33,7 @@ const Header: React.FC = () => {
 	const logoutHandler = async () => {
 		if (isLogin) {
 			const token = localStorage.getItem('ACCESS-TOKEN');
-			const res = await fetch('http://15.164.128.162:8080/api/v1/user/logout', {
+			const res = await fetch('https://shoppingmall.o-r.kr/api/v1/user/logout', {
 				method: 'POST',
 				headers: {
 					'ACCESS-TOKEN': `${token}`,

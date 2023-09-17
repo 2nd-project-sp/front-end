@@ -51,7 +51,7 @@ export const { reducer: productsReducer, actions } = productsSlice;
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
 	try {
-		const response = await fetch('http://15.164.128.162:8080/api/v1/products/1');
+		const response = await fetch('https://shoppingmall.o-r.kr/api/v1/products/1');
 
 		if (!response.ok) {
 			throw new Error('Network response was not ok');

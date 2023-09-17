@@ -62,11 +62,15 @@ const ProductDetail: React.FC = () => {
 			};
 
 			try {
-				const response = await axios.post('http://15.164.128.162:8080/api/v1/cart/1', requestData, {
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				});
+				const response = await axios.post(
+					'https://shoppingmall.o-r.kr/api/v1/cart/1',
+					requestData,
+					{
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					}
+				);
 
 				if (response.status === 200) {
 					console.log('Item added to cart:', response.data);

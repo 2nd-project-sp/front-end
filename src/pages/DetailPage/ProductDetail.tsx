@@ -8,8 +8,9 @@ import ProductOption from '../../components/ProductOption/ProductOption';
 import { addToCart } from '../../store/cartSlice'; //CartSlice 작업 추가(김혜린)
 import axios from 'axios';
 // import { setProductsData } from '../../store/productsSlice';
-import { fetchProducts, ProductsState } from '../../store/productsSlice';
+import { ProductsState } from '../../store/productsSlice';
 import { AppDispatch } from '../../store/store';
+import { fetchProducts } from '../../api/product';
 
 const ProductDetail: React.FC = () => {
 	const navigate = useNavigate();
@@ -18,8 +19,9 @@ const ProductDetail: React.FC = () => {
 	const { id } = useParams<{ id?: string }>();
 	// const idAsNumber = parseInt(id, 10);
 
-	const productData = useSelector((state: ProductsState) => state.products.data);
-	const selectedProduct = productData.data; //상품 리스트 나오면 삭제
+	const selectedProduct = useSelector(state => console.log(state));
+	console.log(selectedProduct);
+	// const selectedProduct = productData.data; //상품 리스트 나오면 삭제
 	const optionList = selectedProduct && selectedProduct.optionList;
 	const optionId = selectedProduct && selectedProduct.optionList[0].optionId;
 

@@ -6,7 +6,7 @@ import tokenSlice from './tokenSlice';
 import cartSlice from './cartSlice';
 import manageSlice from './manageSlice';
 
-import { productsReducer } from './productsSlice';
+import productsSlice from './productsSlice';
 
 export const store = configureStore({
 	reducer: {
@@ -16,7 +16,7 @@ export const store = configureStore({
 		testProducts: testProductsReducer,
 		cart: cartSlice,
 		manage: manageSlice,
-		products: productsReducer,
+		products: productsSlice,
 	},
 });
 

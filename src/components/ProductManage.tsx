@@ -1,16 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { fetchCategories, fetchSubCategories } from '../api/category';
 import { CustomProductInterface } from '../pages/ProductMarket';
 import { RootState, updateQuantity } from '../store/manageSlice';
 
 const ProductManage: React.FC = () => {
 	const dispatch = useDispatch();
 	const productInfo = useSelector((state: RootState) => state.manage);
-
 	const [editedProducts, setEditedProducts] = useState<{ [key: number]: boolean }>({});
 	const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});
-	//할인가격 코드
+	const [categories, setCategories] = useState<any[]>([]);
+	const [subCategories, setSubCategories] = useState<any[]>([]);
+
+	useEffect(() => {
+		fetchCategories().then(categoryList => {
+			setCategories(categoryList);
+		});
+		productInfo.forEach((product: CustomProductInterface) => {
+			const categoryId = product.categoryId;
+			fetchSubCategories(categoryId).then(subCategoryList => {
+				setSubCategories(subCategoryList);
+			});
+		});
+	}, [productInfo]);
+
+	const getCategoryNameById = (categoryId: number) => {
+		const category = categories.find(cat => cat.id === Number(categoryId));
+		return category ? category.name : '';
+	};
+
+	const getSubcategoryNamesByCategoryId = (subCategoryId: number) => {
+		const subcategory = subCategories.find(cat => cat.id === Number(subCategoryId));
+		return subcategory ? subcategory.name : '';
+	};
+
 	const calculateDiscountedPrice = (originalPrice: number, discountRate: number) => {
 		const price = Number(originalPrice);
 		const rate = Number(discountRate);
@@ -18,40 +42,38 @@ const ProductManage: React.FC = () => {
 		return discountedPrice;
 	};
 
-	//수량 수정
-	const editClickedHandler = (productId: number) => {
+	const editClickedHandler = (name: string) => {
 		setEditedProducts(prevEditedProducts => ({
 			...prevEditedProducts,
-			[productId]: true,
+			[name]: true,
 		}));
-		//현재 값으로 수정된 수량을 초기화
-		const currentQuantity =
-			productInfo.find((product: { id: number }) => product.id === productId)?.quantity || 0;
+
+		const currentStock =
+			productInfo.find((product: CustomProductInterface) => product.name === name)?.stock || 0;
+
 		setEditedQuantities(prevValue => ({
 			...prevValue,
-			[productId]: currentQuantity,
+			[name]: currentStock,
 		}));
 	};
-	const handleEditedQuantityChange = (
-		productId: number,
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
+
+	const handleEditedQuantityChange = (name: string, event: React.ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value;
 		const parsedValue = value.trim() === '' ? undefined : parseInt(value, 10);
-		setEditedQuantities(prevValue => {
-			return {
-				...prevValue,
-				[productId]: parsedValue !== undefined ? parsedValue : 0,
-			};
-		});
+
+		setEditedQuantities(prevValue => ({
+			...prevValue,
+			[name]: parsedValue !== undefined ? parsedValue : 0,
+		}));
 	};
-	const submitHandler = (productId: number) => {
-		if (editedQuantities[productId] !== undefined) {
-			dispatch(updateQuantity({ productId, newQuantity: editedQuantities[productId] }));
-			// 클리어
+
+	const submitHandler = (name: string) => {
+		if (editedQuantities[name] !== undefined) {
+			dispatch(updateQuantity({ name, newQuantity: editedQuantities[name] }));
+
 			setEditedProducts(prevValue => ({
 				...prevValue,
-				[productId]: false,
+				[name]: false,
 			}));
 		}
 	};
@@ -65,25 +87,27 @@ const ProductManage: React.FC = () => {
 				<ProductInfoCon>
 					{productInfo &&
 						productInfo.map((product: CustomProductInterface) => (
-							<Products key={product.id}>
+							<Products key={product.name}>
 								<ProductManageImg>
-									<img src={product.image} alt='판매 상품 이미지' />
+									<img src={product.imageUrl} alt='판매 상품 이미지' />
 								</ProductManageImg>
 								<ProductText>
 									<ProductManageInfoTitle>
 										{product.isNew ? (
 											<NewItem>
 												<div>new</div>
-												{product.title}
+												{product.name}
 											</NewItem>
 										) : (
 											''
 										)}
 									</ProductManageInfoTitle>
 									<ProductManageInfo>
-										{product.categoryId} {product.subCategoryId}
+										{getCategoryNameById(product.categoryId)}-
+										{getSubcategoryNamesByCategoryId(product.subCategoryId)}
 									</ProductManageInfo>
-									<ProductManageInfo>브랜드: {product.brandId}</ProductManageInfo>
+
+									<ProductManageInfo>브랜드: {product.brand}</ProductManageInfo>
 									{product.discountRate ? (
 										<>
 											<DiscountPrice>
@@ -96,7 +120,6 @@ const ProductManage: React.FC = () => {
 												).toLocaleString()}
 												원 {Number(product.discountRate)}%
 											</DiscountPrice>
-
 											<ProductManageInfo>
 												할인기간:{' '}
 												{product.saleStartDate && product.saleEndDate
@@ -112,22 +135,21 @@ const ProductManage: React.FC = () => {
 									<ProductManageInfo>
 										배송비:{product.delivaryPrice.toLocaleString()}원
 									</ProductManageInfo>
-									<ProductManageInfo>설명: {product.description}</ProductManageInfo>
 									<ProductQuantity>
-										{!editedProducts[product.id] ? (
+										{!editedProducts[product.name] ? (
 											<>
-												수량:{Number(product.quantity).toLocaleString()}
-												<Edit onClick={() => editClickedHandler(product.id)}>수정</Edit>
+												수량:{Number(product.stock).toLocaleString()}
+												<Edit onClick={() => editClickedHandler(product.name)}>수정</Edit>
 											</>
 										) : (
 											<>
 												수량:
 												<input
 													type='number'
-													value={editedQuantities[product.id] || ''}
-													onChange={e => handleEditedQuantityChange(product.id, e)}
+													value={editedQuantities[product.name] || ''}
+													onChange={e => handleEditedQuantityChange(product.name, e)}
 												/>
-												<Edit onClick={() => submitHandler(product.id)}>완료</Edit>
+												<Edit onClick={() => submitHandler(product.name)}>완료</Edit>
 											</>
 										)}
 									</ProductQuantity>

@@ -14,11 +14,11 @@ const manageSlice = createSlice({
 		addToManage: (state, action: PayloadAction<CustomProductInterface>) => {
 			state.push(action.payload);
 		},
-		updateQuantity: (state, action: PayloadAction<{ productId: number; newQuantity: number }>) => {
-			const { productId, newQuantity } = action.payload;
-			const product = state.find(p => p.id === productId);
+		updateQuantity: (state, action: PayloadAction<{ name: string; newQuantity: number }>) => {
+			const { name, newQuantity } = action.payload;
+			const product = state.find(p => p.name === name);
 			if (product) {
-				product.quantity = newQuantity;
+				product.stock = newQuantity;
 			}
 		},
 	},

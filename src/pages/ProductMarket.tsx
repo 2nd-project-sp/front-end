@@ -1,65 +1,85 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import ProductManage from '../components/ProductManage';
 import { addToManage } from '../store/manageSlice';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios';
+import { fetchCategories, fetchSubCategories } from '../api/category';
 
 export interface CustomProductInterface {
-	id: number;
-	title: string;
-	category?: string;
-	categoryId: string;
-	subCategoryId: string;
+	categoryId: number;
+	subCategoryId: number;
+	optionId?: number;
+	name: string;
+	brand: string;
 	price: number;
-	brandId: string;
+	stock: number;
 	description: string;
-	image: string;
-	quantity: number;
-	thumbnail?: string;
-	showDiscount: boolean;
+	sellStatus: string;
+	isNew: boolean;
+	isDiscount: boolean;
 	discountRate: number;
 	delivaryPrice: number;
-	isNew: boolean;
-	option?: string;
-	name?: string;
-	rating?: Number;
 	saleStartDate: Date | null;
 	saleEndDate: Date | null;
+	imageUrl: string;
+	imageType?: string;
 }
 
 const ProductMarket: React.FC = () => {
+	const apiEndpoint = 'http://15.164.128.162:8080/api/v1/products';
 	const dispatch = useDispatch();
-	const [quantity, setQuantity] = useState(1);
-	const [showDiscount, setShowDiscount] = useState(false);
+	//수량 기본값이 1
+	const [stock, setStock] = useState(1);
+	const [isDiscount, setIsDiscount] = useState(false);
+	//신상품
 	const [isNew, setIsNew] = useState(false);
 	//할인기간
 	const [saleStartDate, setSaleStartDate] = useState(null);
 	const [saleEndDate, setSaleEndDate] = useState(null);
-	const [idCounter, setIdCounter] = useState(1);
-
-	const option = ['WOMEN', 'MEN', 'DIGITAL', 'BEAUTY', 'KIDS', 'INTERIOR'];
-	const subOption = ['의류', '가방', '신발', '악세사리'];
+	//카테고리,서브카테고리
+	const [categories, setCategories] = useState([]);
+	const [subCategories, setSubCategories] = useState([]);
 
 	const [productInfo, setProductInfo] = useState({
-		id: idCounter,
-		title: '',
-		categoryId: '',
-		subCategoryId: '',
+		name: '',
+		categoryId: 0,
+		subCategoryId: 0,
+		optionId: 0,
 		price: 0,
-		brandId: '',
+		brand: '',
 		description: '',
-		image: '',
-		quantity: 1,
-		showDiscount: false,
+		sellStatus: '',
+		imageUrl: '',
+		stock: 1,
+		isDiscount: false,
 		discountRate: 0,
 		delivaryPrice: 0,
 		isNew: false,
 		saleStartDate: null as Date | null,
 		saleEndDate: null as Date | null,
 	});
-	console.log(productInfo.id);
+
+	useEffect(() => {
+		fetchCategories().then(categoryList => {
+			if (categoryList) {
+				setCategories(categoryList);
+			} else {
+				console.error('카테고리 목록 가져오기 실패');
+			}
+		});
+
+		fetchSubCategories(productInfo.categoryId).then(subCategoryList => {
+			if (subCategoryList) {
+				setSubCategories(subCategoryList);
+			} else {
+				console.error('서브카테고리 목록 가져오기 실패');
+			}
+		});
+	}, [productInfo.categoryId]);
+
 	//할인기간 핸들러
 	const handleSaleStartDateChange = (date: Date | null) => {
 		setProductInfo({
@@ -75,71 +95,77 @@ const ProductMarket: React.FC = () => {
 		});
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const {
-			id,
+			name,
 			categoryId,
 			subCategoryId,
-			title,
 			price,
-			brandId,
+			brand,
 			description,
-			image,
-			quantity,
-			showDiscount,
+			sellStatus,
+			imageUrl,
+			stock,
+			isDiscount,
 			discountRate,
 			delivaryPrice,
 			isNew,
 			saleStartDate,
 			saleEndDate,
+			optionId,
 		} = productInfo;
 
 		const updatedProductInfo: CustomProductInterface = {
-			id,
+			name,
 			categoryId,
 			subCategoryId,
-			title,
 			price,
-			brandId,
+			brand,
 			description,
-			image,
-			quantity,
-			showDiscount,
+			sellStatus,
+			imageUrl,
+			stock,
+			isDiscount,
 			discountRate,
 			delivaryPrice,
 			isNew,
 			saleStartDate,
 			saleEndDate,
-			category: '',
-			thumbnail: '',
-			rating: 0,
-			option: '',
-			name: '',
+			optionId,
 		};
-		dispatch(addToManage(updatedProductInfo)); //디스패치하고
-		setIdCounter(idCounter + 1);
+
+		dispatch(addToManage(updatedProductInfo)); //디스패치는 잘 되는데  api왜 안될까
+		try {
+			const response = await axios.post(apiEndpoint, updatedProductInfo);
+			console.log('API Response:', response.data);
+			dispatch(addToManage(response.data));
+		} catch (error) {
+			console.error('API Error:', error);
+		}
+
 		//비워
 		setProductInfo({
-			id: idCounter + 1,
-			categoryId: '',
-			subCategoryId: '',
-			title: '',
+			categoryId: 0,
+			subCategoryId: 0,
+			optionId: 0,
+			name: '',
 			price: 0,
-			brandId: '',
+			brand: '',
 			description: '',
-			image: '',
-			quantity: 1,
-			showDiscount: false,
+			sellStatus: '',
+			imageUrl: '',
+			stock: 1,
+			isDiscount: false,
 			discountRate: 0,
 			delivaryPrice: 0,
 			isNew: false,
 			saleStartDate: null,
 			saleEndDate: null,
 		});
-		setQuantity(1);
+		setStock(1);
 		setIsNew(false);
-		setShowDiscount(false);
+		setIsDiscount(false);
 		setSaleStartDate(null);
 		setSaleEndDate(null);
 	};
@@ -147,7 +173,7 @@ const ProductMarket: React.FC = () => {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	//할인 유무 핸들러
 	const discountHandler = () => {
-		setShowDiscount(!showDiscount);
+		setIsDiscount(!isDiscount);
 	};
 	//신상 유무 핸들러
 	const newHandler = () => {
@@ -163,7 +189,7 @@ const ProductMarket: React.FC = () => {
 		const file = event.target.files && event.target.files[0];
 		if (file) {
 			const imageUrl = URL.createObjectURL(file);
-			setProductInfo({ ...productInfo, image: imageUrl });
+			setProductInfo({ ...productInfo, imageUrl: imageUrl });
 		}
 	};
 
@@ -174,21 +200,21 @@ const ProductMarket: React.FC = () => {
 	};
 
 	const handleDecreaseQuantity = () => {
-		setQuantity(prevQuantity => prevQuantity - 1);
+		setStock(prevQuantity => prevQuantity - 1);
 		setProductInfo(prevProductInfo => ({
 			...prevProductInfo,
-			quantity: quantity - 1,
+			stock: stock - 1,
 		}));
 	};
 
 	const handleIncreaseQuantity = () => {
-		setQuantity(prevQuantity => prevQuantity + 1);
+		setStock(prevQuantity => prevQuantity + 1);
 		setProductInfo(prevProductInfo => ({
 			...prevProductInfo,
-			quantity: quantity + 1,
+			stock: stock + 1,
 		}));
 	};
-	console.log(saleStartDate, saleEndDate);
+
 	return (
 		<>
 			<ProductMarketWrapper>
@@ -214,7 +240,7 @@ const ProductMarket: React.FC = () => {
 							style={{ display: 'none' }}
 						/>
 						<ProductImagePreview>
-							{productInfo ? <img src={productInfo.image} /> : ''}
+							{productInfo ? <img src={productInfo.imageUrl} /> : ''}
 						</ProductImagePreview>
 					</ProductAddInput>
 
@@ -223,8 +249,8 @@ const ProductMarket: React.FC = () => {
 					</ProductAddInput>
 					<ProductDiscount>
 						할인
-						<input type='checkbox' checked={showDiscount} onChange={discountHandler} />
-						{showDiscount ? (
+						<input type='checkbox' checked={isDiscount} onChange={discountHandler} />
+						{isDiscount ? (
 							<ProductDiscountInput>
 								<DisCountRate>
 									<input
@@ -267,11 +293,12 @@ const ProductMarket: React.FC = () => {
 							}}
 						>
 							<option value=''>카테고리</option>
-							{option.map(it => (
-								<option value={it} key={it}>
-									{it}
-								</option>
-							))}
+							{categories &&
+								categories.map(category => (
+									<option value={category.id} key={category.id}>
+										{category.name}
+									</option>
+								))}
 						</select>
 
 						<select
@@ -282,19 +309,20 @@ const ProductMarket: React.FC = () => {
 							}}
 						>
 							<option value=''>서브카테고리</option>
-							{subOption.map(it => (
-								<option value={it} key={it}>
-									{it}
-								</option>
-							))}
+							{subCategories &&
+								subCategories.map(subcategory => (
+									<option value={subcategory.id} key={subcategory.id}>
+										{subcategory.name}
+									</option>
+								))}
 						</select>
 					</ProductAddInput>
 					<ProductAddInput>
 						<div>이름</div>
 						<input
-							value={productInfo.title}
+							value={productInfo.name}
 							onChange={e => {
-								setProductInfo({ ...productInfo, title: e.target.value });
+								setProductInfo({ ...productInfo, name: e.target.value });
 							}}
 							placeholder='상품 이름을 입력하세요'
 						></input>
@@ -302,9 +330,9 @@ const ProductMarket: React.FC = () => {
 					<ProductAddInput>
 						<div>브랜드</div>
 						<input
-							value={productInfo.brandId}
+							value={productInfo.brand}
 							onChange={e => {
-								setProductInfo({ ...productInfo, brandId: e.target.value });
+								setProductInfo({ ...productInfo, brand: e.target.value });
 							}}
 							placeholder='상품의 브랜드를 입력하세요'
 						></input>
@@ -345,8 +373,8 @@ const ProductMarket: React.FC = () => {
 							<Quantity>
 								<input
 									type='number'
-									value={quantity.toString()}
-									onChange={e => setQuantity(parseInt(e.target.value, 10) || 0)}
+									value={stock.toString()}
+									onChange={e => setStock(parseInt(e.target.value, 10) || 0)}
 								/>
 							</Quantity>
 							<ProductAddButton onClick={handleIncreaseQuantity}>+</ProductAddButton>

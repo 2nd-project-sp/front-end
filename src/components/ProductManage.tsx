@@ -12,17 +12,19 @@ const ProductManage: React.FC = () => {
 	const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});
 	const [categories, setCategories] = useState<any[]>([]);
 	const [subCategories, setSubCategories] = useState<any[]>([]);
+	console.log(subCategories);
 
 	useEffect(() => {
 		fetchCategories().then(categoryList => {
 			setCategories(categoryList);
 		});
-		productInfo.forEach((product: CustomProductInterface) => {
-			const categoryId = product.categoryId;
-			fetchSubCategories(categoryId).then(subCategoryList => {
-				setSubCategories(subCategoryList);
+		productInfo &&
+			productInfo.forEach((product: CustomProductInterface) => {
+				const categoryId = product.categoryId;
+				fetchSubCategories(categoryId).then(subCategoryList => {
+					setSubCategories(subCategoryList);
+				});
 			});
-		});
 	}, [productInfo]);
 
 	const getCategoryNameById = (categoryId: number) => {

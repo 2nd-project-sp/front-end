@@ -12,7 +12,8 @@ const Product: React.FC<ProductInterface> = ({ product }: ProductInterface) => {
 	const endDate: Date = new Date(product.saleEndDate);
 	const endMilliseconds: number = endDate.getTime();
 
-	const isSale: boolean = endMilliseconds - nowMilliseconds > 0 ? true : false;
+	// const isSale: boolean = endMilliseconds - nowMilliseconds > 0 ? true : false;
+	const isSale: boolean = true;
 
 	return (
 		<ProductCard data-is-sale={isSale}>

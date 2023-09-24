@@ -16,11 +16,6 @@ const MainPage: React.FC = () => {
 		queryFn: fetchProducts,
 		staleTime: 30000,
 		cacheTime: 3000,
-		// onSuccess: fetchedData => {
-		// 	if (!isError) {
-		// 		dispatch(setProducts(fetchedData.products));
-		// 	}
-		// },
 	});
 	console.log(data?.productList);
 

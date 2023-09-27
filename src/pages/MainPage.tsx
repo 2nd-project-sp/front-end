@@ -5,7 +5,6 @@ import ProductList from '../components/ProductList/ProductList';
 import Sidebar from '../components/Sidebar';
 import Banner from '../components/Banner/Banner';
 import styled from 'styled-components';
-import { devices } from '../assets/styles/constants';
 // import { setProducts, selectProducts } from '../store/testProductSlice';
 import { useQuery } from '@tanstack/react-query';
 import { fetchProducts } from '../api/index';

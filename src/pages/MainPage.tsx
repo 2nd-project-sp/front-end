@@ -19,8 +19,6 @@ const MainPage: React.FC = () => {
 	});
 	console.log(data?.productList);
 
-
-const MainPage: React.FC = () => {
 	const { category } = useParams();
 	const location = useLocation();
 	const queryParams = new URLSearchParams(location.search);

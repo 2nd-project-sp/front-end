@@ -14,19 +14,27 @@ const Product = ({ product }: any) => {
 
 	// const isSale: boolean = endMilliseconds - nowMilliseconds > 0 ? true : false;
 	const isSale: boolean = true;
+	function addCommasToPrice(price: number): string {
+		const priceString = price.toString();
 
+		const formattedPrice = priceString.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+		return formattedPrice;
+	}
 	return (
 		<ProductCard data-is-sale={isSale}>
 			<Link to={`/product/${product.id}`}>
 				<ProductImage data-is-sale={isSale}>
 					{/* <img src={product.imageUrl} alt={product.name} /> */}
 					<div>
-						<img
-							src={
-								'https://img.29cm.co.kr/item/202308/11ee35923504abf7aa4f312e96f92cf3.jpg?width=400'
-							}
-							alt={product.name}
-						/>
+						{product.imageUrl ? (
+							<img src={product.imageUrl} alt={product.name} />
+						) : (
+							<img
+								src='https://trade.cnu.ac.kr/_custom/cnu/resource/img/tmp_gallery.png'
+								alt={product.name}
+							/>
+						)}
 					</div>
 					{!isSale && (
 						<div className='sale-text'>
@@ -36,14 +44,17 @@ const Product = ({ product }: any) => {
 				</ProductImage>
 				<ProductTitle>
 					{/* <p>{product.category}</p> */}
-					<h5>{product.name}</h5>
+					<div>{product.brand}</div>
 					<strong>{product.name}</strong>
 				</ProductTitle>
+				{product.discountRate > 0 && (
+					<OriginPrice>{`${addCommasToPrice(product.price)}`}</OriginPrice>
+				)}
 				<ProductInfo>
 					{product.discountRate > 0 && <Discount>{`${product.discountRate}%`}</Discount>}
 					{product.discountRate > 0 && (
 						<DiscountedPrice>
-							{`${Math.round(product.price * (1 - product.discountRate / 100))}`}
+							{`${addCommasToPrice(Math.round(product.price * (1 - product.discountRate / 100)))}`}
 						</DiscountedPrice>
 					)}
 					{!product.discountRate && <Price>{product.price}</Price>}
@@ -67,32 +78,36 @@ const ProductCard = styled.div<ProductCardProps>`
 	font-size: 16px;
 	font-family: campton, 'Apple SD Gothic Neo', NanumBarunGothic, 나눔바른고딕, 'Malgun Gothic',
 		'맑은 고딕', dotum, sans-serif;
+	color: rgb(0, 0, 0);
 	background-color: ${props => (props['data-is-sale'] ? '' : 'rgba(157, 158, 157, 0.7)')};
 	pointer-events: ${props => (props['data-is-sale'] ? '' : 'none')};
 	opacity: ${props => (props['data-is-sale'] ? 1 : 0.6)};
 `;
 
 const ProductTitle = styled.div`
-	margin-bottom: 0.8rem;
-	h5 {
-		margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
+	div {
+		margin-top: 1rem;
 		text-decoration: underline;
 		margin-bottom: 0.5rem;
+		font-size: small;
 	}
 	strong {
-		color: rgb(157, 158, 157);
+		color: rgb(81, 90, 88);
 		line-height: 1;
 		font-weight: normal;
-		line-height: 1.4;
+		font-size: small;
 	}
 	@media screen and (${devices.md}) {
-		h5 {
+		div {
 			text-decoration: underline;
+			font-size: small;
 		}
 		strong {
-			color: rgb(157, 158, 157);
+			color: rgb(81, 90, 88);
 			line-height: 1;
 			font-weight: normal;
+			font-size: small;
 		}
 	}
 `;
@@ -101,19 +116,32 @@ const ProductInfo = styled.div`
 	div {
 		display: flex;
 		justify-content: space-between;
+		margin-bottom: 0.3rem;
 	}
 `;
 const Discount = styled.span`
-	margin-right: 0.5rem; /* 여백을 조정할 수 있는 값으로 변경하세요 */
+	margin-right: 0.5rem;
 	color: var(--ruler-scale-color-red-500);
-	font-weight: bold;
+	font-weight: 500;
+	font-size: 14px;
 `;
 
 const DiscountedPrice = styled.strong`
-	color: var(--ruler-scale-color-red-500);
+	// color: var(--ruler-scale-color-red-500);
+	font-size: 14px;
+	font-weight: 600;
+`;
+const OriginPrice = styled.div`
+	font-size: small;
+	color: var(--ruler-scale-color-gray-500);
+	opacity: 0.5;
+	text-decoration-line: line-through;
 `;
 const Price = styled.div`
-	font-weight: bold;
+	font-weight: 500;
+	font-size: small;
+	margin-left: 5px;
+	margin-bottom: 0.3rem;
 `;
 const ProductInfo2 = styled.div`
 	ul {

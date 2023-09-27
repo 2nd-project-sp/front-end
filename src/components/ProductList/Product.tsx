@@ -1,12 +1,12 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { devices } from '../../assets/styles/constants';
-import { ProductInterface } from '../../models/product';
+
 interface ProductCardProps {
-	isSale: boolean;
+	isSale?: boolean;
+	'data-is-sale'?: string | boolean;
 }
-const Product: React.FC<ProductInterface> = ({ product }: ProductInterface) => {
+const Product = ({ product }: any) => {
 	const now: Date = new Date();
 	const nowMilliseconds: number = now.getTime();
 	const endDate: Date = new Date(product.saleEndDate);
@@ -85,7 +85,7 @@ const ProductTitle = styled.div`
 		font-weight: normal;
 		line-height: 1.4;
 	}
-	@media screen and ${devices.md} {
+	@media screen and (${devices.md}) {
 		h5 {
 			text-decoration: underline;
 		}

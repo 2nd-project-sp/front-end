@@ -1,13 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { ISteps } from '../../models/steps';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setting } from '../../store/signupSlice';
-import { RootState } from '../../store/store';
 
 const PhoneNum: React.FC<ISteps> = ({ step, setStep }: ISteps) => {
 	const dispatch = useDispatch();
-	const check = useSelector((state: RootState) => state.signup);
 	const [phoneNumber, setPhoneNumber] = useState<string>('');
 	const [gender, setGender] = useState('');
 	const validationCheck = phoneNumber.length === 13 && gender !== '';

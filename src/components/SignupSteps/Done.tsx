@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ const Done: React.FC = () => {
 	const handlingNext = async () => {
 		navigate('/');
 		try {
-			const response = await axios.post('http://15.164.128.162:8080/api/v1/user/sign', check, {
+			const response = await axios.post('https://shoppingmall.o-r.kr/api/v1/user/sign', check, {
 				headers: {
 					'Content-Type': 'application/json',
 				},

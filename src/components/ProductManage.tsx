@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { ProductInterface } from '../models/product';
-import { updateQuantity } from '../store/manageSlice';
+import { RootState, updateQuantity } from '../store/manageSlice';
 
 const ProductManage: React.FC = () => {
 	const dispatch = useDispatch();
-	const productInfo = useSelector(state => state.manage.products);
-	console.log(productInfo);
+	const productInfo = useSelector((state: RootState) => state.manage.products);
 
 	const [editedProducts, setEditedProducts] = useState<{ [key: number]: boolean }>({});
 	const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});
@@ -85,16 +84,27 @@ const ProductManage: React.FC = () => {
 									</ProductManageInfo>
 									<ProductManageInfo>브랜드: {product.brandId}</ProductManageInfo>
 									{product.discountRate ? (
-										<DiscountPrice>
-											가격:
-											<BeforeDiscount>{Number(product.price).toLocaleString()}</BeforeDiscount>
-											➡️
-											{calculateDiscountedPrice(
-												product.price,
-												product.discountRate
-											).toLocaleString()}
-											원 {Number(product.discountRate)}%
-										</DiscountPrice>
+										<>
+											<DiscountPrice>
+												가격:
+												<BeforeDiscount>{Number(product.price).toLocaleString()}</BeforeDiscount>
+												➡️
+												{calculateDiscountedPrice(
+													product.price,
+													product.discountRate
+												).toLocaleString()}
+												원 {Number(product.discountRate)}%
+											</DiscountPrice>
+
+											<ProductManageInfo>
+												할인기간:{' '}
+												{product.saleStartDate && product.saleEndDate
+													? `${product.saleStartDate.toLocaleDateString(
+															'en-US'
+													  )} ~ ${product.saleEndDate.toLocaleDateString('en-US')}`
+													: 'N/A'}
+											</ProductManageInfo>
+										</>
 									) : (
 										<ProductManageInfo>가격:{product.price.toLocaleString()}원</ProductManageInfo>
 									)}

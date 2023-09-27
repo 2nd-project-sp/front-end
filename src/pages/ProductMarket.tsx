@@ -3,18 +3,25 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import ProductManage from '../components/ProductManage';
 import { addToManage } from '../store/manageSlice';
-import { v4 as uuidv4 } from 'uuid';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { ProductInterface } from '../models/product';
 
 const ProductMarket: React.FC = () => {
 	const dispatch = useDispatch();
 	const [quantity, setQuantity] = useState(1);
 	const [showDiscount, setShowDiscount] = useState(false);
 	const [isNew, setIsNew] = useState(false);
+	//할인기간
+	const [saleStartDate, setSaleStartDate] = useState(null);
+	const [saleEndDate, setSaleEndDate] = useState(null);
+	const [idCounter, setIdCounter] = useState(1);
+
 	const option = ['WOMEN', 'MEN', 'DIGITAL', 'BEAUTY', 'KIDS', 'INTERIOR'];
 	const subOption = ['의류', '가방', '신발', '악세사리'];
 
 	const [productInfo, setProductInfo] = useState({
-		id: uuidv4(),
+		id: idCounter,
 		title: '',
 		categoryId: '',
 		subCategoryId: '',
@@ -27,9 +34,26 @@ const ProductMarket: React.FC = () => {
 		discountRate: 0,
 		delivaryPrice: 0,
 		isNew: false,
+		saleStartDate: null as Date | null,
+		saleEndDate: null as Date | null,
 	});
+	console.log(productInfo.id);
+	//할인기간 핸들러
+	const handleSaleStartDateChange = (date: Date | null) => {
+		setProductInfo({
+			...productInfo,
+			saleStartDate: date,
+		});
+	};
 
-	const handleSubmit = e => {
+	const handleSaleEndDateChange = (date: Date | null) => {
+		setProductInfo({
+			...productInfo,
+			saleEndDate: date,
+		});
+	};
+
+	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		const {
 			id,
@@ -45,9 +69,11 @@ const ProductMarket: React.FC = () => {
 			discountRate,
 			delivaryPrice,
 			isNew,
+			saleStartDate,
+			saleEndDate,
 		} = productInfo;
 
-		const updatedProductInfo = {
+		const updatedProductInfo: ProductInterface = {
 			id,
 			categoryId,
 			subCategoryId,
@@ -61,11 +87,19 @@ const ProductMarket: React.FC = () => {
 			discountRate,
 			delivaryPrice,
 			isNew,
+			saleStartDate,
+			saleEndDate,
+			category: '',
+			thumbnail: '',
+			rating: 0,
+			option: '',
+			name: '',
 		};
 		dispatch(addToManage(updatedProductInfo)); //디스패치하고
+		setIdCounter(idCounter + 1);
 		//비워
 		setProductInfo({
-			id: uuidv4(),
+			id: idCounter + 1,
 			categoryId: '',
 			subCategoryId: '',
 			title: '',
@@ -78,13 +112,16 @@ const ProductMarket: React.FC = () => {
 			discountRate: 0,
 			delivaryPrice: 0,
 			isNew: false,
+			saleStartDate: null,
+			saleEndDate: null,
 		});
 		setQuantity(1);
 		setIsNew(false);
 		setShowDiscount(false);
+		setSaleStartDate(null);
+		setSaleEndDate(null);
 	};
 
-	console.log(productInfo.subCategoryId);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	//할인 유무 핸들러
 	const discountHandler = () => {
@@ -129,7 +166,7 @@ const ProductMarket: React.FC = () => {
 			quantity: quantity + 1,
 		}));
 	};
-
+	console.log(saleStartDate, saleEndDate);
 	return (
 		<>
 			<ProductMarketWrapper>
@@ -162,24 +199,41 @@ const ProductMarket: React.FC = () => {
 					<ProductAddInput>
 						신상품 <input type='checkbox' checked={isNew} onChange={newHandler} />
 					</ProductAddInput>
-					<ProductAddInput>
+					<ProductDiscount>
 						할인
 						<input type='checkbox' checked={showDiscount} onChange={discountHandler} />
 						{showDiscount ? (
-							<DisCountRate>
-								<input
-									placeholder='할인율을 입력하세요'
-									value={productInfo.discountRate}
-									onChange={e => {
-										setProductInfo({ ...productInfo, discountRate: Number(e.target.value) });
-									}}
+							<ProductDiscountInput>
+								<DisCountRate>
+									<input
+										value={productInfo.discountRate}
+										onChange={e => {
+											setProductInfo({ ...productInfo, discountRate: Number(e.target.value) });
+										}}
+									/>
+									%
+								</DisCountRate>
+								<DatePicker
+									selected={productInfo.saleStartDate}
+									onChange={handleSaleStartDateChange}
+									selectsStart
+									startDate={productInfo.saleStartDate}
+									endDate={productInfo.saleEndDate}
+									placeholderText='시작일'
 								/>
-								%
-							</DisCountRate>
+								<DatePicker
+									selected={productInfo.saleEndDate}
+									onChange={handleSaleEndDateChange}
+									selectsEnd
+									startDate={productInfo.saleStartDate}
+									endDate={productInfo.saleEndDate}
+									placeholderText='종료일'
+								/>
+							</ProductDiscountInput>
 						) : (
 							''
 						)}
-					</ProductAddInput>
+					</ProductDiscount>
 
 					<ProductAddInput>
 						<div>카테고리</div>
@@ -267,7 +321,11 @@ const ProductMarket: React.FC = () => {
 						<ProductAddCount>
 							<ProductAddButton onClick={handleDecreaseQuantity}>-</ProductAddButton>
 							<Quantity>
-								<input type='number' value={quantity} />
+								<input
+									type='number'
+									value={quantity.toString()}
+									onChange={e => setQuantity(parseInt(e.target.value, 10) || 0)}
+								/>
 							</Quantity>
 							<ProductAddButton onClick={handleIncreaseQuantity}>+</ProductAddButton>
 						</ProductAddCount>
@@ -307,20 +365,54 @@ const ProductAdd = styled.div`
 	width: 50%;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: flex-start;
 `;
 
 const ProductAddInput = styled.div`
-	margin-bottom: 10px;
 	display: flex;
+	margin-bottom: 10px;
 	justify-content: center;
+	align-items: center;
 	> div {
 		margin-right: 10px;
 	}
 	> input {
 		border: none;
 		border-bottom: 1px solid #f4f4f4;
+	}
+`;
+const ProductDiscount = styled.div`
+	height: 20px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+`;
+const ProductDiscountInput = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	> div {
+		margin-right: 10px;
+	}
+	> input {
+		border: none;
+		border-bottom: 1px solid #f4f4f4;
+	}
+`;
+
+const DisCountRate = styled.div`
+	display: flex;
+	align-items: center;
+	margin-left: 10px;
+	margin-bottom: 0;
+
+	> input {
+		margin-left: 10px;
+		width: 30px;
+		border: none;
+		border-bottom: 1px solid #f4f4f4;
+		margin-bottom: 0;
 	}
 `;
 
@@ -382,18 +474,5 @@ const Quantity = styled.span`
 	> input::-webkit-outer-spin-button,
 	> input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
-	}
-`;
-
-const DisCountRate = styled.div`
-	display: flex;
-	align-items: center;
-	margin-left: 10px;
-
-	> input {
-		margin-left: 10px;
-		width: 30px;
-		border: none;
-		border-bottom: 1px solid #f4f4f4;
 	}
 `;

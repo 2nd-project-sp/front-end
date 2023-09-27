@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Axios 클라이언트 생성
 const axiosClient = axios.create({
-	baseURL: 'http://15.164.128.162:8080/', // API의 기본 URL을 여기에 설정
+	baseURL: 'https://shoppingmall.o-r.kr/', // API의 기본 URL을 여기에 설정
 });
 
 // 요청 인터셉터 설정

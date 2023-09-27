@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
+import { devices } from '../assets/styles/constants';
 import ProductList from '../components/ProductList/ProductList';
 import Sidebar from '../components/Sidebar';
 import Banner from '../components/Banner/Banner';
@@ -19,6 +19,8 @@ const MainPage: React.FC = () => {
 	});
 	console.log(data?.productList);
 
+
+const MainPage: React.FC = () => {
 	const { category } = useParams();
 	const location = useLocation();
 	const queryParams = new URLSearchParams(location.search);

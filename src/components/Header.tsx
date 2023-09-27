@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { PiHandbagBold } from 'react-icons/pi';
 import { RiLoginBoxLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, login } from '../store/loginSlice';
+import { login } from '../store/loginSlice';
 import { RootState } from '../store/store';
 import { devices } from '../assets/styles/constants';
 import { clearTokenResetTimer } from '../util/util';
@@ -33,7 +33,7 @@ const Header: React.FC = () => {
 	const logoutHandler = async () => {
 		if (isLogin) {
 			const token = localStorage.getItem('ACCESS-TOKEN');
-			const res = await fetch('http://15.164.128.162:8080/api/v1/user/logout', {
+			const res = await fetch('https://shoppingmall.o-r.kr/api/v1/user/logout', {
 				method: 'POST',
 				headers: {
 					'ACCESS-TOKEN': `${token}`,
@@ -53,7 +53,7 @@ const Header: React.FC = () => {
 		navigate('/');
 	};
 
-	const categoryHandler = event => {
+	const categoryHandler = (event: any) => {
 		const value = event.target.getAttribute('data-value');
 		navigate(`/category/${value}?code=1`);
 	};
@@ -71,7 +71,7 @@ const Header: React.FC = () => {
 				<div className='header-navigation'>
 					<div>
 						<div className='temp-logo' onClick={homeHandler}>
-							29CM
+							GD Mall
 						</div>
 					</div>
 					<div className='navigation'>

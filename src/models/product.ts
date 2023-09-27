@@ -1,5 +1,4 @@
 export interface ProductInterface {
-
 	isNew: boolean;
 	id: number;
 	title: string;
@@ -16,8 +15,11 @@ export interface ProductInterface {
 	name: string;
 	brandId: string;
 	discountRate: number;
+	showDiscount: boolean;
 	delivaryPrice: number;
-
+	saleStartDate: Date | null;
+	saleEndDate: Date | null;
+	item?: {};
 }
 
 export interface ProductLists {

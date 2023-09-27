@@ -9,15 +9,23 @@ import {
 	AddressSetting,
 } from '../components';
 
+// type TStepComponent = {
+// 	0: JSX.Element;
+// 	1: JSX.Element;
+// 	2: JSX.Element;
+// 	3: JSX.Element;
+// 	4: JSX.Element;
+// };
+
 const SignUpPage: React.FC = () => {
 	const [step, setStep] = useState(0);
-	const stepComponent = {
-		0: <EmailSetting step={step} setStep={setStep} />,
-		1: <PasswordSetting step={step} setStep={setStep} />,
-		2: <PhoneNum step={step} setStep={setStep} />,
-		3: <AddressSetting step={step} setStep={setStep} />,
-		4: <Done />,
-	};
+	const stepComponent = [
+		<EmailSetting step={step} setStep={setStep} />,
+		<PasswordSetting step={step} setStep={setStep} />,
+		<PhoneNum step={step} setStep={setStep} />,
+		<AddressSetting step={step} setStep={setStep} />,
+		<Done />,
+	];
 	return (
 		<SSignUp>
 			<div className='wrapper'>
